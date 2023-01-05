@@ -17,9 +17,11 @@ public class Model {
         Comment c1 = new Comment("user1", 5, "amazing", R.drawable.avatar);
         Comment c2 = new Comment("user2", 4, "very good" ,R.drawable.avatar);
         Comment c3 = new Comment("user3", 1, "boring",R.drawable.avatar);
+        Comment c4 = new Comment("user4", 4, "nice",R.drawable.avatar);
         comments.add(c1);
         comments.add(c2);
         comments.add(c3);
+        comments.add(c4);
 
         addBook(new Book("Harry Potter 1",
                 "res/drawable/harry_potter1.png",
