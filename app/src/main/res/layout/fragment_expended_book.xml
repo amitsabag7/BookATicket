@@ -12,16 +12,16 @@
         android:id="@+id/expandedBook_cover_img"
         android:layout_width="160dp"
         android:layout_height="220dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/expandedBook_name_tv"
-        android:layout_width="210dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="3dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:inputType="textPersonName"
@@ -33,9 +33,9 @@
 
     <EditText
         android:id="@+id/expandedBook_writer_tv"
-        android:layout_width="210dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="3dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:inputType="textPersonName"
@@ -48,14 +48,14 @@
 
     <EditText
         android:id="@+id/expandedBook_year_tv"
-        android:layout_width="210dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="3dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,36 +65,57 @@
         android:id="@+id/expandedBook_description_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="70dp"
         android:background="@android:color/transparent"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="2"
         android:textAlignment="center"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/expandedBook_commentsHeader_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expandedBook_year_tv" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/expandedBook_comments_rl"
-        android:layout_width="409dp"
-        android:layout_height="368dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expandedBook_commentsHeader_tv" />
-
     <TextView
         android:id="@+id/expandedBook_commentsHeader_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="10dp"
         android:text="Readers Comments:"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expandedBook_description_tv" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/expandedBook_comments_rl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/expandedBook_take_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expandedBook_commentsHeader_tv" />
+
+    <Button
+        android:id="@+id/expandedBook_take_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#353333"
+        android:text="Taking that book!"
+        android:textColor="#DD2E6B"
+        android:textColorHighlight="#DD2E6B"
+        android:textColorLink="#DD2E6B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
