@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.bookaticket.Model.Model;
 
@@ -36,11 +37,11 @@ public class Login_Fragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
+                String email = mEmail.getText().toString();
+                String password = mPassword.getText().toString();
 
                 Model.instance().loginUser(email,password, ()-> {
-                    Log.d("TAG", "lOGIN IS OK");
+
                 });
             }
         });
