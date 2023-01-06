@@ -12,6 +12,8 @@ public class Model {
         return _instance;
     }
 
+    private FirebaseModel firebaseModel = new FirebaseModel();
+
     private Model() {
         List<Comment> comments = new LinkedList<>();
         Comment c1 = new Comment("user1", 5, "amazing", R.drawable.avatar);
@@ -47,5 +49,14 @@ public class Model {
 
     public void updateBook(int pos, Book book){
         data.set(pos, book);
+    }
+
+    public interface LoginListener{
+        void onComplete();
+    }
+
+    public void loginUser(String email, String password, Model.LoginListener callback){
+        firebaseModel.loginUser(email,password,callback);
+
     }
 }

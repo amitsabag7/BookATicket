@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import model.Model;
-
-
-import java.util.List;
+import com.example.bookaticket.Model.Model;
 
 
 public class Login_Fragment extends Fragment {
