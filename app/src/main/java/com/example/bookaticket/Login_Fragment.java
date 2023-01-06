@@ -3,7 +3,6 @@ package com.example.bookaticket;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavAction;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -14,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import model.Model;
+
+
+import java.util.List;
 
 
 public class Login_Fragment extends Fragment {
