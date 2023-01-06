@@ -9,5 +9,14 @@
         android:id="@+id/login_Fragment"
         android:name="com.example.bookaticket.Login_Fragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_Fragment_to_signup_Fragment"
+            app:destination="@id/signup_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signup_Fragment"
+        android:name="com.example.bookaticket.Signup_Fragment"
+        android:label="fragment_signup_"
+        tools:layout="@layout/fragment_signup_" />
 </navigation>

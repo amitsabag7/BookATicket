@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "298517568637",
+    "project_id": "bookaticket-6ce0a",
+    "storage_bucket": "bookaticket-6ce0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298517568637:android:a2f82640b50225208d6514",
+        "android_client_info": {
+          "package_name": "com.example.bookaticket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "298517568637-1f4a9ah61o3p63io8tedkikknobta5es.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl01E0C7hwAhH3Y4_R4ljw6eYjv-CVBWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "298517568637-1f4a9ah61o3p63io8tedkikknobta5es.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
