@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_constraintBaseline_toTopOf="parent"
-    tools:context=".Login_Fragment">
+    tools:context=".Login_Fragment"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="23dp">
 
     <ImageView
         android:id="@+id/login_logo"
@@ -24,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="התחברות"
+        android:text="Login"
         android:textColor="#090808"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -70,17 +72,6 @@
         app:layout_constraintTop_toBottomOf="@+id/login_title" />
 
     <TextView
-        android:id="@+id/login_forgot_pass"
-        android:layout_width="167dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="20dp"
-        android:text="Forgot your password? "
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_password_edit" />
-
-    <TextView
         android:id="@+id/login_password_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,30 +85,30 @@
         app:layout_constraintTop_toBottomOf="@+id/login_email_tv" />
 
     <Button
-        android:id="@+id/login_signup_btn"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="159dp"
-        android:layout_height="62dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="#FF007E"
-        android:text="Signup"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/login_login_brn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/login_login_brn"
-        android:layout_width="159dp"
-        android:layout_height="62dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="32dp"
+        android:id="@+id/login_login_btn"
+        android:layout_width="190dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="38dp"
         android:backgroundTint="#FF007E"
         android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/login_signup_btn" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_signup_link"
+        app:layout_constraintVertical_bias="0.405" />
+
+    <TextView
+        android:id="@+id/login_signup_link"
+        android:background="?attr/selectableItemBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Create a new member?"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/login_login_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_password_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
