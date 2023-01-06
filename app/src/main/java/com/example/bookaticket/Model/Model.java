@@ -1,6 +1,8 @@
 package com.example.bookaticket.Model;
 
 import com.example.bookaticket.R;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,5 +60,13 @@ public class Model {
     public void loginUser(String email, String password, Model.LoginListener callback){
         firebaseModel.loginUser(email,password,callback);
 
+    }
+
+    public interface SignupListener{
+        void onComplete();
+    }
+
+    public void signupUser(String username, String email, String password, Model.SignupListener callback) {
+        firebaseModel.signupUser(username,email,password,callback);
     }
 }
