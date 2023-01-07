@@ -1,7 +1,10 @@
 package com.example.bookaticket;
 
+import android.app.BackgroundServiceStartNotAllowedException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bookaticket.Model.BookInfo;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
@@ -48,7 +55,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.dateTV.setText(bookInfo.getPublishedDate());
 
         // below line is use to set image from URL in our image view.
-        Picasso.get().load(bookInfo.getThumbnail()).into(holder.bookIV);
+        String newUrlString = bookInfo.getThumbnail().replaceFirst("^http", "https");
+        try{
+            Picasso.get().load(newUrlString).into(holder.bookIV);
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
         // below line is use to add on click listener for our item of recycler view.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
