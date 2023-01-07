@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/login_Fragment">
+    app:startDestination="@id/newBook_Fragment">
 
     <fragment
         android:id="@+id/login_Fragment"
@@ -19,4 +19,9 @@
         android:name="com.example.bookaticket.Signup_Fragment"
         android:label="fragment_signup_"
         tools:layout="@layout/fragment_signup_" />
+    <fragment
+        android:id="@+id/newBook_Fragment"
+        android:name="com.example.bookaticket.NewBook_Fragment"
+        android:label="fragment_new_book"
+        tools:layout="@layout/fragment_new_book" />
 </navigation>
