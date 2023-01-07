@@ -49,6 +49,19 @@ public class FirebaseModel {
         });
     }
 
+    public boolean isLogedIn () {
+        if(mAuth.getCurrentUser() != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public void logoutuser() {
+       if(isLogedIn()) {
+          mAuth.signOut();
+       }
+    }
+
 
 
 
