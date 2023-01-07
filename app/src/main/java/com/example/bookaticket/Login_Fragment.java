@@ -28,6 +28,8 @@ public class Login_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+
         mEmail = view.findViewById(R.id.login_email_edit);
         mPassword = view.findViewById(R.id.login_password_edit);
         mLoginBtn = view.findViewById(R.id.login_login_btn);
@@ -61,5 +63,13 @@ public class Login_Fragment extends Fragment {
 
         return view;
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Model.instance().isLogedIn()) {
+            Navigation.findNavController(getView()).navigate(R.id.homePage_Fragment);
+        }
     }
 }
