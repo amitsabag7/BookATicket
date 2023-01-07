@@ -27,8 +27,9 @@ public class FirebaseModel {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Log.d("tag","Login successesful");
+                    callback.onComplete(task);
                 } else {
-
+                    callback.onComplete(task);
                 }
             }
         });
@@ -40,8 +41,9 @@ public class FirebaseModel {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Log.d("tag","Signup successesful");
+                    callback.onComplete(task);
                 } else {
-
+                    callback.onComplete(task);
                 }
             }
         });

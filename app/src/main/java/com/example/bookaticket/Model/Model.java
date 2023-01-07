@@ -54,7 +54,7 @@ public class Model {
     }
 
     public interface LoginListener{
-        void onComplete();
+        void onComplete(Task<AuthResult> task);
     }
 
     public void loginUser(String email, String password, Model.LoginListener callback){
@@ -63,7 +63,7 @@ public class Model {
     }
 
     public interface SignupListener{
-        void onComplete();
+        void onComplete(Task<AuthResult> task);
     }
 
     public void signupUser(String username, String email, String password, Model.SignupListener callback) {
