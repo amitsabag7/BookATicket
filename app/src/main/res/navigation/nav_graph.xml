@@ -13,10 +13,22 @@
         <action
             android:id="@+id/action_login_Fragment_to_signup_Fragment"
             app:destination="@id/signup_Fragment" />
+        <action
+            android:id="@+id/action_login_Fragment_to_homePage_Fragment"
+            app:destination="@id/homePage_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/signup_Fragment"
         android:name="com.example.bookaticket.Signup_Fragment"
         android:label="fragment_signup_"
-        tools:layout="@layout/fragment_signup_" />
+        tools:layout="@layout/fragment_signup_" >
+        <action
+            android:id="@+id/action_signup_Fragment_to_login_Fragment"
+            app:destination="@id/login_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homePage_Fragment"
+        android:name="com.example.bookaticket.HomePage_Fragment"
+        android:label="fragment_home_page_"
+        tools:layout="@layout/fragment_home_page_" />
 </navigation>

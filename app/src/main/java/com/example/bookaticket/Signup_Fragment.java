@@ -3,6 +3,7 @@ package com.example.bookaticket;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.bookaticket.Model.Model;
 
@@ -61,7 +63,13 @@ public class Signup_Fragment extends Fragment {
                 }
 
                 //TODO :progress bar
-                Model.instance().signupUser(username,email,password, ()-> {
+                Model.instance().signupUser(username,email,password, (task)-> {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(getContext(),"Signup successfully",Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(view).navigate(R.id.login_Fragment);
+                    } else {
+                        Toast.makeText(getContext(),"This email already exist",Toast.LENGTH_LONG).show();
+                    }
 
                 });
 

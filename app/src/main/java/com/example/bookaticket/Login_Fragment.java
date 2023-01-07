@@ -35,12 +35,18 @@ public class Login_Fragment extends Fragment {
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view1) {
 
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
 
-                Model.instance().loginUser(email,password, ()-> {
+                Model.instance().loginUser(email,password, (task)-> {
+                    if(task.isSuccessful()) {
+                        Toast.makeText(getContext(),"Hello " + email,Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(view1).navigate(R.id.homePage_Fragment);
+                    } else {
+                        Toast.makeText(getContext(),"Mail or Password incorrect",Toast.LENGTH_LONG).show();
+                    }
 
                 });
             }
