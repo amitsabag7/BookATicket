@@ -20,9 +20,15 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.util.BoundingBox;
+
+import java.util.ArrayList;
 
 public class HomePage_Fragment extends Fragment {
 
@@ -45,15 +51,42 @@ public class HomePage_Fragment extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
 
-//        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx),map);
-//        this.mLocationOverlay.enableMyLocation();
-//        map.getOverlays().add(this.mLocationOverlay);
 
         IMapController mapController = map.getController();
 
-        GeoPoint startPoint = new GeoPoint(30.8124247,34.8594762);
+        // Start the map on Israel
+        //TODO: Map view only for israel
+        GeoPoint startPoint = new GeoPoint(31.8124247,34.8594762);
         mapController.setCenter(startPoint);
-        mapController.setZoom(9.5);
+        mapController.setZoom(10);
+
+        // Add station's location
+        // TODO: Dynamic function - add locations from DB
+        ArrayList<OverlayItem> stations = new ArrayList<OverlayItem>();
+        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.0728237835651, 34.79334675443333)));
+        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.085160155331636, 34.79868415443362)));
+        stations.add(new OverlayItem("Title", "Description", new GeoPoint(31.987942570365515, 34.75737162559562)));
+        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.79312932825393, 34.957639232304736)));
+        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.166803385081394, 34.81959750370291)));
+
+
+
+        // Add the overlay icons with click listener
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(stations,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        Navigation.findNavController(getView()).navigate(R.id.login_Fragment);
+                        return true;
+                    }
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                        return false;
+                    }
+                }, ctx);
+        mOverlay.setFocusItemsOnTap(true);
+
+        map.getOverlays().add(mOverlay);
 
 
 
