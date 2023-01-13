@@ -54,7 +54,7 @@ public class HomePage_Fragment extends Fragment {
         GeoPoint startPoint = new GeoPoint(30.8124247,34.8594762);
         mapController.setCenter(startPoint);
         mapController.setZoom(9.5);
-        
+
 
 
 
