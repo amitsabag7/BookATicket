@@ -31,4 +31,10 @@
         android:name="com.example.bookaticket.HomePage_Fragment"
         android:label="fragment_home_page_"
         tools:layout="@layout/fragment_home_page_" />
+
+    <fragment
+        android:id="@+id/stationBookList_fragment"
+        android:name="com.example.bookaticket.StationBookList_Fragment"
+        android:label="fragment_station_book_list_"
+        tools:layout="@layout/fragment_station_book_list" />
 </navigation>
