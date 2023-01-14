@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/newBook_Fragment">
+
+    <fragment
+        android:id="@+id/login_Fragment"
+        android:name="com.example.bookaticket.Login_Fragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_Fragment_to_signup_Fragment"
+            app:destination="@id/signup_Fragment" />
+        <action
+            android:id="@+id/action_login_Fragment_to_homePage_Fragment"
+            app:destination="@id/homePage_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signup_Fragment"
+        android:name="com.example.bookaticket.Signup_Fragment"
+        android:label="fragment_signup_"
+        tools:layout="@layout/fragment_signup_" />
+
+    <fragment
+        android:id="@+id/newBook_Fragment"
+        android:name="com.example.bookaticket.NewBook_Fragment"
+        android:label="fragment_new_book"
+        tools:layout="@layout/fragment_new_book_" >
+
+        <action
+            android:id="@+id/action_signup_Fragment_to_login_Fragment"
+            app:destination="@id/login_Fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homePage_Fragment"
+        android:name="com.example.bookaticket.HomePage_Fragment"
+        android:label="fragment_home_page_"
+        tools:layout="@layout/fragment_home_page_" >
+        <action
+            android:id="@+id/action_homePage_Fragment_to_stationBookList_fragment"
+            app:destination="@id/stationBookList_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/stationBookList_fragment"
+        android:name="com.example.bookaticket.StationBookList_Fragment"
+        android:label="fragment_station_book_list_"
+        tools:layout="@layout/fragment_station_book_list" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
+</navigation>
