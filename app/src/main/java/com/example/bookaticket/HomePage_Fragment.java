@@ -4,16 +4,24 @@ package com.example.bookaticket;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.bookaticket.Model.Model;
+import com.example.bookaticket.Model.Station;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -29,13 +37,16 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.util.BoundingBox;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class HomePage_Fragment extends Fragment {
 
     private Button logout;
     private MapView map;
     private MyLocationNewOverlay mLocationOverlay;
-
+    public List<Station> stations = new LinkedList<>();
+    public ArrayList<OverlayItem> items = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,36 +71,13 @@ public class HomePage_Fragment extends Fragment {
         mapController.setCenter(startPoint);
         mapController.setZoom(10);
 
-        // Add station's location
-        // TODO: Dynamic function - add locations from DB
-        ArrayList<OverlayItem> stations = new ArrayList<OverlayItem>();
-        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.0728237835651, 34.79334675443333)));
-        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.085160155331636, 34.79868415443362)));
-        stations.add(new OverlayItem("Title", "Description", new GeoPoint(31.987942570365515, 34.75737162559562)));
-        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.79312932825393, 34.957639232304736)));
-        stations.add(new OverlayItem("Title", "Description", new GeoPoint(32.166803385081394, 34.81959750370291)));
-
-
-
-        // Add the overlay icons with click listener
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(stations,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        Navigation.findNavController(getView()).navigate(R.id.login_Fragment);
-                        return true;
-                    }
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        return false;
-                    }
-                }, ctx);
-        mOverlay.setFocusItemsOnTap(true);
-
-        map.getOverlays().add(mOverlay);
-
-
-
+        // Get all station from DB and draw to map
+        //TODO: Write to local DB
+        Model.instance().getAllStations((list)-> {
+            stations=list;
+            stationsToOverlaysItems(items,stations);
+            viewLocaionOnMap(ctx,items);
+        });
 
         logout = view.findViewById(R.id.logut_btn);
         logout.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +94,36 @@ public class HomePage_Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         map.onResume();
+    }
+
+    public void stationsToOverlaysItems (ArrayList<OverlayItem> items,List<Station> stations){
+        GeoPoint p;
+        for (Station st: stations) {
+            p = new GeoPoint(st.getLocation().getLatitude(),st.getLocation().getLongitude());
+            items.add(new OverlayItem(st.getId(),st.getName(),p));
+
+        }
+    }
+
+    public void viewLocaionOnMap(Context ctx, ArrayList<OverlayItem> items) {
+        // Add the overlay icons with click listener
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+//                        HomePage_FragmentDirections.ActionHomePageFragmentToStationBookListFragment action =
+//                                HomePage_FragmentDirections.actionHomePageFragmentToStationBookListFragment(item.getTitle(),item.getSnippet());
+                        Navigation.findNavController(getView()).navigate(R.id.stationBookList_fragment);
+                        return true;
+                    }
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                        return false;
+                    }
+                }, ctx);
+        mOverlay.setFocusItemsOnTap(true);
+
+        map.getOverlays().add(mOverlay);
     }
 
 

@@ -53,6 +53,7 @@ public class StationBookList_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_station_book_list, container, false);
+
         books = Model.instance().getAllBooks();
         TextView stationNameTV = view.findViewById(R.id.stationBookList_stationNameTV);
         RecyclerView stationBookList = view.findViewById(R.id.stationBookListRV);
