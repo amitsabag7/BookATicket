@@ -35,7 +35,10 @@ android {
 
 dependencies {
 
+<<<<<<< HEAD
     //compile fileTree(dir: 'libs', include: '*.jar')
+=======
+>>>>>>> 68e43eaebe9f8da42e84407f0142dc539db49f5d
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -48,8 +51,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+<<<<<<< HEAD
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'org.osmdroid:osmdroid-android:6.1.4'
 
+=======
+    implementation 'org.osmdroid:osmdroid-android:6.1.4'
+
+
+>>>>>>> 68e43eaebe9f8da42e84407f0142dc539db49f5d
 }
