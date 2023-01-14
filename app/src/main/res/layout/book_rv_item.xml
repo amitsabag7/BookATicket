@@ -55,14 +55,15 @@
 
         <TextView
             android:id="@+id/idTVDate"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_alignParentEnd="true"
             android:layout_marginEnd="5dp"
             android:layout_toEndOf="@id/idIVbook"
             android:padding="3dp"
             android:text="date"
             android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idTVPageCount"
+            android:layout_alignParentEnd="true"
             android:textSize="11sp" />
 
     </RelativeLayout>
