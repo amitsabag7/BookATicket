@@ -30,11 +30,22 @@
         android:id="@+id/homePage_Fragment"
         android:name="com.example.bookaticket.HomePage_Fragment"
         android:label="fragment_home_page_"
-        tools:layout="@layout/fragment_home_page_" />
+        tools:layout="@layout/fragment_home_page_" >
+        <action
+            android:id="@+id/action_homePage_Fragment_to_stationBookList_fragment"
+            app:destination="@id/stationBookList_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/stationBookList_fragment"
         android:name="com.example.bookaticket.StationBookList_Fragment"
         android:label="fragment_station_book_list_"
-        tools:layout="@layout/fragment_station_book_list" />
+        tools:layout="@layout/fragment_station_book_list" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
 </navigation>
