@@ -18,10 +18,7 @@ public class Book {
         this.description = description;
         this.comments = comments;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1c3244735aec3295f53fc7a84cca9ef286bdbe09
+
 
     public String getName() {
         return name;
@@ -70,9 +67,5 @@ public class Book {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
-<<<<<<< HEAD
-=======
->>>>>>> 68e43eaebe9f8da42e84407f0142dc539db49f5d
-=======
->>>>>>> 1c3244735aec3295f53fc7a84cca9ef286bdbe09
+
 }

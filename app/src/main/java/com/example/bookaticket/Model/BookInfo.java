@@ -120,4 +120,18 @@ public class BookInfo {
         this.infoLink = infoLink;
         this.buyLink = buyLink;
     }
+
+    public BookInfo (String title, String imgPath, String writer, String description){
+        this.title = title;
+        this.subtitle = null;
+        this.authors = null;
+        this.publisher = writer;
+        this.publishedDate = null;
+        this.description = description;
+        this.pageCount = 0;
+        this.thumbnail = imgPath;
+        this.previewLink = null;
+        this.infoLink = null;
+        this.buyLink = null;
+    }
 }

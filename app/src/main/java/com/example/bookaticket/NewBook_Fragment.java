@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,10 +36,17 @@ import java.util.ArrayList;
 public class NewBook_Fragment extends Fragment {
 
     private RequestQueue mRequestQueue;
-    private ArrayList<BookInfo> bookInfoArrayList;
+    private ArrayList<BookInfo> bookInfoArrayList = new ArrayList<>();
     private ProgressBar progressBar;
     private EditText searchEdt;
     private ImageButton searchBtn;
+    private TextView onlineTv;
+    private  TextView myBooksTv;
+    private int clickCounter = 0;
+    private BookAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView mRecyclerView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,58 +54,64 @@ public class NewBook_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_book_, container, false);
+        adapter = new BookAdapter(bookInfoArrayList, NewBook_Fragment.this.getContext());
+        linearLayoutManager = new LinearLayoutManager(NewBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
+        mRecyclerView  = (RecyclerView) view.findViewById(R.id.idRVBooks);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setAdapter(adapter);
 
         progressBar = view.findViewById(R.id.idLoadingPB);
         searchEdt = view.findViewById(R.id.idEdtSearchBooks);
         searchBtn = view.findViewById(R.id.idBtnSearch);
+        onlineTv = view.findViewById(R.id.onlineTv);
+        myBooksTv = view.findViewById(R.id.myBooksTv);
+
+        // adding my books here
+        bookInfoArrayList.add(new BookInfo("Harry Potter 1", "res/drawable/harry_potter1.png", "J K Rolling", "something"));
+        adapter.notifyDataSetChanged();
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
+                searchEdt.setVisibility(View.VISIBLE);
+                onlineTv.setVisibility(View.VISIBLE);
+                myBooksTv.setVisibility(View.INVISIBLE);
+                bookInfoArrayList.clear();
+                clickCounter++;
+                adapter.notifyDataSetChanged();
 
-                // checking if our edittext field is empty or not.
-                if (searchEdt.getText().toString().isEmpty()) {
-                    searchEdt.setError("Please enter search query");
-                    return;
+                if (clickCounter>1)
+                {
+                    if (searchEdt.getText().toString().isEmpty() ) {
+                        searchEdt.setError("Please enter search query");
+                        return;
+                    }
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    getBooksInfo(searchEdt.getText().toString(), view);
+
                 }
-                // if the search query is not empty then we are
-                // calling get book info method to load all
-                // the books from the API.
-                getBooksInfo(searchEdt.getText().toString(), view);
             }
         });
-
         return view;
     }
 
         private void getBooksInfo(String query, View view) {
 
-            // creating a new array list.
-            bookInfoArrayList = new ArrayList<>();
+            bookInfoArrayList.clear();
 
-            // below line is use to initialize
-            // the variable for our request queue.
             mRequestQueue = Volley.newRequestQueue(this.getContext());
 
-            // below line is use to clear cache this
-            // will be use when our data is being updated.
             mRequestQueue.getCache().clear();
 
-            // below is the url for getting data from API in json format.
             String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
 
-            // below line we are  creating a new request queue.
             RequestQueue queue = Volley.newRequestQueue(this.getContext());
 
-
-            // below line is use to make json object request inside that we
-            // are passing url, get method and getting json object. .
             JsonObjectRequest booksObjrequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     progressBar.setVisibility(View.GONE);
-                    // inside on response method we are extracting all our json data.
                     if (response != null) {
                         try {
                             JSONArray itemsArray = response.getJSONArray("items");
@@ -123,32 +137,13 @@ public class NewBook_Fragment extends Fragment {
                                         authorsArrayList.add(authorsArray.optString(i));
                                     }
                                 }
-                                // after extracting all the data we are
-                                // saving this data in our modal class.
                                 BookInfo bookInfo = new BookInfo(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink);
-
-                                // below line is use to pass our modal
-                                // class in our array list.
                                 bookInfoArrayList.add(bookInfo);
-
-                                // below line is use to pass our
-                                // array list in adapter class.
-                                BookAdapter adapter = new BookAdapter(bookInfoArrayList, NewBook_Fragment.this.getContext());
-
-                                // below line is use to add linear layout
-                                // manager for our recycler view.
-                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(NewBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
-                                RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.idRVBooks);
-
-                                // in below line we are setting layout manager and
-                                // adapter to our recycler view.
-                                mRecyclerView.setLayoutManager(linearLayoutManager);
-                                mRecyclerView.setAdapter(adapter);
                             }
+                            adapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            // displaying a toast message when we get any error from API
                             Toast.makeText(NewBook_Fragment.this.getContext(), "No Data Found" + e, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -160,8 +155,7 @@ public class NewBook_Fragment extends Fragment {
                     Toast.makeText(NewBook_Fragment.this.getContext(), "Error found is " + error, Toast.LENGTH_SHORT).show();
                 }
             });
-            // at last we are adding our json object
-            // request in our request queue.
+
             queue.add(booksObjrequest);
         }
 
