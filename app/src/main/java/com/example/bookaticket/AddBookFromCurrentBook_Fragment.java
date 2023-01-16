@@ -3,6 +3,7 @@ package com.example.bookaticket;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +34,6 @@ public class AddBookFromCurrentBook_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_add_book_from_current_book_, container, false);;
         adapter = new BookAdapter(bookInfoArrayList, AddBookFromCurrentBook_Fragment.this.getContext());
         linearLayoutManager = new LinearLayoutManager(AddBookFromCurrentBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
@@ -44,6 +44,7 @@ public class AddBookFromCurrentBook_Fragment extends Fragment {
         // adding my books here
         bookInfoArrayList.add(new BookInfo("Harry Potter 1", "res/drawable/harry_potter1.png", "J K Rolling", "something"));
         adapter.notifyDataSetChanged();
+
 
         //myBooksTv = view.findViewById(R.id.myBooksTv);
         globalsearchBtn = view.findViewById(R.id.idBtnGlobalSearch);

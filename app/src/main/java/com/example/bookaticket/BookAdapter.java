@@ -1,10 +1,13 @@
 package com.example.bookaticket;
 
+import android.app.AlertDialog;
 import android.app.BackgroundServiceStartNotAllowedException;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookaticket.Model.BookInfo;
@@ -28,6 +33,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     // creating variables for arraylist and context.
     private ArrayList<BookInfo> bookInfoArrayList;
     private Context mcontext;
+    private FragmentManager fm;
 
     // creating constructor for array list and context.
     public BookAdapter(ArrayList<BookInfo> bookInfoArrayList, Context mcontext) {
@@ -66,10 +72,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // inside on click listener method we are calling a new activity
-                // and passing all the data of that item in next intent.
-//                Intent i = new Intent(mcontext, BookInfo.class);
-//                i.putExtra("title", bookInfo.getTitle());
+//                 inside on click listener method we are calling a new activity
+//                 and passing all the data of that item in next intent.
+                AddBookDialog newAddDialog = new AddBookDialog();
+
+                Bundle args = new Bundle();
+                args.putString("title", bookInfo.getTitle());
+                // need to send the station as well
+                newAddDialog.setArguments(args);
+
+//                newAddDialog.putExtra("title", bookInfo.getTitle());
 //                i.putExtra("subtitle", bookInfo.getSubtitle());
 //                i.putExtra("authors", bookInfo.getAuthors());
 //                i.putExtra("publisher", bookInfo.getPublisher());
@@ -80,10 +92,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 //                i.putExtra("previewLink", bookInfo.getPreviewLink());
 //                i.putExtra("infoLink", bookInfo.getInfoLink());
 //                i.putExtra("buyLink", bookInfo.getBuyLink());
-//
-//                // after passing that data we are
-//                // starting our new  intent.
-//                mcontext.startActivity(i);
+
+                FragmentActivity activity = (FragmentActivity) mcontext;
+                newAddDialog.show(activity.getSupportFragmentManager(), "");
             }
         });
     }
