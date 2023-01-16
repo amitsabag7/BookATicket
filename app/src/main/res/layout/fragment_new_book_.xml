@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewBook_Fragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+            <!--edit text for getting the search
+            query for book from user-->
+        <TextView
+            android:id="@+id/onlineTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Search a book online"
+            android:textSize="16sp"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <EditText
+            android:id="@+id/idEdtSearchBooks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/onlineTv"
+            android:layout_marginTop="0dp"
+            android:layout_toStartOf="@+id/idBtnSearch"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+            <!--image button for our search button -->
+        <ImageButton
+            android:id="@+id/idBtnSearch"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/onlineTv"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/globalsearch" />
+
+
+        <!--recycler view for displaying our list of books-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/idRVBooks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/idEdtSearchBooks"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+        <!--progressbar for displaying our loading indicator-->
+        <ProgressBar
+            android:id="@+id/idLoadingPB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
