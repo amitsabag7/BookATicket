@@ -18,17 +18,9 @@
             android:id="@+id/onlineTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="5dp"
             android:text="Search a book online"
-            android:visibility="invisible"
-            tools:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/myBooksTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:text="Add a book from the once you already took"
+            android:textSize="16sp"
             android:visibility="visible"
             tools:visibility="visible" />
 
@@ -39,20 +31,19 @@
             android:layout_below="@+id/onlineTv"
             android:layout_marginTop="0dp"
             android:layout_toStartOf="@+id/idBtnSearch"
-            android:layout_weight="4"
-            android:visibility="invisible"
-            tools:visibility="invisible" />
+            android:visibility="visible"
+            tools:visibility="visible" />
 
             <!--image button for our search button -->
         <ImageButton
             android:id="@+id/idBtnSearch"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_below="@+id/onlineTv"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:src="@drawable/globalsearch"
-            android:tint="#FFFFFF" />
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/globalsearch" />
 
 
         <!--recycler view for displaying our list of books-->
