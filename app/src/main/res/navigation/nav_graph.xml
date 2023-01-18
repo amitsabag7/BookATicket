@@ -34,6 +34,12 @@
         <action
             android:id="@+id/action_homePage_Fragment_to_stationBookList_fragment"
             app:destination="@id/stationBookList_fragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
 
     <fragment

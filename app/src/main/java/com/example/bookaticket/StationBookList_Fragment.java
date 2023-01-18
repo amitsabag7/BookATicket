@@ -28,6 +28,7 @@ import java.util.List;
 public class StationBookList_Fragment extends Fragment {
     TextView stationNameTV;
     String stationName;
+    String stationId;
     List<Book> books;
     BookRecyclerAdapter adapter;
 
@@ -53,6 +54,8 @@ public class StationBookList_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_station_book_list, container, false);
+        stationId = StationBookList_FragmentArgs.fromBundle(getArguments()).getId();
+        stationName = StationBookList_FragmentArgs.fromBundle(getArguments()).getName();
 
         books = Model.instance().getAllBooks();
         TextView stationNameTV = view.findViewById(R.id.stationBookList_stationNameTV);

@@ -30,6 +30,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -111,9 +112,8 @@ public class HomePage_Fragment extends Fragment {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-//                        HomePage_FragmentDirections.ActionHomePageFragmentToStationBookListFragment action =
-//                                HomePage_FragmentDirections.actionHomePageFragmentToStationBookListFragment(item.getTitle(),item.getSnippet());
-                        Navigation.findNavController(getView()).navigate(R.id.stationBookList_fragment);
+                        HomePage_FragmentDirections.ActionHomePageFragmentToStationBookListFragment action = HomePage_FragmentDirections.actionHomePageFragmentToStationBookListFragment(item.getTitle(),item.getSnippet());
+                        Navigation.findNavController(getView()).navigate(action);
                         return true;
                     }
                     @Override
