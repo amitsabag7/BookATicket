@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-     app:startDestination="@id/login_Fragment">
+    app:startDestination="@id/login_Fragment">
 
     <fragment
         android:id="@+id/login_Fragment"
         android:name="com.example.bookaticket.Login_Fragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_Fragment_to_signup_Fragment"
             app:destination="@id/signup_Fragment" />
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/signup_Fragment"
         android:name="com.example.bookaticket.Signup_Fragment"
-        android:label="fragment_signup_"
+        android:label="Signup"
         tools:layout="@layout/fragment_signup_" />
 
     <fragment
@@ -37,18 +37,24 @@
     <fragment
         android:id="@+id/homePage_Fragment"
         android:name="com.example.bookaticket.HomePage_Fragment"
-        android:label="fragment_home_page_"
-        tools:layout="@layout/fragment_home_page_" >
+        android:label="Stations"
+        tools:layout="@layout/fragment_home_page_">
         <action
             android:id="@+id/action_homePage_Fragment_to_stationBookList_fragment"
             app:destination="@id/stationBookList_fragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/stationBookList_fragment"
         android:name="com.example.bookaticket.StationBookList_Fragment"
-        android:label="fragment_station_book_list_"
-        tools:layout="@layout/fragment_station_book_list" >
+        android:label="Books list in station"
+        tools:layout="@layout/fragment_station_book_list">
         <argument
             android:name="id"
             app:argType="string" />
@@ -66,4 +72,11 @@
             app:destination="@id/newBook_Fragment" />
     </fragment>
 
+
+        android:id="@+id/privateArea_Fragment"
+        android:name="com.example.bookaticket.PrivateArea_Fragment"
+        android:label="fragment_private_area_"
+        tools:layout="@layout/fragment_private_area_" />
+    <action android:id="@+id/action_global_privateArea_Fragment" app:destination="@id/privateArea_Fragment" />
 </navigation>
+
