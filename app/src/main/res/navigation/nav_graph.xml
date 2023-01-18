@@ -21,11 +21,19 @@
         android:id="@+id/signup_Fragment"
         android:name="com.example.bookaticket.Signup_Fragment"
         android:label="Signup"
-        tools:layout="@layout/fragment_signup_">
+        tools:layout="@layout/fragment_signup_" />
+
+    <fragment
+        android:id="@+id/newBook_Fragment"
+        android:name="com.example.bookaticket.NewBook_Fragment"
+        android:label="fragment_new_book"
+        tools:layout="@layout/fragment_new_book_" >
+
         <action
             android:id="@+id/action_signup_Fragment_to_login_Fragment"
             app:destination="@id/login_Fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/homePage_Fragment"
         android:name="com.example.bookaticket.HomePage_Fragment"
@@ -55,9 +63,20 @@
             app:argType="string" />
     </fragment>
     <fragment
+        android:id="@+id/addBookFromCurrentBook_Fragment"
+        android:name="com.example.bookaticket.AddBookFromCurrentBook_Fragment"
+        android:label="fragment_add_book_from_current_book_"
+        tools:layout="@layout/fragment_add_book_from_current_book_" >
+        <action
+            android:id="@+id/action_addBookFromCurrentBook_Fragment_to_newBook_Fragment"
+            app:destination="@id/newBook_Fragment" />
+    </fragment>
+
+
         android:id="@+id/privateArea_Fragment"
         android:name="com.example.bookaticket.PrivateArea_Fragment"
         android:label="fragment_private_area_"
         tools:layout="@layout/fragment_private_area_" />
     <action android:id="@+id/action_global_privateArea_Fragment" app:destination="@id/privateArea_Fragment" />
 </navigation>
+
