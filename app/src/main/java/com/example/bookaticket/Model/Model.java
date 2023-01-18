@@ -31,11 +31,76 @@ public class Model {
                 "res/drawable/harry_potter1.png",
                 1999,
                 "J K Rolling",
-                "Harry Potter and the Philosopher's Stone is a 1997 fantasy novel written by British author J. K. Rowling. The first novel in the Harry Potter series and Rowling's debut novel, it follows Harry Potter, a young wizard who discovers his magical heritage on his eleventh birthday, when he receives a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. Harry makes close friends and a few enemies during his first year at the school and with the help of his friends, Ron Weasley and Hermione Granger, he faces an attempted comeback by the dark wizard Lord Voldemort, who killed Harry's parents, but failed to kill Harry when he was just 15 months old.", comments));
+                "Harry Potter and the Philosopher's Stone is a 1997 fantasy novel written " +
+                        "by British author J. K. Rowling. The first novel in the Harry Potter series" +
+                        " and Rowling's debut novel, it follows Harry Potter, a young wizard who " +
+                        "discovers his magical heritage on his eleventh birthday, when he receives" +
+                        " a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. " +
+                        "Harry makes close friends and a few enemies during his first year at the " +
+                        "school and with the help of his friends, Ron Weasley and Hermione Granger," +
+                        " he faces an attempted comeback by the dark wizard Lord Voldemort, who " +
+                        "killed Harry's parents, but failed to kill Harry when he was just 15 months old."
+                , comments, false));
+
+        addBook(new Book("Harry Potter 2",
+                "res/drawable/harry_potter1.png",
+                1999,
+                "J K Rolling",
+                "Harry Potter and the Philosopher's Stone is a 1997 fantasy novel written " +
+                        "by British author J. K. Rowling. The first novel in the Harry Potter series" +
+                        " and Rowling's debut novel, it follows Harry Potter, a young wizard who " +
+                        "discovers his magical heritage on his eleventh birthday, when he receives" +
+                        " a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. " +
+                        "Harry makes close friends and a few enemies during his first year at the " +
+                        "school and with the help of his friends, Ron Weasley and Hermione Granger," +
+                        " he faces an attempted comeback by the dark wizard Lord Voldemort, who " +
+                        "killed Harry's parents, but failed to kill Harry when he was just 15 months old."
+                , comments, true));
+
+        addBook(new Book("Harry Potter 3",
+                "res/drawable/harry_potter1.png",
+                1999,
+                "J K Rolling",
+                "Harry Potter and the Philosopher's Stone is a 1997 fantasy novel written " +
+                        "by British author J. K. Rowling. The first novel in the Harry Potter series" +
+                        " and Rowling's debut novel, it follows Harry Potter, a young wizard who " +
+                        "discovers his magical heritage on his eleventh birthday, when he receives" +
+                        " a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. " +
+                        "Harry makes close friends and a few enemies during his first year at the " +
+                        "school and with the help of his friends, Ron Weasley and Hermione Granger," +
+                        " he faces an attempted comeback by the dark wizard Lord Voldemort, who " +
+                        "killed Harry's parents, but failed to kill Harry when he was just 15 months old."
+                , comments, true));
+
+        addBook(new Book("Harry Potter 4",
+                "res/drawable/harry_potter1.png",
+                1999,
+                "J K Rolling",
+                "Harry Potter and the Philosopher's Stone is a 1997 fantasy novel written " +
+                        "by British author J. K. Rowling. The first novel in the Harry Potter series" +
+                        " and Rowling's debut novel, it follows Harry Potter, a young wizard who " +
+                        "discovers his magical heritage on his eleventh birthday, when he receives" +
+                        " a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. " +
+                        "Harry makes close friends and a few enemies during his first year at the " +
+                        "school and with the help of his friends, Ron Weasley and Hermione Granger," +
+                        " he faces an attempted comeback by the dark wizard Lord Voldemort, who " +
+                        "killed Harry's parents, but failed to kill Harry when he was just 15 months old."
+                , comments, false));
 
     }
 
     List<Book> data = new LinkedList<>();
+
+    User user = new User("aml eisami","daliyat al carmel",
+            "amleisami2@gmail.com","res/drawable/avatar.png");
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public List<Book> getAllBooks() {
         return data;

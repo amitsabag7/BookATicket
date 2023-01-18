@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/login_Fragment">
+    app:startDestination="@id/userDetails_Fragment">
 
     <fragment
         android:id="@+id/login_Fragment"
@@ -31,4 +31,25 @@
         android:name="com.example.bookaticket.HomePage_Fragment"
         android:label="fragment_home_page_"
         tools:layout="@layout/fragment_home_page_" />
+    <fragment
+        android:id="@+id/userDetails_Fragment"
+        android:name="com.example.bookaticket.UserDetails_Fragment"
+        android:label="UserDetails_Fragment" >
+        <action
+            android:id="@+id/action_userDetails_Fragment_to_editUserDetails_Fragment"
+            app:destination="@id/editUserDetails_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/expendedBook_Fragment"
+        android:name="com.example.bookaticket.ExpendedBook_Fragment"
+        android:label="fragment_expended_book"
+        tools:layout="@layout/fragment_expended_book" />
+    <fragment
+        android:id="@+id/editUserDetails_Fragment"
+        android:name="com.example.bookaticket.EditUserDetails_Fragment"
+        android:label="EditUserDetails_Fragment" >
+        <action
+            android:id="@+id/action_editUserDetails_Fragment_to_userDetails_Fragment"
+            app:destination="@id/userDetails_Fragment" />
+    </fragment>
 </navigation>
