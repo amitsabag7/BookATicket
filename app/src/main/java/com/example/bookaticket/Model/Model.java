@@ -77,4 +77,20 @@ public class Model {
     public void logoutuser() {
         firebaseModel.logoutuser();
     }
+
+    public void getBooksByStationId(String stationId, Model.GetBooksListener listener) {
+        firebaseModel.getBooksByStationId(stationId, listener);
+    }
+
+    public void getStationById(String stationId, Model.GetStationListener listener) {
+        firebaseModel.getStationById(stationId, listener);
+    }
+
+    public interface GetBooksListener{
+        void onComplete(List<Book> books);
+    }
+
+    public interface GetStationListener {
+        void onComplete(Station station);
+    }
 }

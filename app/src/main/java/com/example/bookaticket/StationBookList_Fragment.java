@@ -14,27 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookaticket.Model.Book;
 import com.example.bookaticket.Model.Model;
+import com.example.bookaticket.Model.Station;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link StationBookList_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StationBookList_Fragment extends Fragment {
-    TextView stationNameTV;
-    String stationName;
-    List<Book> books;
+
+    Station station;
+    List<Book> stationBooks;
     BookRecyclerAdapter adapter;
 
-    public static StationBookList_Fragment newInstance(String stationName) {
+    public static StationBookList_Fragment newInstance(String stationId) {
         StationBookList_Fragment fragment = new StationBookList_Fragment();
         Bundle args = new Bundle();
-        args.putString("stationName", stationName);
+        args.putString("stationId", stationId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,16 +42,40 @@ public class StationBookList_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            stationName = args.getString("stationName");
+            station = new Station(args.getString("stationId"));
+            fetchStation();
+        } else {
+            station = new Station("07cJ3RsJZMRYyYgsLGcO", new GeoPoint(32.0853, 34.7818), "Herzliya");
+            stationBooks = Model.instance().getAllBooks();
+            fetchStation();
         }
+    }
+
+    private void fetchStation() {
+        Model.instance().getStationById(station.getId(), (result) -> {
+            if (station == null) {
+                Toast.makeText(getContext(), "Error fetching station details", Toast.LENGTH_SHORT).show();
+            } else {
+                this.station = result;
+                fetchBooksByStationId();
+            }
+        });
+    }
+
+    private void fetchBooksByStationId() {
+        Model.instance().getBooksByStationId(station.getId(), (books) -> {
+            if (books.isEmpty()) {
+                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
+            } else {
+                stationBooks.addAll(books);
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_station_book_list, container, false);
-        books = Model.instance().getAllBooks();
         TextView stationNameTV = view.findViewById(R.id.stationBookList_stationNameTV);
         RecyclerView stationBookList = view.findViewById(R.id.stationBookListRV);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -65,8 +87,8 @@ public class StationBookList_Fragment extends Fragment {
         adapter = new BookRecyclerAdapter();
         stationBookList.setAdapter(adapter);
 
-        if (stationName != null) {
-            stationNameTV.setText(stationName);
+        if (station.getName() != null) {
+            stationNameTV.setText(station.getName());
         }
 
         return view;
@@ -103,13 +125,13 @@ public class StationBookList_Fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-            Book book = books.get(position);
+            Book book = stationBooks.get(position);
             holder.bind(book);
         }
 
         @Override
         public int getItemCount() {
-            return books.size();
+            return stationBooks.size();
         }
     }
 }
