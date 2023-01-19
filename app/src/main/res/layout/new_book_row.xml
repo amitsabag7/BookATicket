@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/idIVbook"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:id="@+id/idTVBookTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/idIVbook"
+            android:padding="3dp"
+            android:text="Book Title"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/idTVpublisher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idTVBookTitle"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@id/idIVbook"
+            android:padding="3dp"
+            android:text="Publisher"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+
+        <TextView
+            android:id="@+id/idTVDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idTVpublisher"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:padding="3dp"
+            android:text="date"
+            android:textColor="@color/black"
+            android:textSize="11sp" />
+
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

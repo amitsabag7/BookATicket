@@ -35,6 +35,10 @@ public class Model {
 
     }
 
+    public interface Listener<T>{
+        void onComplete(T data);
+    }
+
     List<Book> data = new LinkedList<>();
 
     public List<Book> getAllBooks() {
@@ -76,6 +80,10 @@ public class Model {
 
     public void logoutuser() {
         firebaseModel.logoutuser();
+    }
+
+    public void getAllStations(Listener<List<Station>> callback){
+        firebaseModel.getAllStations(callback);
     }
 
     public void getBooksByStationId(String stationId, Model.GetBooksListener listener) {

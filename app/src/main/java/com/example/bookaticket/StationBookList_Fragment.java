@@ -14,25 +14,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bookaticket.Model.Book;
 import com.example.bookaticket.Model.Model;
-import com.example.bookaticket.Model.Station;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link StationBookList_Fragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class StationBookList_Fragment extends Fragment {
-
-    Station station;
-    List<Book> stationBooks;
+    TextView stationNameTV;
+    String stationName;
+    String stationId;
+    List<Book> books;
     BookRecyclerAdapter adapter;
 
-    public static StationBookList_Fragment newInstance(String stationId) {
+    public static StationBookList_Fragment newInstance(String stationName) {
         StationBookList_Fragment fragment = new StationBookList_Fragment();
         Bundle args = new Bundle();
-        args.putString("stationId", stationId);
+        args.putString("stationName", stationName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,40 +45,19 @@ public class StationBookList_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            station = new Station(args.getString("stationId"));
-            fetchStation();
-        } else {
-            station = new Station("07cJ3RsJZMRYyYgsLGcO", new GeoPoint(32.0853, 34.7818), "Herzliya");
-            stationBooks = Model.instance().getAllBooks();
-            fetchStation();
+            stationName = args.getString("stationName");
         }
-    }
-
-    private void fetchStation() {
-        Model.instance().getStationById(station.getId(), (result) -> {
-            if (station == null) {
-                Toast.makeText(getContext(), "Error fetching station details", Toast.LENGTH_SHORT).show();
-            } else {
-                this.station = result;
-                fetchBooksByStationId();
-            }
-        });
-    }
-
-    private void fetchBooksByStationId() {
-        Model.instance().getBooksByStationId(station.getId(), (books) -> {
-            if (books.isEmpty()) {
-                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
-            } else {
-                stationBooks.addAll(books);
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_station_book_list, container, false);
+        stationId = StationBookList_FragmentArgs.fromBundle(getArguments()).getId();
+        stationName = StationBookList_FragmentArgs.fromBundle(getArguments()).getName();
+
+        books = Model.instance().getAllBooks();
         TextView stationNameTV = view.findViewById(R.id.stationBookList_stationNameTV);
         RecyclerView stationBookList = view.findViewById(R.id.stationBookListRV);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -87,8 +69,8 @@ public class StationBookList_Fragment extends Fragment {
         adapter = new BookRecyclerAdapter();
         stationBookList.setAdapter(adapter);
 
-        if (station.getName() != null) {
-            stationNameTV.setText(station.getName());
+        if (stationName != null) {
+            stationNameTV.setText(stationName);
         }
 
         return view;
@@ -125,13 +107,13 @@ public class StationBookList_Fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-            Book book = stationBooks.get(position);
+            Book book = books.get(position);
             holder.bind(book);
         }
 
         @Override
         public int getItemCount() {
-            return stationBooks.size();
+            return books.size();
         }
     }
 }
