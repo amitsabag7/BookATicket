@@ -1,11 +1,20 @@
 package com.example.bookaticket.Model;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import androidx.core.os.HandlerCompat;
+
 import com.example.bookaticket.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
+import java.io.Console;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Model {
     private static final Model _instance= new Model();
@@ -15,6 +24,10 @@ public class Model {
     }
 
     private FirebaseModel firebaseModel = new FirebaseModel();
+    AppLocalDbRepository localDb = AppLocalDB.getAppDb();
+    private Executor executor = Executors.newSingleThreadExecutor();
+    private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+
 
     private Model() {
         List<Comment> comments = new LinkedList<>();
@@ -148,6 +161,29 @@ public class Model {
     }
 
     public void getAllStations(Listener<List<Station>> callback){
-        firebaseModel.getAllStations(callback);
+
+        Long localLastUpdate = Station.getLocalLastUpdate();
+        Log.d("tag","local"+localLastUpdate.toString());
+
+
+       firebaseModel.getAllStationsSince(localLastUpdate,list-> {
+           executor.execute(()->{
+               Log.d("tag","firebasr return "+list.size() );
+               Long time = localLastUpdate;
+               for(Station st: list) {
+                   localDb.stationDao().insertAll(st);
+                   if(time <= st.getLastUpdated()) {
+                       time = st.getLastUpdated();
+                   }
+               }
+               Station.setLocalLastUpdate(time);
+              List<Station> complete = localDb.stationDao().getAll();
+               mainHandler.post(()->{
+                   callback.onComplete(complete);
+                   Log.d("TAG",complete.toString());
+
+               });
+           });
+       });
     }
 }
