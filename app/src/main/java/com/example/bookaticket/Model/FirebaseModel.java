@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.bookaticket.Login_Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -75,8 +76,10 @@ public class FirebaseModel {
        }
     }
 
-    public void getAllStations(Model.Listener<List<Station>> callback){
-        db.collection("stations").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback){
+        db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since,0))
+                                             .get()
+                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<Station> list = new LinkedList<>();
