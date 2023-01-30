@@ -89,6 +89,10 @@ public class Model {
 
     }
 
+    public interface Listener<T>{
+        void onComplete(T data);
+    }
+
     List<Book> data = new LinkedList<>();
 
     User user = new User("aml eisami","daliyat al carmel",
@@ -141,5 +145,9 @@ public class Model {
 
     public void logoutuser() {
         firebaseModel.logoutuser();
+    }
+
+    public void getAllStations(Listener<List<Station>> callback){
+        firebaseModel.getAllStations(callback);
     }
 }
