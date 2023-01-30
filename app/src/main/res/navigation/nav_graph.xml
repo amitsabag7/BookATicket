@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/userDetails_Fragment">
+    app:startDestination="@id/login_Fragment">
 
     <fragment
         android:id="@+id/login_Fragment"
         android:name="com.example.bookaticket.Login_Fragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_Fragment_to_signup_Fragment"
             app:destination="@id/signup_Fragment" />
@@ -20,36 +20,68 @@
     <fragment
         android:id="@+id/signup_Fragment"
         android:name="com.example.bookaticket.Signup_Fragment"
-        android:label="fragment_signup_"
-        tools:layout="@layout/fragment_signup_" >
+        android:label="Signup"
+        tools:layout="@layout/fragment_signup_" />
+
+    <fragment
+        android:id="@+id/newBook_Fragment"
+        android:name="com.example.bookaticket.NewBook_Fragment"
+        android:label="fragment_new_book"
+        tools:layout="@layout/fragment_new_book_" >
+
         <action
             android:id="@+id/action_signup_Fragment_to_login_Fragment"
             app:destination="@id/login_Fragment" />
     </fragment>
+
     <fragment
         android:id="@+id/homePage_Fragment"
         android:name="com.example.bookaticket.HomePage_Fragment"
-        android:label="fragment_home_page_"
-        tools:layout="@layout/fragment_home_page_" />
-    <fragment
-        android:id="@+id/userDetails_Fragment"
-        android:name="com.example.bookaticket.UserDetails_Fragment"
-        android:label="UserDetails_Fragment" >
+        android:label="Stations"
+        tools:layout="@layout/fragment_home_page_">
         <action
-            android:id="@+id/action_userDetails_Fragment_to_editUserDetails_Fragment"
-            app:destination="@id/editUserDetails_Fragment" />
+            android:id="@+id/action_homePage_Fragment_to_stationBookList_fragment"
+            app:destination="@id/stationBookList_fragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/stationBookList_fragment"
+        android:name="com.example.bookaticket.StationBookList_Fragment"
+        android:label="Books list in station"
+        tools:layout="@layout/fragment_station_book_list">
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/expendedBook_Fragment"
-        android:name="com.example.bookaticket.ExpendedBook_Fragment"
-        android:label="fragment_expended_book"
-        tools:layout="@layout/fragment_expended_book" />
-    <fragment
-        android:id="@+id/editUserDetails_Fragment"
-        android:name="com.example.bookaticket.EditUserDetails_Fragment"
-        android:label="EditUserDetails_Fragment" >
+        android:id="@+id/addBookFromCurrentBook_Fragment"
+        android:name="com.example.bookaticket.AddBookFromCurrentBook_Fragment"
+        android:label="fragment_add_book_from_current_book_"
+        tools:layout="@layout/fragment_add_book_from_current_book_" >
         <action
-            android:id="@+id/action_editUserDetails_Fragment_to_userDetails_Fragment"
-            app:destination="@id/userDetails_Fragment" />
+            android:id="@+id/action_addBookFromCurrentBook_Fragment_to_newBook_Fragment"
+            app:destination="@id/newBook_Fragment" />
     </fragment>
+
+
+        android:id="@+id/privateArea_Fragment"
+        android:name="com.example.bookaticket.PrivateArea_Fragment"
+        android:label="fragment_private_area_"
+        tools:layout="@layout/fragment_private_area_" />
+    <action android:id="@+id/action_global_privateArea_Fragment" app:destination="@id/privateArea_Fragment" />
+    <fragment
+        android:id="@+id/privateArea_Fragment"
+        android:name="com.example.bookaticket.PrivateArea_Fragment"
+        android:label="fragment_private_area_"
+        tools:layout="@layout/fragment_private_area_" />
 </navigation>
+
