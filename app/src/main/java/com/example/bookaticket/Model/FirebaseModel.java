@@ -11,7 +11,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
@@ -127,5 +129,37 @@ public class FirebaseModel {
                 }
             }
         });
+    }
+
+    public void addBookToStation(Book book, String stationId, Comment newComment, Model.AddBookToStationListener callback) {
+        db.collection("books").add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful()) {
+                    DocumentReference bookRef = task.getResult();
+                    db.collection("stations").document(stationId).update("books", FieldValue.arrayUnion(bookRef)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()) {
+                                db.collection("books").document(bookRef.getId()).collection("comments").add(newComment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                        if(task.isSuccessful()) {
+                                            callback.onComplete(true);
+                                        } else {
+                                            callback.onComplete(false);
+                                        }
+                                    }
+                                });
+                            } else {
+                                callback.onComplete(false);
+                            }
+                        }
+                    });
+                } else {
+                    callback.onComplete(false);
+                }
+            }
+    });
     }
 }

@@ -101,4 +101,12 @@ public class Model {
     public interface GetStationListener {
         void onComplete(Station station);
     }
+
+    public interface AddBookToStationListener{
+        void onComplete(boolean b);
+    }
+
+    public void addBookToStation(Book book, String stationId, Comment newComment, Model.AddBookToStationListener callback) {
+        firebaseModel.addBookToStation(book, stationId, newComment, callback);
+    }
 }

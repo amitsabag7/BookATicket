@@ -72,16 +72,24 @@
             app:destination="@id/newBook_Fragment" />
     </fragment>
 
-
-        android:id="@+id/privateArea_Fragment"
-        android:name="com.example.bookaticket.PrivateArea_Fragment"
-        android:label="fragment_private_area_"
-        tools:layout="@layout/fragment_private_area_" />
-    <action android:id="@+id/action_global_privateArea_Fragment" app:destination="@id/privateArea_Fragment" />
     <fragment
         android:id="@+id/privateArea_Fragment"
         android:name="com.example.bookaticket.PrivateArea_Fragment"
         android:label="fragment_private_area_"
         tools:layout="@layout/fragment_private_area_" />
+    <action android:id="@+id/action_global_privateArea_Fragment" app:destination="@id/privateArea_Fragment" />
+
+    <fragment
+        android:id="@+id/addBook_Fragment"
+        android:name="com.example.bookaticket.AddBook_Fragment"
+        android:label="add book to station"
+        android:layout="@layout/fragment_add_book">
+        <argument
+            android:name="stationName"
+            app:argType="string" />
+        <argument
+            android:name="book"
+            app:argType="com.example.bookaticket.Model.Book" />
+    </fragment>
 </navigation>
 
