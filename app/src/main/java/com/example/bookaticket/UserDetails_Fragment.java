@@ -1,5 +1,6 @@
 package com.example.bookaticket;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bookaticket.Model.Book;
 import com.example.bookaticket.Model.Model;
 import com.example.bookaticket.Model.User;
+import com.squareup.picasso.Picasso;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -30,7 +33,7 @@ public class UserDetails_Fragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_user_details, container, false);
-        user = Model.instance().getUser();
+        user = Model.instance().getUsers().get(0);
         books = Model.instance().getAllBooks();
 
         TextView userName = view.findViewById(R.id.UserName);
@@ -42,7 +45,14 @@ public class UserDetails_Fragment extends Fragment {
         userName.setText(user.userName);
         hometown.setText(user.homeTown);
         email.setText(user.email);
-        profileImg.setImageResource(R.drawable.avatar);
+
+        if (user.profileImg != "") {
+            Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(profileImg);
+        }
+        else {
+            profileImg.setImageResource(R.drawable.avatar);
+        }
+
         editprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
