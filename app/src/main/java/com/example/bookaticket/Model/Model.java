@@ -175,7 +175,9 @@ public class Model {
 
     public void signupUser(String username, String email, String password, Model.SignupListener callback) {
         firebaseModel.signupUser(username,email,password,callback);
+        firebaseModel.saveUser(username,email);
     }
+
 
     public boolean isLogedIn() {
         return firebaseModel.isLogedIn();
@@ -183,6 +185,10 @@ public class Model {
 
     public void logoutuser() {
         firebaseModel.logoutuser();
+    }
+
+    public String getCurentUserEmail() {
+       return firebaseModel.getCurentUserEmail();
     }
 
     public void getAllStations(Listener<List<Station>> callback){

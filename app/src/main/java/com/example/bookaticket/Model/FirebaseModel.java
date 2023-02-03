@@ -24,6 +24,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class FirebaseModel {
@@ -70,6 +71,17 @@ public class FirebaseModel {
         });
     }
 
+    public void saveUser(String username, String email) {
+        User user = new User(username,"", email, "");
+        Map<String, Object> json = user.toJson();
+        db.collection("users").document().set(json).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("tag","The user "+username+" saved in FireBase");
+            }
+        });
+    }
+
     public boolean isLogedIn () {
         if(mAuth.getCurrentUser() != null) {
             return true;
@@ -80,6 +92,14 @@ public class FirebaseModel {
        if(isLogedIn()) {
           mAuth.signOut();
        }
+    }
+
+    public String getCurentUserEmail() {
+        if(mAuth.getCurrentUser() != null) {
+            return mAuth.getCurrentUser().getEmail();
+        }
+
+        return "";
     }
 
     public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback){
