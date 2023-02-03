@@ -1,7 +1,5 @@
 package com.example.bookaticket.Model;
 
-import android.media.Image;
-
 public class User {
 
     public String userName;
@@ -13,6 +11,10 @@ public class User {
         this.userName = userName;
         this.homeTown = homeTown;
         this.email = email;
+        this.profileImg = profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
         this.profileImg = profileImg;
     }
 }

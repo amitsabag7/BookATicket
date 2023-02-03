@@ -1,5 +1,6 @@
 package com.example.bookaticket.Model;
 
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -106,6 +108,11 @@ public class Model {
                         "killed Harry's parents, but failed to kill Harry when he was just 15 months old."
                 , comments, false));
 
+        User user1 = new User("aml eisami","daliyat al carmel",
+                "amleisami2@gmail.com","gs://bookaticket-6ce0a.appspot.com/profileImages/amleisami2@gmail.com.jpg");
+
+        users.add(user1);
+
     }
 
     public interface Listener<T>{
@@ -113,12 +120,25 @@ public class Model {
     }
 
     List<Book> data = new LinkedList<>();
+    List<User> users = new ArrayList<>();
 
     User user = new User("aml eisami","daliyat al carmel",
-            "amleisami2@gmail.com","res/drawable/avatar.png");
+            "amleisami2@gmail.com","gs://bookaticket-6ce0a.appspot.com/profileImages/amleisami2@gmail.com.jpg");
+
+    public void updateProfileImage(String email,String profileImg){
+        for (int user = 0; user < users.size(); user++) {
+            if (users.get(user).email == email){
+                users.get(user).setProfileImg(profileImg);
+            }
+        }
+    }
 
     public User getUser(){
         return user;
+    }
+
+    public List<User> getUsers(){
+        return users;
     }
 
     public void setUser(User user) {
@@ -147,7 +167,6 @@ public class Model {
 
     public void loginUser(String email, String password, Model.LoginListener callback){
         firebaseModel.loginUser(email,password,callback);
-
     }
 
     public interface SignupListener{
@@ -191,5 +210,13 @@ public class Model {
                });
            });
        });
+    }
+
+    public interface UploadImageListener{
+        void onComplete(String url);
+    }
+
+    public void uploadImage(String name, Bitmap bitmap,UploadImageListener listener){
+        firebaseModel.uploadImage(name,bitmap,listener);
     }
 }
