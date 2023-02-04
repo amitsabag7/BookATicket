@@ -1,6 +1,8 @@
 package com.example.bookaticket.Model;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Book {
     public String name;
@@ -9,14 +11,17 @@ public class Book {
     public String writer;
     public String description;
     public List<Comment> comments;
+    public boolean isReturned;
 
-    public Book(String name, String imgPath, int year, String writer, String description, List<Comment> comments) {
+    public Book(String name, String imgPath, int year, String writer, String description,
+                List<Comment> comments, boolean isReturned) {
         this.name = name;
         this.imgPath = imgPath;
         this.year = year;
         this.writer = writer;
         this.description = description;
         this.comments = comments;
+        this.isReturned = isReturned;
     }
 
 
@@ -68,4 +73,13 @@ public class Book {
         this.comments = comments;
     }
 
+    public void updateComment(Comment comment,String text){
+        for (int com = 0; com < this.comments.size(); com++) {
+            if ((comments.get(com).user == comment.user) &&
+                    (comments.get(com).text == comment.text)){
+                comments.get(com).text = text;
+                comments.set(com,comment);
+            }
+        }
+    }
 }
