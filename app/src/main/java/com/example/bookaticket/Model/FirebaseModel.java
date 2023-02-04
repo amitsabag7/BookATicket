@@ -162,4 +162,19 @@ public class FirebaseModel {
             }
     });
     }
+
+    public void getBookById(String id, Model.Listener<Book> listener) {
+        db.collection("books").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful() && task.getResult() != null) {
+                    DocumentSnapshot document = task.getResult();
+                    Book book = document.toObject(Book.class);
+                    listener.onComplete(book);
+                } else {
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
 }

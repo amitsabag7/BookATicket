@@ -28,7 +28,9 @@
         android:name="com.example.bookaticket.NewBook_Fragment"
         android:label="fragment_new_book"
         tools:layout="@layout/fragment_new_book_" >
-
+        <action
+            android:id="@+id/action_newBook_Fragment_to_AddBook_Fragment"
+            app:destination="@id/addBook_Fragment" />
         <action
             android:id="@+id/action_signup_Fragment_to_login_Fragment"
             app:destination="@id/login_Fragment" />
@@ -85,11 +87,14 @@
         android:label="add book to station"
         android:layout="@layout/fragment_add_book">
         <argument
+            android:name="stationId"
+            app:argType="string" />
+        <argument
             android:name="stationName"
             app:argType="string" />
         <argument
-            android:name="book"
-            app:argType="com.example.bookaticket.Model.Book" />
+            android:name="bookId"
+            app:argType="string" />
     </fragment>
 </navigation>
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,6 +70,13 @@ public class StationBookList_Fragment extends Fragment {
         stationBookList.addItemDecoration(dividerItemDecoration);
         adapter = new BookRecyclerAdapter();
         stationBookList.setAdapter(adapter);
+        ImageButton addBookBtn = view.findViewById(R.id.stationBookList_addBookBtn);
+        addBookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.addBookFromCurrentBook_Fragment);
+            }
+        });
 
         if (stationName != null) {
             stationNameTV.setText(stationName);

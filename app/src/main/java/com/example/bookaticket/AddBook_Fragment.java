@@ -43,22 +43,29 @@ public class AddBook_Fragment extends Fragment {
         EditText comment = view.findViewById(R.id.addBook_newCommentET);
         Button addBook = view.findViewById(R.id.addBook_addBtn);
 
-        stationId = StationBookList_FragmentArgs.fromBundle(getArguments()).getId();
+        stationId = AddBook_FragmentArgs.fromBundle(getArguments()).getStationId();
         stationName = AddBook_FragmentArgs.fromBundle(getArguments()).getStationName();
-        book = AddBook_FragmentArgs.fromBundle(getArguments()).getBook();
+        String bookId = AddBook_FragmentArgs.fromBundle(getArguments()).getBookId();
+        Model.instance().getBookById(bookId, new Model.Listener<Book>() {
+            @Override
+            public void onComplete(Book data) {
+                book = data;
+                name.setText(book.getName());
+                author.setText(book.writer);
+                year.setText(book.getYear());
+                description.setText(book.getDescription());
+                addBook.setText("Add Book to" + stationName);
+                try {
+                    Drawable coverImg = Drawable.createFromStream((InputStream) new URL(book.imgPath).getContent(), "src");
+                    cover.setImageDrawable(coverImg);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
-        try {
-            Drawable coverImg = Drawable.createFromStream((InputStream) new URL(book.imgPath).getContent(), "src");
-            cover.setImageDrawable(coverImg);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        name.setText(book.name);
-        author.setText(book.writer);
-        year.setText(String.valueOf(book.year));
-        description.setText(book.description);
-        addBook.setText("Add Book to" + stationName);
+
         /**
          addBook.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view1) {

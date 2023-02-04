@@ -57,6 +57,9 @@ public class Model {
         data.set(pos, book);
     }
 
+    public void getBookById(String id, Listener<Book> listener) {
+       firebaseModel.getBookById(id, listener);
+    }
     public interface LoginListener{
         void onComplete(Task<AuthResult> task);
     }
