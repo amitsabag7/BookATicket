@@ -165,33 +165,30 @@ public class FirebaseModel {
         db.collection("books").add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
-                if(task.isSuccessful()) {
-                    DocumentReference bookRef = task.getResult();
-                    db.collection("stations").document(stationId).update("books", FieldValue.arrayUnion(bookRef)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                db.collection("books").document(bookRef.getId()).collection("comments").add(newComment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                        if(task.isSuccessful()) {
-                                            callback.onComplete(true);
-                                        } else {
-                                            callback.onComplete(false);
-                                        }
-                                    }
-                                });
-                            } else {
-                                callback.onComplete(false);
-                            }
-                        }
-                    });
-                } else {
-                    callback.onComplete(false);
-                }
+//                if(task.isSuccessful()) {
+//                    DocumentReference bookRef = task.getResult();
+//                    db.collection("stations").document(stationId).update("books", FieldValue.arrayUnion(bookRef)).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if(task.isSuccessful()) {
+//                                db.collection("books").document(bookRef.getId()).collection("comments").add(newComment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                                        if(task.isSuccessful()) {
+//                                            callback.onComplete(true);
+//                                        } else {
+//                                            callback.onComplete(false);
+//                                        }
+//                                    }
+//                                });
+//                            } else {
+//                                callback.onComplete(false);
+//                            }
+//                        }
+                Log.d("tag","Book  "+ book.getName() +" saved in FireBase");
+                    }
+                });
             }
-    });
-    }
 
     public void getBookById(String id, Model.Listener<Book> listener) {
         db.collection("books").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -231,6 +228,24 @@ public class FirebaseModel {
                         listener.onComplete(uri.toString());
                     }
                 });
+            }
+        });
+    }
+
+    public void getAllBookInstancesByStationID(String stationID, Model.Listener<List<BookInstance>> callback) {
+        db.collection("bookInstance").whereEqualTo("stationID", stationID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<BookInstance> list = new LinkedList<>();
+                if (task.isSuccessful()){
+                    Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
+                    QuerySnapshot jsonsList = task.getResult();
+                    for (DocumentSnapshot json: jsonsList){
+                        BookInstance st = BookInstance.fromJson(json.getData());
+                        list.add(st);
+                    }
+                }
+                callback.onComplete(list);
             }
         });
     }

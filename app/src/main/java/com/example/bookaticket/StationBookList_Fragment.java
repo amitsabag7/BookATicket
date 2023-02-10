@@ -1,5 +1,6 @@
 package com.example.bookaticket;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookaticket.Model.Book;
+import com.example.bookaticket.Model.BookInstance;
 import com.example.bookaticket.Model.Model;
 
 import java.util.List;
@@ -31,7 +34,7 @@ public class StationBookList_Fragment extends Fragment {
     TextView stationNameTV;
     String stationName;
     String stationId;
-    List<Book> books;
+    List<BookInstance> bookInstances;
     BookRecyclerAdapter adapter;
 
     public static StationBookList_Fragment newInstance(String stationName) {
@@ -51,6 +54,7 @@ public class StationBookList_Fragment extends Fragment {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,7 +63,6 @@ public class StationBookList_Fragment extends Fragment {
         stationId = StationBookList_FragmentArgs.fromBundle(getArguments()).getId();
         stationName = StationBookList_FragmentArgs.fromBundle(getArguments()).getName();
 
-        books = Model.instance().getAllBooks();
         TextView stationNameTV = view.findViewById(R.id.stationBookList_stationNameTV);
         RecyclerView stationBookList = view.findViewById(R.id.stationBookListRV);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -69,6 +72,17 @@ public class StationBookList_Fragment extends Fragment {
                 layoutManager.getOrientation());
         stationBookList.addItemDecoration(dividerItemDecoration);
         adapter = new BookRecyclerAdapter();
+
+        Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
+            if (list != null) {
+                bookInstances = list;
+
+                adapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         stationBookList.setAdapter(adapter);
         ImageButton addBookBtn = view.findViewById(R.id.stationBookList_addBookBtn);
         addBookBtn.setOnClickListener(new View.OnClickListener() {
@@ -98,9 +112,9 @@ public class StationBookList_Fragment extends Fragment {
             bookCoverIV = itemView.findViewById(R.id.bookRow_bookCoverIV);
         }
 
-        public void bind(Book book) {
-            bookNameTV.setText(book.name);
-            bookAuthorTV.setText(book.writer);
+        public void bind(BookInstance bookInstance) {
+            bookNameTV.setText("bookInstance.name");
+            bookAuthorTV.setText("bookInstance.writer");
             bookCoverIV.setImageResource(R.drawable.harry_potter1);
         }
     }
@@ -116,13 +130,19 @@ public class StationBookList_Fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-            Book book = books.get(position);
-            holder.bind(book);
+            if (bookInstances != null) {
+                BookInstance bookInstance = bookInstances.get(position);
+                holder.bind(bookInstance);
+            }
         }
 
         @Override
         public int getItemCount() {
-            return books.size();
+            if (bookInstances != null) {
+                return bookInstances.size();
+            } else {
+                return 0;
+            }
         }
     }
 }

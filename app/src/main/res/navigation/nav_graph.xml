@@ -93,8 +93,8 @@
             android:name="stationName"
             app:argType="string" />
         <argument
-            android:name="bookId"
-            app:argType="string" />
+        android:name="bookInfo"
+        app:argType="com.example.bookaticket.Model.BookInfo" />
     </fragment>
     <fragment
         android:id="@+id/userDetails_Fragment"
