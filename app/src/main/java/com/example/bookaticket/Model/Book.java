@@ -1,8 +1,8 @@
 package com.example.bookaticket.Model;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class Book {
     public String name;
@@ -75,11 +75,22 @@ public class Book {
 
     public void updateComment(Comment comment,String text){
         for (int com = 0; com < this.comments.size(); com++) {
-            if ((comments.get(com).user == comment.user) &&
+            if ((comments.get(com).userEmail == comment.userEmail) &&
                     (comments.get(com).text == comment.text)){
                 comments.get(com).text = text;
                 comments.set(com,comment);
             }
         }
+    }
+
+    public Map<String, Object> toJson() {
+        Map<String, Object> json = new HashMap<>();
+        json.put("name", name);
+        json.put("imgPath", imgPath);
+        json.put("year", year);
+        json.put("writer", writer);
+        json.put("description", description);
+        json.put("comments", comments.toString());
+        return json;
     }
 }

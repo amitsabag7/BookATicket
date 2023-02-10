@@ -98,7 +98,9 @@ public class NewBook_Fragment extends Fragment {
                             ArrayList<String> authorsArrayList = new ArrayList<>();
                             if (authorsArray.length() != 0) {
                                 for (int j = 0; j < authorsArray.length(); j++) {
-                                    authorsArrayList.add(authorsArray.optString(i));
+                                    if (!authorsArray.optString(i).isEmpty()) {
+                                        authorsArrayList.add(authorsArray.optString(i));
+                                    }
                                 }
                             }
 

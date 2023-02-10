@@ -1,6 +1,5 @@
 package com.example.bookaticket;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bookaticket.Model.Book;
@@ -20,7 +19,7 @@ public class CommentsListFagmentViewModel extends ViewModel {
         List<Comment> myComments = new ArrayList<Comment>();
 
         for (int comment = 0; comment < data.size(); comment++){
-            if ((data.get(comment).user).equals(userName)){
+            if ((data.get(comment).userEmail).equals(userName)){
                 myComments.add(data.get(comment));
             }
         }

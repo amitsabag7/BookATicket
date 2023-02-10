@@ -1,17 +1,20 @@
 package com.example.bookaticket.Model;
 
-import com.example.bookaticket.R;
-
 public class Comment {
-    public int userAvatarPath;
-    public String user;
-    public int starsRate;
+
+    public String bookInfoID;
+    public String id;
+    public Long lastUpdated;
+    public String userEmail;
+    public int rate;
     public String text;
 
-    public Comment(String user, int starsRate, String text, int userAvatarPath) {
-        this.userAvatarPath = userAvatarPath;
-        this.user = user;
-        this.starsRate = starsRate;
+    public Comment(String bookInfoID, String id, String userEmail, int rate, String text) {
+        this.bookInfoID = bookInfoID;
+        this.id = id;
+        this.lastUpdated = lastUpdated;
+        this.userEmail = userEmail;
+        this.rate = rate;
         this.text = text;
     }
 }

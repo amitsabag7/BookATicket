@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookaticket.Model.BookInfo;
@@ -74,12 +75,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             public void onClick(View v) {
 //                 inside on click listener method we are calling a new activity
 //                 and passing all the data of that item in next intent.
-                AddBookDialog newAddDialog = new AddBookDialog();
 
                 Bundle args = new Bundle();
-                args.putString("title", bookInfo.getTitle());
-                // need to send the station as well
-                newAddDialog.setArguments(args);
+                args.putString("stationId", "1");
+                args.putString("stationName", "Holon");
+
+                NewBook_FragmentDirections.ActionNewBookFragmentToAddBookFragment action =
+                        NewBook_FragmentDirections.actionNewBookFragmentToAddBookFragment("1", "Holon", bookInfo);
+                Navigation.findNavController(v).navigate(action);
+//                AddBookDialog newAddDialog = new AddBookDialog();
+//
+
+//                // need to send the station as well
+//                newAddDialog.setArguments(args);
 
 //                newAddDialog.putExtra("title", bookInfo.getTitle());
 //                i.putExtra("subtitle", bookInfo.getSubtitle());
@@ -93,8 +101,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 //                i.putExtra("infoLink", bookInfo.getInfoLink());
 //                i.putExtra("buyLink", bookInfo.getBuyLink());
 
-                FragmentActivity activity = (FragmentActivity) mcontext;
-                newAddDialog.show(activity.getSupportFragmentManager(), "");
+//                FragmentActivity activity = (FragmentActivity) mcontext;
+//                newAddDialog.show(activity.getSupportFragmentManager(), "");
             }
         });
     }

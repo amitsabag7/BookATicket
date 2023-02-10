@@ -1,8 +1,10 @@
 package com.example.bookaticket.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
-public class BookInfo {
+public class BookInfo implements Serializable {
     private String title;
     private String subtitle;
     private ArrayList<String> authors;
@@ -13,7 +15,7 @@ public class BookInfo {
     private String thumbnail;
     private String previewLink;
     private String infoLink;
-    private String buyLink;
+        private String buyLink;
 
     // creating getter and setter methods
     public String getTitle() {
@@ -34,6 +36,19 @@ public class BookInfo {
 
     public ArrayList<String> getAuthors() {
         return authors;
+    }
+
+    public String authorsToString() {
+        if(authors.size() == 0) {
+            return "";
+        }
+
+        StringBuilder authorsList = new StringBuilder();
+
+        for (String author : authors) {
+            authorsList.append(author).append(", ");
+        }
+        return authorsList.toString();
     }
 
     public void setAuthors(ArrayList<String> authors) {

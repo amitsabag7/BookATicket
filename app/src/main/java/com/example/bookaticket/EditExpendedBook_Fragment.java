@@ -2,7 +2,6 @@ package com.example.bookaticket;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,10 +131,10 @@ public class EditExpendedBook_Fragment extends Fragment {
         }
 
         public void bind(Comment comment,int position) {
-                userName.setText(comment.user);
-                avatar.setImageResource(comment.userAvatarPath);
+                userName.setText(comment.userEmail);
+               // avatar.setImageResource("drawable/avatar.png");
                 text.setText(comment.text);
-                starRate.setImageResource(starImage(comment.starsRate));
+                starRate.setImageResource(starImage(comment.rate));
         }
     }
 
@@ -177,7 +176,7 @@ public class EditExpendedBook_Fragment extends Fragment {
             List<Comment> comment = book1.comments;
 
             for (Comment cm:comment) {
-                if (cm.user == user.userName){
+                if (cm.userEmail == user.userName){
                     count++;
                 }
             }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookaticket.Login_Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,9 +14,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -26,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import java.util.ArrayList;
 
 public class FirebaseModel {
 
@@ -88,6 +93,7 @@ public class FirebaseModel {
         }
         return false;
     }
+
     public void logoutuser() {
        if(isLogedIn()) {
           mAuth.signOut();
@@ -122,7 +128,84 @@ public class FirebaseModel {
         });
     }
 
-    public void uploadImage(String name, Bitmap bitmap, Model.UploadImageListener listener){
+    public void getBooksByStationId(String stationId, Model.GetBooksListener listener) {
+        db.collection("books").whereEqualTo("stationId",stationId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    List<Book> books = new ArrayList<>();
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        Book book = document.toObject(Book.class);
+                        books.add(book);
+                    }
+                    listener.onComplete(books);
+                } else {
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
+
+    public void getStationById(String stationId, Model.GetStationListener listener) {
+        db.collection("stations").document(stationId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful() && task.getResult() != null) {
+                    DocumentSnapshot document = task.getResult();
+                    Station station = document.toObject(Station.class);
+                    listener.onComplete(station);
+                } else {
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
+
+    public void addBookToStation(Book book, String stationId, Comment newComment, Model.AddBookToStationListener callback) {
+        db.collection("books").add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+//                if(task.isSuccessful()) {
+//                    DocumentReference bookRef = task.getResult();
+//                    db.collection("stations").document(stationId).update("books", FieldValue.arrayUnion(bookRef)).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if(task.isSuccessful()) {
+//                                db.collection("books").document(bookRef.getId()).collection("comments").add(newComment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                                        if(task.isSuccessful()) {
+//                                            callback.onComplete(true);
+//                                        } else {
+//                                            callback.onComplete(false);
+//                                        }
+//                                    }
+//                                });
+//                            } else {
+//                                callback.onComplete(false);
+//                            }
+//                        }
+                Log.d("tag","Book  "+ book.getName() +" saved in FireBase");
+                    }
+                });
+            }
+
+    public void getBookById(String id, Model.Listener<Book> listener) {
+        db.collection("books").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful() && task.getResult() != null) {
+                    DocumentSnapshot document = task.getResult();
+                    Book book = document.toObject(Book.class);
+                    listener.onComplete(book);
+                } else {
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
+
+    public void uploadImage(String name, Bitmap bitmap, Model.UploadImageListener listener) {
         StorageReference storageRef = storage.getReference();
         StorageReference imagesRef = storageRef.child("profileImages/" + name + ".jpg");
 
@@ -147,12 +230,23 @@ public class FirebaseModel {
                 });
             }
         });
-
-
-
     }
 
-
-
-
+    public void getAllBookInstancesByStationID(String stationID, Model.Listener<List<BookInstance>> callback) {
+        db.collection("bookInstance").whereEqualTo("stationID", stationID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<BookInstance> list = new LinkedList<>();
+                if (task.isSuccessful()){
+                    Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
+                    QuerySnapshot jsonsList = task.getResult();
+                    for (DocumentSnapshot json: jsonsList){
+                        BookInstance st = BookInstance.fromJson(json.getData());
+                        list.add(st);
+                    }
+                }
+                callback.onComplete(list);
+            }
+        });
+    }
 }
