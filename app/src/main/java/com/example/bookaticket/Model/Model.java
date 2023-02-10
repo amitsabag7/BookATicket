@@ -108,10 +108,10 @@ public class Model {
 //                        "killed Harry's parents, but failed to kill Harry when he was just 15 months old."
 //                , comments, false));
 //
-//        User user1 = new User("aml eisami","daliyat al carmel",
-//                "amleisami2@gmail.com","gs://bookaticket-6ce0a.appspot.com/profileImages/amleisami2@gmail.com.jpg");
-//
-//        users.add(user1);
+        User user1 = new User("aml eisami","daliyat al carmel",
+                "amleisami2@gmail.com","gs://bookaticket-6ce0a.appspot.com/profileImages/amleisami2@gmail.com.jpg");
+
+        users.add(user1);
     }
 
     public interface Listener<T>{
