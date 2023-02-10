@@ -148,21 +148,6 @@ public class Model {
         return data;
     }
 
-    public void addBook(Book book) {
-        data.add(book);
-    }
-
-    public void deleteBook(int pos){
-        data.remove(pos);
-    }
-
-    public void updateBook(int pos, Book book){
-        data.set(pos, book);
-    }
-
-    public void getBookById(String id, Listener<Book> listener) {
-       firebaseModel.getBookById(id, listener);
-    }
     public interface LoginListener{
         void onComplete(Task<AuthResult> task);
     }
@@ -228,29 +213,6 @@ public class Model {
         firebaseModel.uploadImage(name,bitmap,listener);
     }
 
-    public void getBooksByStationId(String stationId, Model.GetBooksListener listener) {
-        firebaseModel.getBooksByStationId(stationId, listener);
-    }
-
-    public void getStationById(String stationId, Model.GetStationListener listener) {
-        firebaseModel.getStationById(stationId, listener);
-    }
-
-    public interface GetBooksListener{
-        void onComplete(List<Book> books);
-    }
-
-    public interface GetStationListener {
-        void onComplete(Station station);
-    }
-
-    public interface AddBookToStationListener{
-        void onComplete(boolean b);
-    }
-
-    public void addBookToStation(Book book, String stationId, Comment newComment, Model.AddBookToStationListener callback) {
-        firebaseModel.addBookToStation(book, stationId, newComment, callback);
-    }
 
     public void getAllBookInstancesByStationID(String stationId, Listener<List<BookInstance>> callback) {
         firebaseModel.getAllBookInstancesByStationID(stationId, callback);
