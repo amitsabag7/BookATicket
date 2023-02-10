@@ -128,68 +128,6 @@ public class FirebaseModel {
         });
     }
 
-    public void getBooksByStationId(String stationId, Model.GetBooksListener listener) {
-        db.collection("books").whereEqualTo("stationId",stationId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    List<Book> books = new ArrayList<>();
-                    for(QueryDocumentSnapshot document : task.getResult()) {
-                        Book book = document.toObject(Book.class);
-                        books.add(book);
-                    }
-                    listener.onComplete(books);
-                } else {
-                    listener.onComplete(null);
-                }
-            }
-        });
-    }
-
-    public void getStationById(String stationId, Model.GetStationListener listener) {
-        db.collection("stations").document(stationId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful() && task.getResult() != null) {
-                    DocumentSnapshot document = task.getResult();
-                    Station station = document.toObject(Station.class);
-                    listener.onComplete(station);
-                } else {
-                    listener.onComplete(null);
-                }
-            }
-        });
-    }
-
-    public void addBookToStation(Book book, String stationId, Comment newComment, Model.AddBookToStationListener callback) {
-        db.collection("books").add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-//                if(task.isSuccessful()) {
-//                    DocumentReference bookRef = task.getResult();
-//                    db.collection("stations").document(stationId).update("books", FieldValue.arrayUnion(bookRef)).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if(task.isSuccessful()) {
-//                                db.collection("books").document(bookRef.getId()).collection("comments").add(newComment).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-//                                        if(task.isSuccessful()) {
-//                                            callback.onComplete(true);
-//                                        } else {
-//                                            callback.onComplete(false);
-//                                        }
-//                                    }
-//                                });
-//                            } else {
-//                                callback.onComplete(false);
-//                            }
-//                        }
-                Log.d("tag","Book  "+ book.getName() +" saved in FireBase");
-                    }
-                });
-            }
-
     public void getBookById(String id, Model.Listener<Book> listener) {
         db.collection("books").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
