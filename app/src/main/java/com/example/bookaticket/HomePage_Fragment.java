@@ -2,8 +2,14 @@ package com.example.bookaticket;
 
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -12,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.bookaticket.Model.Model;
 import com.example.bookaticket.Model.Station;
@@ -21,9 +28,12 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.IconOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -38,6 +48,7 @@ public class HomePage_Fragment extends Fragment {
     public List<Station> stations = new LinkedList<>();
     public ArrayList<OverlayItem> items = new ArrayList<>();
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,7 +61,9 @@ public class HomePage_Fragment extends Fragment {
 
         map = (MapView) view.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
+        map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
+
 
 
         IMapController mapController = map.getController();
@@ -62,22 +75,24 @@ public class HomePage_Fragment extends Fragment {
         mapController.setZoom(10);
 
         // Get all station from DB and draw to map
-        //TODO: Write to local DB
         Model.instance().getAllStations((list)-> {
             stations=list;
             stationsToOverlaysItems(items,stations);
             viewLocaionOnMap(ctx,items);
+
         });
 
-        logout = view.findViewById(R.id.logut_btn);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Model.instance().logoutuser();
-                Navigation.findNavController(view).navigate(R.id.login_Fragment);
-            }
-        });
+//        logout = view.findViewById(R.id.logut_btn);
+//        logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Model.instance().logoutuser();
+//                Navigation.findNavController(view).navigate(R.id.login_Fragment);
+//            }
+//        });
         return view;
+
+
     }
 
     @Override
@@ -93,7 +108,8 @@ public class HomePage_Fragment extends Fragment {
             items.add(new OverlayItem(st.getId(),st.getName(),p));
 
         }
-    }
+
+ }
 
     public void viewLocaionOnMap(Context ctx, ArrayList<OverlayItem> items) {
         // Add the overlay icons with click listener
@@ -106,13 +122,15 @@ public class HomePage_Fragment extends Fragment {
                         return true;
                     }
                     @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                    public boolean onItemLongPress(final int index, final OverlayItem item){
+                        Toast.makeText(getContext(),"This is "+ item.getSnippet()+" station",Toast.LENGTH_LONG).show();
                         return false;
                     }
                 }, ctx);
-        mOverlay.setFocusItemsOnTap(true);
 
+        mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
+
     }
 
 

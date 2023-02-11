@@ -26,8 +26,8 @@
     <fragment
         android:id="@+id/newBook_Fragment"
         android:name="com.example.bookaticket.NewBook_Fragment"
-        android:label="fragment_new_book"
-        tools:layout="@layout/fragment_new_book_" >
+        android:label="Add new book"
+        tools:layout="@layout/fragment_new_book_">
         <action
             android:id="@+id/action_newBook_Fragment_to_AddBook_Fragment"
             app:destination="@id/addBook_Fragment" />
@@ -67,8 +67,8 @@
     <fragment
         android:id="@+id/addBookFromCurrentBook_Fragment"
         android:name="com.example.bookaticket.AddBookFromCurrentBook_Fragment"
-        android:label="fragment_add_book_from_current_book_"
-        tools:layout="@layout/fragment_add_book_from_current_book_" >
+        android:label="Search for a book"
+        tools:layout="@layout/fragment_add_book_from_current_book_">
         <action
             android:id="@+id/action_addBookFromCurrentBook_Fragment_to_newBook_Fragment"
             app:destination="@id/newBook_Fragment" />
@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/addBook_Fragment"
         android:name="com.example.bookaticket.AddBook_Fragment"
-        android:label="add book to station"
+        android:label="Add book to station"
         android:layout="@layout/fragment_add_book">
         <argument
             android:name="stationId"
@@ -86,13 +86,13 @@
             android:name="stationName"
             app:argType="string" />
         <argument
-        android:name="bookInfo"
-        app:argType="com.example.bookaticket.Model.BookInfo" />
+            android:name="bookInfo"
+            app:argType="com.example.bookaticket.Model.BookInfo" />
     </fragment>
     <fragment
         android:id="@+id/userDetails_Fragment"
         android:name="com.example.bookaticket.UserDetails_Fragment"
-        android:label="UserDetails_Fragment" >
+        android:label="My account">
         <action
             android:id="@+id/action_userDetails_Fragment_to_editUserDetails_Fragment"
             app:destination="@id/editUserDetails_Fragment" />
@@ -100,7 +100,7 @@
     <fragment
         android:id="@+id/editUserDetails_Fragment"
         android:name="com.example.bookaticket.EditUserDetails_Fragment"
-        android:label="EditUserDetails_Fragment" >
+        android:label="My account">
         <action
             android:id="@+id/action_editUserDetails_Fragment_to_userDetails_Fragment"
             app:destination="@id/userDetails_Fragment" />

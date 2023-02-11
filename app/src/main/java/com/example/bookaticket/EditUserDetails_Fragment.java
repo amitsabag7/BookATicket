@@ -54,6 +54,11 @@ public class EditUserDetails_Fragment extends Fragment {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menu.removeItem(R.id.main_menu_private);
+                menu.findItem(R.id.main_menu_logout).setVisible(true).setOnMenuItemClickListener((view) ->{
+                    Model.instance().logoutuser();
+                    Navigation.findNavController(getView()).navigate(R.id.login_Fragment);
+                    return true;
+                });
             }
 
             @Override
