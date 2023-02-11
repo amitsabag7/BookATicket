@@ -176,19 +176,6 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="200dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/logo" />
-
-    <ImageView
         android:id="@+id/profileImg"
         android:layout_width="144dp"
         android:layout_height="135dp"
@@ -207,14 +194,14 @@
 
     <ImageView
         android:id="@+id/editprofileimg"
-        android:layout_width="59dp"
-        android:layout_height="53dp"
+        android:layout_width="34dp"
+        android:layout_height="33dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
+        app:layout_constraintHorizontal_bias="0.84"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.15"
         app:srcCompat="@drawable/edit_my_profile" />
 
     <TextView
@@ -226,7 +213,7 @@
         android:text="My Profile"
         android:textAlignment="center"
         android:textColor="#E91E63"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
