@@ -57,15 +57,19 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Bundle args = new Bundle();
-                            args.putString("id", finalBookInfo.getId());
-                            args.putString("title", finalBookInfo.getTitle());
-                            args.putString("author", finalBookInfo.getAuthor());
-                            args.putString("publishedDate", finalBookInfo.getPublishedDate());
-                            args.putString("thumbnail", finalBookInfo.getThumbnail());
-                            args.putString("description", finalBookInfo.getDescription());
+//                            Bundle args = new Bundle();
+//                            args.putString("id", finalBookInfo.getId());
+//                            args.putString("title", finalBookInfo.getTitle());
+//                            args.putString("author", finalBookInfo.getAuthor());
+//                            args.putString("publishedDate", finalBookInfo.getPublishedDate());
+//                            args.putString("thumbnail", finalBookInfo.getThumbnail());
+//                            args.putString("description", finalBookInfo.getDescription());
 
-                            Navigation.findNavController(view).navigate(R.id.expendedBook_Fragment, args);
+                            StationBookList_FragmentDirections.ActionStationBookListFragmentToExpendedBookFragment action =
+                                    StationBookList_FragmentDirections.actionStationBookListFragmentToExpendedBookFragment(finalBookInfo);
+                            Navigation.findNavController(view).navigate(action);
+//                            StationBookList_FragmentArgs.
+//                            Navigation.findNavController(view).navigate(R.id.expendedBook_Fragment, args);
                         }
                     });
                 }

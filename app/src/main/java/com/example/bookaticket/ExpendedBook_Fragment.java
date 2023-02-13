@@ -14,28 +14,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bookaticket.Model.Book;
+import com.example.bookaticket.Model.BookInfo;
 import com.example.bookaticket.Model.Comment;
 import com.example.bookaticket.Model.Model;
+import com.squareup.picasso.Picasso;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class ExpendedBook_Fragment extends Fragment {
+    private LinkedList<Comment> comments = new LinkedList<>();
+
+
     // change everything to book info and delete book!
-    List<Book> books;
-    static Book book1;
+//    List<Book> books;
+//    static Book book1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_expended_book, container, false);
-        books = Model.instance().getAllBooks();
-        book1 = books.get(0);
+        BookInfo bookInfo = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
+
+//        books = Model.instance().getAllBooks();
+//        book1 = new Book();
+        Comment c1 = new Comment("String bookInfoID", "String id", "user1", 4, "very good");
+        Comment c2 = new Comment("String bookInfoID", "String id", "user2", 5, "great");
+        comments.add(c1);
+        comments.add(c2);
 
         TextView name = view.findViewById(R.id.expandedBook_name_tv);
         ImageView cover = view.findViewById(R.id.expandedBook_cover_img);
         TextView writer = view.findViewById(R.id.expandedBook_writer_tv);
-        TextView year = view.findViewById(R.id.expandedBook_year_tv);
+        TextView publishedDate = view.findViewById(R.id.expandedBook_year_tv);
         TextView description = view.findViewById(R.id.expandedBook_description_tv);
 
         RecyclerView comments = view.findViewById(R.id.expandedBook_comments_rl);
@@ -45,12 +57,13 @@ public class ExpendedBook_Fragment extends Fragment {
         CommentRecyclerAdapter commentAdapter = new CommentRecyclerAdapter();
         comments.setAdapter(commentAdapter);
 
-        name.setText(book1.name);
+        name.setText(bookInfo.getTitle());
         //cover.setImageURI(Uri.parse("res/drawable/harry_potter1.png"));
-        cover.setImageResource(R.drawable.harry_potter1);
-        writer.setText(book1.writer);
-        year.setText(String.valueOf(book1.year));
-        description.setText(book1.description);
+        Picasso.get().load(bookInfo.getThumbnail()).into(cover);
+//        cover.setImageResource(R.drawable.harry_potter1);
+        writer.setText(bookInfo.getAuthor());
+        publishedDate.setText(bookInfo.getPublishedDate());
+        description.setText(bookInfo.getDescription());
 
         return view;
 
@@ -116,14 +129,14 @@ public class ExpendedBook_Fragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
-                Comment comment = book1.comments.get(position);
+                Comment comment = comments.get(position);
                 //Log.d("tag", "comment: " + st.avatarURL);
                 holder.bind(comment);
             }
 
             @Override
             public int getItemCount() {
-                return book1.comments.size();
+                return comments.size();
             }
         }
     }
