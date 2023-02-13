@@ -121,6 +121,9 @@
         <argument
             android:name="bookInfo"
             app:argType="com.example.bookaticket.Model.BookInfo" />
+        <argument
+            android:name="bookInstanceId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

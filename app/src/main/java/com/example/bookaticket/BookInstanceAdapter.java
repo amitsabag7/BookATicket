@@ -64,9 +64,8 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
 //                            args.putString("publishedDate", finalBookInfo.getPublishedDate());
 //                            args.putString("thumbnail", finalBookInfo.getThumbnail());
 //                            args.putString("description", finalBookInfo.getDescription());
-
                             StationBookList_FragmentDirections.ActionStationBookListFragmentToExpendedBookFragment action =
-                                    StationBookList_FragmentDirections.actionStationBookListFragmentToExpendedBookFragment(finalBookInfo);
+                                    StationBookList_FragmentDirections.actionStationBookListFragmentToExpendedBookFragment(finalBookInfo, bookInstance.getId());
                             Navigation.findNavController(view).navigate(action);
 //                            StationBookList_FragmentArgs.
 //                            Navigation.findNavController(view).navigate(R.id.expendedBook_Fragment, args);
