@@ -6,18 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookaticket.Model.BookInfo;
 import com.example.bookaticket.Model.BookInstance;
+import com.example.bookaticket.Model.Model;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapter.BookViewHolder> {
 
     private List<BookInstance> bookInstanceList;
+    private List<BookInfo> bookInfos;
     private Context mcontext;
     private FragmentManager fm;
 
@@ -37,8 +42,21 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         if (bookInstanceList != null) {
             BookInstance bookInstance = bookInstanceList.get(position);
-            // here pull book info from firebase and update the info thats presented
-            holder.bind(bookInstance);
+
+            String bookInfoID = bookInstance.getBookInfoID();
+
+            Model.instance().getBookInfoByID(bookInfoID, (callback) -> {
+                BookInfo bookInfo = new BookInfo();
+                if (callback != null) {
+                    bookInfo = callback;
+                    holder.bind(bookInfo);
+                }
+                else
+                {
+                    Toast.makeText(this.mcontext, "No book info found", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
     }
 
@@ -64,10 +82,10 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
             bookCoverIV = itemView.findViewById(R.id.bookRow_bookCoverIV);
         }
 
-        public void bind(BookInstance bookInstance) {
-            bookNameTV.setText("bookInstance.name");
-            bookAuthorTV.setText("bookInstance.writer");
-            bookCoverIV.setImageResource(R.drawable.harry_potter1);
+        public void bind(BookInfo bookInfo) {
+            bookNameTV.setText(bookInfo.getTitle());
+            bookAuthorTV.setText(bookInfo.getAuthor());
+            Picasso.get().load(bookInfo.getThumbnail()).into(bookCoverIV);
         }
     }
 }

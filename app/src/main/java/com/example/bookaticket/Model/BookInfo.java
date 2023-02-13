@@ -31,7 +31,7 @@ public class BookInfo implements Serializable {
     private String publisher="";
     private String publishedDate="";
     private String description="";
-    private int pageCount=0;
+    private Long pageCount=new Long(0);
     private String thumbnail="";
     private String previewLink="";
     private String infoLink="";
@@ -70,7 +70,7 @@ public class BookInfo implements Serializable {
         String publisher = (String)json.get(PUBLISHER);
         String publishedDate = (String)json.get(PUBLISHED_DATE);
         String description = (String)json.get(DESCRIPTION);
-        int pageCount = (int)json.get(PAGE_COUNT);
+        Long pageCount = (Long)json.get(PAGE_COUNT);
         String thumbnail = (String)json.get(THUMBNAIL);
         String previewLink = (String)json.get(PREVIEW_LINK);
         String infoLink = (String)json.get(INFO_LINK);
@@ -179,11 +179,11 @@ public class BookInfo implements Serializable {
         this.description = description;
     }
 
-    public int getPageCount() {
+    public Long getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Long pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -231,7 +231,7 @@ public class BookInfo implements Serializable {
 
     // for from json with id
     public BookInfo(String id, String title, String subtitle, String author, String publisher,
-                    String publishedDate, String description, int pageCount, String thumbnail,
+                    String publishedDate, String description, Long pageCount, String thumbnail,
                     String previewLink, String infoLink, String buyLink) {
         this.id = id;
         this.title = title;
@@ -249,7 +249,7 @@ public class BookInfo implements Serializable {
 
     // for new one, without id
     public BookInfo(String title, String subtitle, String author, String publisher,
-                    String publishedDate, String description, int pageCount, String thumbnail,
+                    String publishedDate, String description, Long pageCount, String thumbnail,
                     String previewLink, String infoLink, String buyLink) {
         this.title = title;
         this.subtitle = subtitle;
@@ -271,7 +271,7 @@ public class BookInfo implements Serializable {
         this.publisher = writer;
         this.publishedDate = null;
         this.description = description;
-        this.pageCount = 0;
+        this.pageCount = new Long(0);
         this.thumbnail = imgPath;
         this.previewLink = null;
         this.infoLink = null;

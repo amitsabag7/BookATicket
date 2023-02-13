@@ -88,7 +88,7 @@ public class NewBook_Fragment extends Fragment {
                             String publisher = volumeObj.optString("publisher");
                             String publishedDate = volumeObj.optString("publishedDate");
                             String description = volumeObj.optString("description");
-                            int pageCount = volumeObj.optInt("pageCount");
+                            Long pageCount = volumeObj.optLong("pageCount");
                             JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
                             String thumbnail = imageLinks.optString("thumbnail");
                             String previewLink = volumeObj.optString("previewLink");

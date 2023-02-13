@@ -255,7 +255,7 @@ public class Model {
                 Log.d("tag","firebase return "+ bookInfo.getTitle() );
                 Long time = localLastUpdate;
                 localDb.bookInfoDao().insertAll(bookInfo);
-                if (time < bookInfo.getLastUpdated()) {
+                if ((bookInfo.getLastUpdated() != null) && (time < bookInfo.getLastUpdated())) {
                     time = bookInfo.getLastUpdated();
                 }
                 BookInfo.setLocalLastUpdated(time);
