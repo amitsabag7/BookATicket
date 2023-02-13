@@ -57,12 +57,18 @@
         android:name="com.example.bookaticket.StationBookList_Fragment"
         android:label="Books list in station"
         tools:layout="@layout/fragment_station_book_list">
+        <action
+            android:id="@+id/stationBookList_fragment_to_ExpandedBook_fragment"
+            app:destination="@id/expendedBook_Fragment" />
         <argument
             android:name="id"
             app:argType="string" />
         <argument
             android:name="name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_stationBookList_fragment_to_expendedBook_Fragment"
+            app:destination="@id/expendedBook_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/addBookFromCurrentBook_Fragment"
@@ -108,6 +114,12 @@
     <action
         android:id="@+id/action_global_privateArea_Fragment"
         app:destination="@id/userDetails_Fragment" />
+
+    <fragment
+        android:id="@+id/expendedBook_Fragment"
+        android:name="com.example.bookaticket.ExpendedBook_Fragment"
+        android:label="fragment_expended_book"
+        tools:layout="@layout/fragment_expended_book" />
 
 </navigation>
 

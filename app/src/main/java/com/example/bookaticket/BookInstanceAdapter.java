@@ -1,6 +1,7 @@
 package com.example.bookaticket;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookaticket.Model.BookInfo;
@@ -18,6 +20,7 @@ import com.example.bookaticket.Model.Model;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapter.BookViewHolder> {
 
@@ -42,7 +45,7 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         if (bookInstanceList != null) {
             BookInstance bookInstance = bookInstanceList.get(position);
-
+//            BookInfo bi = new BookInfo();
             String bookInfoID = bookInstance.getBookInfoID();
 
             Model.instance().getBookInfoByID(bookInfoID, (callback) -> {
@@ -50,13 +53,27 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
                 if (callback != null) {
                     bookInfo = callback;
                     holder.bind(bookInfo);
+                    BookInfo finalBookInfo = bookInfo;
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bundle args = new Bundle();
+                            args.putString("id", finalBookInfo.getId());
+                            args.putString("title", finalBookInfo.getTitle());
+                            args.putString("author", finalBookInfo.getAuthor());
+                            args.putString("publishedDate", finalBookInfo.getPublishedDate());
+                            args.putString("thumbnail", finalBookInfo.getThumbnail());
+                            args.putString("description", finalBookInfo.getDescription());
+
+                            Navigation.findNavController(view).navigate(R.id.expendedBook_Fragment, args);
+                        }
+                    });
                 }
                 else
                 {
                     Toast.makeText(this.mcontext, "No book info found", Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
     }
 

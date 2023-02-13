@@ -20,6 +20,7 @@ import com.example.bookaticket.Model.Model;
 import java.util.List;
 
 public class ExpendedBook_Fragment extends Fragment {
+    // change everything to book info and delete book!
     List<Book> books;
     static Book book1;
 
