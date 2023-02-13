@@ -119,7 +119,7 @@ public class FirebaseModel {
                 if (task.isSuccessful()){
                     Log.d("TAG","successful");
                     QuerySnapshot jsonsList = task.getResult();
-                    for (DocumentSnapshot json: jsonsList){
+                                                                                                                                                                                          for (DocumentSnapshot json: jsonsList){
                         Station st = Station.fromJson(json.getData());
                         list.add(st);
                     }
@@ -228,6 +228,31 @@ public class FirebaseModel {
 
                         }
                         callback.onComplete(bookInfo);
+                    }
+                });
+    }
+
+    public void getUserByEmail(String userEmail, Model.Listener<User> callback) {
+        db.collection("users")
+                .whereEqualTo("email", userEmail)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        User user = new User();
+                        if (task.isSuccessful()){
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json: jsonsList){
+                                user = User.fromJson(json.getData());
+                                Log.d("TAG","Amit"+user.getUserName()+user.getProfileImg()+user.getHomeTown());
+                            }
+
+                        }
+                        else {
+                            Log.d("failfire","failfire");
+
+                        }
+                        callback.onComplete(user);
                     }
                 });
     }

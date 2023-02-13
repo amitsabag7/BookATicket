@@ -45,8 +45,9 @@ public class HomePage_Fragment extends Fragment {
     private Button logout;
     private MapView map;
     private MyLocationNewOverlay mLocationOverlay;
-    public List<Station> stations = new LinkedList<>();
+    //public List<Station> stations = new LinkedList<>();
     public ArrayList<OverlayItem> items = new ArrayList<>();
+    public HomePageFragmentViewModel viewModel= new HomePageFragmentViewModel();
 
 
     @Override
@@ -76,19 +77,11 @@ public class HomePage_Fragment extends Fragment {
 
         // Get all station from DB and draw to map
         Model.instance().getAllStations((list)-> {
-            stations=list;
-            stationsToOverlaysItems(items,stations);
+            viewModel.setData(list);
+            stationsToOverlaysItems(items,viewModel.getData());
             viewLocaionOnMap(ctx,items);
         });
 
-//        logout = view.findViewById(R.id.logut_btn);
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Model.instance().logoutuser();
-//                Navigation.findNavController(view).navigate(R.id.login_Fragment);
-//            }
-//        });
         return view;
 
 
@@ -97,7 +90,7 @@ public class HomePage_Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        map.onResume();
+//        map.onResume();
     }
 
     public void stationsToOverlaysItems (ArrayList<OverlayItem> items,List<Station> stations){
