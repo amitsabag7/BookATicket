@@ -40,25 +40,6 @@
         app:layout_constraintVertical_bias="0.247"
         tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/Email"
-        android:layout_width="219dp"
-        android:layout_height="40dp"
-        android:autoText="false"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:text=""
-        android:textAlignment="gravity"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.64"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImg"
-        app:layout_constraintVertical_bias="0.179"
-        tools:ignore="MissingConstraints" />
-
     <View
         android:id="@+id/divider2"
         android:layout_width="0dp"
@@ -105,8 +86,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Email"
-        app:layout_constraintVertical_bias="0.039"
+        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        app:layout_constraintVertical_bias="0.111"
         tools:ignore="MissingConstraints" />
 
     <View
@@ -232,9 +213,24 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layout_constraintVertical_bias="0.987" />
+        app:layout_constraintVertical_bias="0.574" />
+
+    <TextView
+        android:id="@+id/Email"
+        android:layout_width="214dp"
+        android:layout_height="39dp"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:autoSizeTextType="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.649"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileImg"
+        app:layout_constraintVertical_bias="0.18" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
