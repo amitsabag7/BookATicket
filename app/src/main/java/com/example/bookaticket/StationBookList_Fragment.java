@@ -54,7 +54,7 @@ public class StationBookList_Fragment extends Fragment {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+//    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,7 +76,7 @@ public class StationBookList_Fragment extends Fragment {
             if (list != null) {
                 bookInstances = list;
 
-//                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
             }

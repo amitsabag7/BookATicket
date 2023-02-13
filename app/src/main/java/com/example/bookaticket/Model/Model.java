@@ -221,16 +221,24 @@ public class Model {
         Long localLastUpdate = BookInstance.getLocalLastUpdated();
 
         firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
-            Long time = localLastUpdate;
-            for (BookInstance bookInstance:list) {
-                localDb.bookInstanceDao().insertAll(bookInstance);
-                if (time < bookInstance.getLastUpdated()) {
-                    time = bookInstance.getLastUpdated();
+
+            //firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
+            executor.execute(() -> {
+                Log.d("tag","firebase return "+list.size() );
+                Long time = localLastUpdate;
+                for (BookInstance bookInstance:list) {
+                    localDb.bookInstanceDao().insertAll(bookInstance);
+                    if (time < bookInstance.getLastUpdated()) {
+                        time = bookInstance.getLastUpdated();
+                    }
                 }
-            }
-            BookInstance.setLocalLastUpdated(time);
-            List<BookInstance> complete = localDb.bookInstanceDao().getAll();
-            callback.onComplete(complete);
+                BookInstance.setLocalLastUpdated(time);
+                // needs to only find specific books
+                List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByStationID(stationId);
+                mainHandler.post(() -> {
+                    callback.onComplete(complete);
+                });
+            });
         });
         System.out.println(callback);
     }

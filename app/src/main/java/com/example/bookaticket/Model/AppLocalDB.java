@@ -6,10 +6,11 @@ import androidx.room.RoomDatabase;
 
 import com.example.bookaticket.MyApplication;
 
-@Database(entities = {Station.class}, version = 5)
+@Database(entities = {Station.class, BookInstance.class}, version = 7)
+
 abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract StationDao stationDao();
-    public abstract  BookInstanceDao bookInstanceDao();
+    public abstract BookInstanceDao bookInstanceDao();
 }
 public class AppLocalDB {
     static public AppLocalDbRepository getAppDb() {

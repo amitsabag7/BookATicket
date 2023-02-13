@@ -37,6 +37,7 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         if (bookInstanceList != null) {
             BookInstance bookInstance = bookInstanceList.get(position);
+            // here pull book info from firebase and update the info thats presented
             holder.bind(bookInstance);
         }
     }

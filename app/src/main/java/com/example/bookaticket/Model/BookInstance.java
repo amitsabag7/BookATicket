@@ -1,20 +1,34 @@
 package com.example.bookaticket.Model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.example.bookaticket.MyApplication;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Entity
 public class BookInstance {
 
+    @PrimaryKey
+    @NotNull
+    public String id="";
+    public String bookInfoID="";
+    public Long lastUpdated=null;
+    public String stationID="";
+    public String userEmail="";
 
-    public String bookInfoID;
-    public String id;
-    public Long lastUpdated;
-    public String stationID;
-    public String userEmail;
+    public BookInstance() {
 
+    }
     public BookInstance(String bookInfoID, String id,
 //                        Long lastUpdated,
                         String stationID, String userEmail) {
@@ -51,8 +65,16 @@ public class BookInstance {
         return json;
     }
 
-    public static void setLocalLastUpdated(Long time) {
+    public static Long getLocalLastUpdated(Long time) {
+        SharedPreferences sharedPref= MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        return sharedPref.getLong("book_instance_local_last_update", 0);
+    }
 
+    public static void setLocalLastUpdated(Long time){
+        SharedPreferences sharedPref= MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong("book_instance_local_last_update", time);
+        editor.commit();
     }
 
     public Long getLastUpdated() {
@@ -81,5 +103,21 @@ public class BookInstance {
 
     public String getUserEmail() {
         return userEmail;
+    }
+
+    public void setBookInfoID(@NotNull String bookInfoID) {
+        this.bookInfoID = bookInfoID;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStationID(String stationID) {
+        this.stationID = stationID;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

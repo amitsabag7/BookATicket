@@ -171,7 +171,11 @@ public class FirebaseModel {
     }
 
     public void getAllBookInstancesByStationIDSince(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
-        db.collection("bookInstance").whereEqualTo("stationID", stationID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("bookInstance")
+                .whereEqualTo("stationID", stationID)
+//                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 List<BookInstance> list = new LinkedList<>();
@@ -179,12 +183,40 @@ public class FirebaseModel {
                     Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
                     QuerySnapshot jsonsList = task.getResult();
                     for (DocumentSnapshot json: jsonsList){
-                        BookInstance st = BookInstance.fromJson(json.getData());
-                        list.add(st);
+                        BookInstance bi = BookInstance.fromJson(json.getData());
+                        list.add(bi);
                     }
+                }
+                else {
+
                 }
                 callback.onComplete(list);
             }
         });
     }
+
+//    public void getAllBookInstancesByStationID(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
+//        db.collection("bookInstance")
+//                .whereEqualTo("stationID", stationID)
+////                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        List<BookInstance> list = new LinkedList<>();
+//                        if (task.isSuccessful()){
+//                            Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
+//                            QuerySnapshot jsonsList = task.getResult();
+//                            for (DocumentSnapshot json: jsonsList){
+//                                BookInstance st = BookInstance.fromJson(json.getData());
+//                                list.add(st);
+//                            }
+//                        }
+//                        else {
+//
+//                        }
+//                        callback.onComplete(list);
+//                    }
+//                });
+//    }
 }
