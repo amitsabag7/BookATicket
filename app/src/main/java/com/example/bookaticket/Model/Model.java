@@ -220,4 +220,8 @@ public class Model {
     public void getAllBookInstancesByStationID(String stationId, Listener<List<BookInstance>> callback) {
         firebaseModel.getAllBookInstancesByStationID(stationId, callback);
     }
+
+    public void getAllBookInfosByStationID(String stationId, Listener<List<BookInfo>> callback) {
+        firebaseModel.getAllBookInfosByStationID(stationId, callback);
+    }
 }

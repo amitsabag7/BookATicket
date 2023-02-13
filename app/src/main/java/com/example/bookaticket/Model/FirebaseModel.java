@@ -26,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -184,6 +185,59 @@ public class FirebaseModel {
                     }
                 }
                 callback.onComplete(list);
+            }
+        });
+    }
+
+    public void getAllBookInfosByStationID(String stationID, Model.Listener<List<BookInfo>> callback) {
+        db.collection("bookInstance").whereEqualTo("stationID", stationID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<BookInstance> bookInstances = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                        if (document.getData() != null) {
+                            BookInstance bookInstance = BookInstance.fromJson(document.getData());
+                            bookInstances.add(bookInstance);
+                        }
+                    }
+
+                    ArrayList<String> bookInfoIds = new ArrayList<String>();
+                    for (BookInstance bookInstance : bookInstances) {
+                        bookInfoIds.add(bookInstance.bookInfoID);
+                    }
+
+
+
+                    if (!bookInfoIds.isEmpty()) {
+
+                        db.collection("bookInfo").whereIn("id", bookInfoIds)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            List<BookInfo> bookInfos = new ArrayList<>();
+                                            for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                                                if (document.getData() != null) {
+                                                    BookInfo bookInfo = BookInfo.fromJson(document.getData());
+                                                    bookInfos.add(bookInfo);
+                                                }
+                                            }
+                                            callback.onComplete(bookInfos);
+                                        } else {
+                                            Log.d("station-list", "Error getting documents: ", task.getException());
+                                            callback.onComplete(null);
+                                        }
+                                    }
+                                });
+                    } else {
+                        Log.d("station-list", "Error getting documents: ", task.getException());
+                    }
+                } else {
+                    Log.d("station-list", "bookInfoIds is empty", task.getException());
+                    callback.onComplete(null);
+                }
             }
         });
     }

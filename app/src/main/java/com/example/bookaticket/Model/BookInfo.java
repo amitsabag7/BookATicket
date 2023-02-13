@@ -2,6 +2,8 @@ package com.example.bookaticket.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class BookInfo implements Serializable {
@@ -16,6 +18,21 @@ public class BookInfo implements Serializable {
     private String previewLink;
     private String infoLink;
         private String buyLink;
+
+    public static BookInfo fromJson(Map<String, Object> data) {
+        String title = (String) data.get("title");
+        String subtitle = (String) data.get("subtitle");
+        ArrayList<String> authors = (ArrayList<String>) data.get("authors");
+        String publisher = (String) data.get("publisher");
+        String publishedDate = (String) data.get("publishedDate");
+        String description = (String) data.get("description");
+        int pageCount = ((Long) Objects.requireNonNull(data.get("pageCount"))).intValue();
+        String thumbnail = (String) data.get("thumbnail");
+        String previewLink = (String) data.get("previewLink");
+        String infoLink = (String) data.get("infoLink");
+        String buyLink = (String) data.get("buyLink");
+        return new BookInfo(title, subtitle, authors, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink);
+    }
 
     // creating getter and setter methods
     public String getTitle() {

@@ -19,7 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bookaticket.Model.Book;
+import com.bumptech.glide.Glide;
+import com.example.bookaticket.Model.BookInfo;
 import com.example.bookaticket.Model.BookInstance;
 import com.example.bookaticket.Model.Model;
 
@@ -31,10 +32,11 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class StationBookList_Fragment extends Fragment {
-    TextView stationNameTV;
+
     String stationName;
     String stationId;
-    List<BookInstance> bookInstances;
+    List<BookInstance> bookInstanceList;
+    List<BookInfo> bookInfoList;
     BookRecyclerAdapter adapter;
 
     public static StationBookList_Fragment newInstance(String stationName) {
@@ -73,15 +75,26 @@ public class StationBookList_Fragment extends Fragment {
         stationBookList.addItemDecoration(dividerItemDecoration);
         adapter = new BookRecyclerAdapter();
 
-        Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
-            if (list != null) {
-                bookInstances = list;
 
+        Model.instance().getAllBookInfosByStationID(stationId, (list) -> {
+            if (list != null) {
+                bookInfoList = list;
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+//        Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
+//            if (list != null) {
+//                bookInstanceList = list;
+//
+//                adapter.notifyDataSetChanged();
+//            } else {
+//                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         stationBookList.setAdapter(adapter);
         ImageButton addBookBtn = view.findViewById(R.id.stationBookList_addBookBtn);
@@ -112,10 +125,10 @@ public class StationBookList_Fragment extends Fragment {
             bookCoverIV = itemView.findViewById(R.id.bookRow_bookCoverIV);
         }
 
-        public void bind(BookInstance bookInstance) {
-            bookNameTV.setText("bookInstance.name");
-            bookAuthorTV.setText("bookInstance.writer");
-            bookCoverIV.setImageResource(R.drawable.harry_potter1);
+        public void bind(BookInfo bookInfo) {
+            bookNameTV.setText(bookInfo.getTitle());
+            bookAuthorTV.setText(bookInfo.authorsToString());
+            Glide.with(bookCoverIV.getContext()).load(bookInfo.getThumbnail()).into(bookCoverIV);
         }
     }
 
@@ -130,16 +143,16 @@ public class StationBookList_Fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-            if (bookInstances != null) {
-                BookInstance bookInstance = bookInstances.get(position);
-                holder.bind(bookInstance);
+            if (bookInfoList != null) {
+                BookInfo bookInfo = bookInfoList.get(position);
+                holder.bind(bookInfo);
             }
         }
 
         @Override
         public int getItemCount() {
-            if (bookInstances != null) {
-                return bookInstances.size();
+            if (bookInfoList != null) {
+                return bookInfoList.size();
             } else {
                 return 0;
             }
