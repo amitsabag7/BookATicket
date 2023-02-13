@@ -75,8 +75,8 @@ public class StationBookList_Fragment extends Fragment {
         Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
             if (list != null) {
                 bookInstances = list;
-
                 adapter.notifyDataSetChanged();
+
             } else {
                 Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
             }
