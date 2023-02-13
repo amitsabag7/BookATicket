@@ -4,12 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +38,7 @@ public class ExpendedBook_Fragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_expended_book, container, false);
         BookInfo bookInfo = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
+        String bookInstanceID = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInstanceId();
 
 //        books = Model.instance().getAllBooks();
 //        book1 = new Book();
@@ -49,7 +52,16 @@ public class ExpendedBook_Fragment extends Fragment {
         TextView writer = view.findViewById(R.id.expandedBook_writer_tv);
         TextView publishedDate = view.findViewById(R.id.expandedBook_year_tv);
         TextView description = view.findViewById(R.id.expandedBook_description_tv);
+        Button takeBook = view.findViewById(R.id.expandedBook_take_btn);
 
+
+        takeBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // need usee email here
+                Model.instance().takeBookFromStation(bookInstanceID, "ofriTakesOver");
+            }
+        });
         RecyclerView comments = view.findViewById(R.id.expandedBook_comments_rl);
 
         comments.setHasFixedSize(true);

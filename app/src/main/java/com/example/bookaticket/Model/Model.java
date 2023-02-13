@@ -217,6 +217,10 @@ public class Model {
     }
 
 
+    public void takeBookFromStation(String bookInstanceID, String userEmail){
+        firebaseModel.takeBookFromStation(bookInstanceID, userEmail);
+    }
+
     public void getAllBookInstancesByStationID(String stationId, Listener<List<BookInstance>> callback) {
         Long localLastUpdate = BookInstance.getLocalLastUpdated();
 

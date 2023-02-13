@@ -26,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -193,6 +194,16 @@ public class FirebaseModel {
                 callback.onComplete(list);
             }
         });
+    }
+
+    public void takeBookFromStation(String bookInstanceID, String userEmail){
+        Map<String,Object> updateMap = new HashMap<>();
+        updateMap.put("stationId", "");
+        updateMap.put("userEmail", userEmail);
+        db.collection("bookInstance")
+                .document(bookInstanceID)
+                .update(updateMap);
+        System.out.println("tried to update book with id " + bookInstanceID);
     }
 
     public void getBookInfoByIDSince(String ID, Long since, Model.Listener<BookInfo> callback) {
