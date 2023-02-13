@@ -50,7 +50,7 @@ public class AddBook_Fragment extends Fragment {
         stationName = AddBook_FragmentArgs.fromBundle(getArguments()).getStationName();
         BookInfo bookInfo = AddBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
         name.setText(bookInfo.getTitle());
-        author.setText(bookInfo.authorsToString());
+        author.setText(bookInfo.getAuthor());
         year.setText(bookInfo.getPublishedDate());
         description.setText(bookInfo.getDescription());
         addBook.setText("Add Book to " + stationName + " Station");

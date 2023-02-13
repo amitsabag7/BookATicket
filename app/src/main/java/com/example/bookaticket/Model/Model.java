@@ -218,6 +218,53 @@ public class Model {
 
 
     public void getAllBookInstancesByStationID(String stationId, Listener<List<BookInstance>> callback) {
-        firebaseModel.getAllBookInstancesByStationID(stationId, callback);
+        Long localLastUpdate = BookInstance.getLocalLastUpdated();
+
+        firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
+
+            //firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
+            executor.execute(() -> {
+                Log.d("tag","firebase return "+list.size() );
+                Long time = localLastUpdate;
+                for (BookInstance bookInstance:list) {
+                    localDb.bookInstanceDao().insertAll(bookInstance);
+                    if (time < bookInstance.getLastUpdated()) {
+                        time = bookInstance.getLastUpdated();
+                    }
+                }
+                BookInstance.setLocalLastUpdated(time);
+                // needs to only find specific books
+                List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByStationID(stationId);
+                mainHandler.post(() -> {
+                    callback.onComplete(complete);
+                });
+            });
+        });
+    }
+
+    public void getAllBookInstancesByUserEmail(String userEmail, Listener<List<BookInstance>> callback) {
+//        firebaseModel.getAllBookInstancesByStationID(userEmail, callback);
+    }
+
+
+    public void getBookInfoByID(String bookInfoID, Listener<BookInfo> callback) {
+        Long localLastUpdate = BookInfo.getLocalLastUpdated();
+
+        firebaseModel.getBookInfoByIDSince(bookInfoID, localLastUpdate, bookInfo -> {
+            executor.execute(() -> {
+                Log.d("tag","firebase return "+ bookInfo.getTitle() );
+                Long time = localLastUpdate;
+                localDb.bookInfoDao().insertAll(bookInfo);
+                if ((bookInfo.getLastUpdated() != null) && (time < bookInfo.getLastUpdated())) {
+                    time = bookInfo.getLastUpdated();
+                }
+                BookInfo.setLocalLastUpdated(time);
+
+                BookInfo complete = localDb.bookInfoDao().getBookInfoByID(bookInfoID);
+                mainHandler.post(() -> {
+                    callback.onComplete(complete);
+                });
+            });
+        });
     }
 }

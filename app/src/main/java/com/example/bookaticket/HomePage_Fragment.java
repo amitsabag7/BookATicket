@@ -79,7 +79,6 @@ public class HomePage_Fragment extends Fragment {
             stations=list;
             stationsToOverlaysItems(items,stations);
             viewLocaionOnMap(ctx,items);
-
         });
 
 //        logout = view.findViewById(R.id.logut_btn);

@@ -88,7 +88,7 @@ public class NewBook_Fragment extends Fragment {
                             String publisher = volumeObj.optString("publisher");
                             String publishedDate = volumeObj.optString("publishedDate");
                             String description = volumeObj.optString("description");
-                            int pageCount = volumeObj.optInt("pageCount");
+                            Long pageCount = volumeObj.optLong("pageCount");
                             JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
                             String thumbnail = imageLinks.optString("thumbnail");
                             String previewLink = volumeObj.optString("previewLink");
@@ -103,8 +103,10 @@ public class NewBook_Fragment extends Fragment {
                                     }
                                 }
                             }
+                            String author = authorsArray.optString(0);
 
-                            BookInfo bookInfo = new BookInfo(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink);
+                            BookInfo bookInfo = new BookInfo(title, subtitle, author, publisher, publishedDate,
+                                    description, pageCount, thumbnail, previewLink, infoLink, buyLink);
                             bookInfoArrayList.add(bookInfo);
                             BookAdapter adapter = new BookAdapter(bookInfoArrayList, NewBook_Fragment.this.getContext());
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(NewBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
