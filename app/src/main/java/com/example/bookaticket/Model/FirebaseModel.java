@@ -170,7 +170,7 @@ public class FirebaseModel {
         });
     }
 
-    public void getAllBookInstancesByStationID(String stationID, Model.Listener<List<BookInstance>> callback) {
+    public void getAllBookInstancesByStationIDSince(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
         db.collection("bookInstance").whereEqualTo("stationID", stationID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
