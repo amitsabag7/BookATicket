@@ -65,7 +65,7 @@ public class BookInstance {
         return json;
     }
 
-    public static Long getLocalLastUpdated(Long time) {
+    public static Long getLocalLastUpdated() {
         SharedPreferences sharedPref= MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
         return sharedPref.getLong("book_instance_local_last_update", 0);
     }
@@ -85,9 +85,9 @@ public class BookInstance {
         this.lastUpdated = lastUpdated;
     }
 
-    public static Long getLocalLastUpdated() {
-        return new Long(0);
-    }
+//    public static Long getLocalLastUpdated() {
+//        return new Long(0);
+//    }
 
     public String getBookInfoID() {
         return bookInfoID;

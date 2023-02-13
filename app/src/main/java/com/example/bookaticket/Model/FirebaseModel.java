@@ -195,6 +195,27 @@ public class FirebaseModel {
         });
     }
 
+    public void getBookInfoByIDSince(String ID, Long since, Model.Listener<BookInfo> callback) {
+        db.collection("bookInfo")
+                .whereEqualTo("id", ID)
+                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        BookInfo bookInfo = new BookInfo();
+                        if (task.isSuccessful()){
+                            Log.d("TAG"," found " + bookInfo.getTitle() + "bookInfo successful for ID: " + ID);
+                            DocumentSnapshot json = task.getResult().getDocuments().get(0);
+                            bookInfo = BookInfo.fromJson(json.getData());
+                        }
+                        else {
+
+                        }
+                        callback.onComplete(bookInfo);
+                    }
+                });
+    }
 //    public void getAllBookInstancesByStationID(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
 //        db.collection("bookInstance")
 //                .whereEqualTo("stationID", stationID)

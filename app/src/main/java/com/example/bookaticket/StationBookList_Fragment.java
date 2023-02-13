@@ -96,6 +96,7 @@ public class StationBookList_Fragment extends Fragment {
             stationNameTV.setText(stationName);
         }
 
+        adapter.notifyDataSetChanged();
         return view;
     }
 

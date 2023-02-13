@@ -240,10 +240,31 @@ public class Model {
                 });
             });
         });
-        System.out.println(callback);
     }
 
     public void getAllBookInstancesByUserEmail(String userEmail, Listener<List<BookInstance>> callback) {
 //        firebaseModel.getAllBookInstancesByStationID(userEmail, callback);
+    }
+
+
+    public void getBookInfoByID(String bookInfoID, Listener<BookInfo> callback) {
+        Long localLastUpdate = BookInfo.getLocalLastUpdated();
+
+        firebaseModel.getBookInfoByIDSince(bookInfoID, localLastUpdate, bookInfo -> {
+            executor.execute(() -> {
+                Log.d("tag","firebase return "+ bookInfo.getTitle() );
+                Long time = localLastUpdate;
+                localDb.bookInfoDao().insertAll(bookInfo);
+                if (time < bookInfo.getLastUpdated()) {
+                    time = bookInfo.getLastUpdated();
+                }
+                BookInfo.setLocalLastUpdated(time);
+
+                BookInfo complete = localDb.bookInfoDao().getBookInfoByID(bookInfoID);
+                mainHandler.post(() -> {
+                    callback.onComplete(complete);
+                });
+            });
+        });
     }
 }

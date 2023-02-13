@@ -103,8 +103,10 @@ public class NewBook_Fragment extends Fragment {
                                     }
                                 }
                             }
+                            String author = authorsArray.optString(0);
 
-                            BookInfo bookInfo = new BookInfo(title, subtitle, authorsArrayList, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink);
+                            BookInfo bookInfo = new BookInfo(title, subtitle, author, publisher, publishedDate,
+                                    description, pageCount, thumbnail, previewLink, infoLink, buyLink);
                             bookInfoArrayList.add(bookInfo);
                             BookAdapter adapter = new BookAdapter(bookInfoArrayList, NewBook_Fragment.this.getContext());
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(NewBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
