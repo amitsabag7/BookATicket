@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:textSize="18sp"
         android:text="Book Name"
-        app:layout_constraintStart_toEndOf="@+id/myBookRow_bookCoverIV"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/myBookRow_bookAuthorTV"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintStart_toEndOf="@+id/myBookRow_bookCoverIV"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/myBookRow_bookAuthorTV"
@@ -25,11 +25,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="14dp"
         android:text="Book Author"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/myBookRow_bookCoverIV"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/myBookRow_bookNameTV"/>
+        app:layout_constraintTop_toBottomOf="@+id/myBookRow_bookNameTV"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/myBookRow_bookCoverIV"
@@ -58,6 +58,7 @@
         android:layout_height="18dp"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="@color/black"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
