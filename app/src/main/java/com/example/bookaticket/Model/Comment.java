@@ -10,6 +10,8 @@ import com.example.bookaticket.MyApplication;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 public class Comment {
 
     @PrimaryKey
+    @NotNull
     public String id="";
     public String bookInfoID="";
     public Long lastUpdated=null;

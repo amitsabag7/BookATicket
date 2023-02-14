@@ -9,10 +9,10 @@ import java.util.List;
 
 @Dao
 public interface CommentsDao {
-    @Query("select * from Comments")
+    @Query("select * from Comment")
     List<Comment> getAll();
 
-    @Query("select * from  Comments where bookInfoID = :bookInfoID")
+    @Query("select * from  Comment where bookInfoID = :bookInfoID")
     List<Comment> getCommentsBybookInfoID(String bookInfoID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
