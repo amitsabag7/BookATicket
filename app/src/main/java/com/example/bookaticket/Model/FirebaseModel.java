@@ -80,7 +80,7 @@ public class FirebaseModel {
     public void saveUser(String username, String email) {
         User user = new User(username,"", email, "");
         Map<String, Object> json = user.toJson();
-        db.collection("users").document().set(json).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection("users").document(email).set(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d("tag","The user "+username+" saved in FireBase");
@@ -204,6 +204,12 @@ public class FirebaseModel {
                 .document(bookInstanceID)
                 .update(updateMap);
         System.out.println("tried to update book with id " + bookInstanceID);
+    }
+
+    public void updateUserDetails(User user) {
+        Map<String,Object> updateMap = user.toJson();
+        db.collection("users")
+                .document(user.getEmail()).update(updateMap);
     }
 
     public void getBookInfoByIDSince(String ID, Long since, Model.Listener<BookInfo> callback) {

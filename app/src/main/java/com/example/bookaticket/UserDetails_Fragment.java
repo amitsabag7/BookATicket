@@ -33,7 +33,8 @@ import java.util.List;
 public class UserDetails_Fragment extends Fragment {
 
     List<Book> books;
-    User user;
+//    public User user= new User();
+    UserViewModel viewModel = new UserViewModel();
 
 
     @Override
@@ -75,17 +76,18 @@ public class UserDetails_Fragment extends Fragment {
         ImageView editprofile=view.findViewById(R.id.editprofileimg);
 
         Model.instance().getUserByEmail(Model.instance().getCurentUserEmail(),(u)-> {
-            user = u;
-            userName.setText(user.userName);
-            hometown.setText(user.homeTown);
-            email.setText(user.email);
-            if (user.profileImg != "") {
-                Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(profileImg);
+            viewModel.setUser(u);
+            userName.setText(viewModel.getUser().userName);
+            hometown.setText(viewModel.getUser().homeTown);
+            email.setText(viewModel.getUser().email);
+            if (viewModel.getUser().profileImg != "") {
+                Picasso.get().load(viewModel.getUser().profileImg).placeholder(R.drawable.avatar).into(profileImg);
             }
             else {
                 profileImg.setImageResource(R.drawable.avatar);
             }
         });
+
 
         books = Model.instance().getAllBooks();
 
@@ -105,6 +107,11 @@ public class UserDetails_Fragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder {

@@ -82,6 +82,7 @@ public class HomePage_Fragment extends Fragment {
             viewLocaionOnMap(ctx,items);
         });
 
+
         return view;
 
 

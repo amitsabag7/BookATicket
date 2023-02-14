@@ -124,13 +124,13 @@ public class Model {
     User user = new User("aml eisami","daliyat al carmel",
             "amleisami2@gmail.com","gs://bookaticket-6ce0a.appspot.com/profileImages/amleisami2@gmail.com.jpg");
 
-    public void updateProfileImage(String email,String profileImg){
-        for (int user = 0; user < users.size(); user++) {
-            if (users.get(user).email == email){
-                users.get(user).setProfileImg(profileImg);
-            }
-        }
-    }
+//    public void updateProfileImage(String email,String profileImg){
+//        for (int user = 0; user < users.size(); user++) {
+//            if (users.get(user).email == email){
+//                users.get(user).setProfileImg(profileImg);
+//            }
+//        }
+//    }
 
     public User getUser(){
         return user;
@@ -182,6 +182,14 @@ public class Model {
     }
 
     public void getAllStations(Listener<List<Station>> callback){
+//        executor.execute(()->{
+//            List<Station> complete = localDb.stationDao().getAll();
+//            Log.d("TAG",complete.toString());
+//            mainHandler.post(()->{
+//                callback.onComplete(complete);
+//            });
+//        });
+
 
         Long localLastUpdate = Station.getLocalLastUpdate();
         Log.d("tag","local"+localLastUpdate.toString());
@@ -193,7 +201,7 @@ public class Model {
                Long time = localLastUpdate;
                for(Station st: list) {
                    localDb.stationDao().insertAll(st);
-                   if(time < st.getLastUpdated()) {
+                   if(time > st.getLastUpdated()) {
                        time = st.getLastUpdated();
                    }
                }
@@ -223,6 +231,10 @@ public class Model {
 
     public void takeBookFromStation(String bookInstanceID, String userEmail){
         firebaseModel.takeBookFromStation(bookInstanceID, userEmail);
+    }
+
+    public void updateUserDetails(User user) {
+        firebaseModel.updateUserDetails(user);
     }
 
     public void getAllBookInstancesByStationID(String stationId, Listener<List<BookInstance>> callback) {
