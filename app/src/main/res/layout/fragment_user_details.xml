@@ -40,13 +40,11 @@
         app:layout_constraintVertical_bias="0.247"
         tools:ignore="MissingConstraints" />
 
-    <EditText
+    <TextView
         android:id="@+id/Email"
         android:layout_width="219dp"
         android:layout_height="40dp"
-        android:autoText="false"
         android:ems="10"
-        android:inputType="textEmailAddress"
         android:text=""
         android:textAlignment="gravity"
         android:textColor="@color/black"
@@ -225,8 +223,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/MyBooksrecyclerView"
-        android:layout_width="411dp"
-        android:layout_height="227dp"
+        android:layout_width="410dp"
+        android:layout_height="296dp"
         android:fadeScrollbars="false"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
         android:scrollbars="vertical"
