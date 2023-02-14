@@ -25,7 +25,7 @@ public class Station {
     public Double xLocation=0.0;
     public Double yLocation=0.0;
     public String name="";
-    public Long lastUpdated=null;
+    public Long lastUpdated;
 
     public Station() {
 
