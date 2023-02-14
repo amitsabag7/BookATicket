@@ -134,9 +134,6 @@ public class EditUserDetails_Fragment extends Fragment {
             public void onClick(View view) {
                 user.userName = String.valueOf(userName.getText());
                 user.homeTown = String.valueOf(hometown.getText());
-                Model.instance().setUser(user);
-                userName.setText(user.userName);
-                hometown.setText(user.homeTown);
 
                 if (isAvatarSelected){
                     profileImg.setDrawingCacheEnabled(true);
@@ -145,11 +142,11 @@ public class EditUserDetails_Fragment extends Fragment {
                     Model.instance().uploadImage(user.email, bitmap,url -> {
                         if (url != null) {
                         Log.d("profileImg", "***" + url);
-                        Model.instance().updateProfileImage(user.email,url);
+                        user.profileImg=url;
                         }
                     });
                 }
-
+                Model.instance().updateUserDetails(user);
                 Navigation.findNavController(view).navigate(R.id.action_editUserDetails_Fragment_to_userDetails_Fragment);
             }
         });
