@@ -111,7 +111,7 @@ public class FirebaseModel {
     }
 
     public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback) {
-        db.collection("stations").whereGreaterThan(Station.LAST_UPDATED, new Timestamp(since, 0))
+            db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -192,6 +192,7 @@ public class FirebaseModel {
                         } else {
                             callback.onComplete(null);
                         }
+                        callback.onComplete(list);
                     }
                 });
     }
@@ -251,7 +252,7 @@ public class FirebaseModel {
     public void getAllCommentsByBookInfoID(String bookInfoID, Long since, Model.Listener<List<Comment>> callback) {
         db.collection("comments")
                 .whereEqualTo("bookInfoID", bookInfoID)
-//                .whereGreaterThanOrEqualTo("lastUpdated", new Timestamp(since, 0))
+                .whereGreaterThanOrEqualTo("lastUpdated", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -403,7 +404,7 @@ public class FirebaseModel {
     public void getAllBookInstancesUserEmailSince(String userEmail, Long since, Model.Listener<List<BookInstance>> callback) {
         db.collection("bookInstance")
                 .whereEqualTo("userEmail", userEmail)
-                .whereEqualTo("lastUpdated", new Timestamp(since, 0))
+    //            .whereEqualTo("lastUpdated", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -444,6 +445,24 @@ public class FirebaseModel {
 
                         }
                         callback.onComplete(user);
+                    }
+                });
+    }
+
+    public void returnBookInstanceToStation(String bookInstanceID, String stationID, Model.Listener<Boolean> callback) {
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("stationID", stationID);
+        updateMap.put("userEmail", "");
+        db.collection("bookInstance")
+                .document(bookInstanceID)
+                .update(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            callback.onComplete(true);
+                        } else {
+                            callback.onComplete(false);
+                        }
                     }
                 });
     }

@@ -46,6 +46,7 @@ public class AddBook_Fragment extends Fragment {
         stationId = AddBook_FragmentArgs.fromBundle(getArguments()).getStationId();
         stationName = AddBook_FragmentArgs.fromBundle(getArguments()).getStationName();
         BookInfo bookInfo = AddBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
+        String bookInstanceId = AddBook_FragmentArgs.fromBundle(getArguments()).getBookInstanceId();
         name.setText(bookInfo.getTitle());
         author.setText(bookInfo.getAuthor());
         year.setText(bookInfo.getPublishedDate());
@@ -65,41 +66,70 @@ public class AddBook_Fragment extends Fragment {
             String userEmail = Model.instance().getCurentUserEmail();
             int ratingValue = (int) rating.getRating();
 
-            Model.instance().addBookInfo(bookInfo, new Model.Listener<String>() {
-                @Override
-                public void onComplete(String bookInfoID) {
-                    if (bookInfoID != null) {
-                        Comment newComment = new Comment(bookInfoID, userEmail, ratingValue, commentText);
-                        Model.instance().addNewComment(newComment, new Model.Listener<Boolean>() {
-                            @Override
-                            public void onComplete(Boolean commentAdded) {
-                                if (!commentAdded) {
-                                    Toast.makeText(getContext(), "Could not save new comment", Toast.LENGTH_SHORT).show();
+            if (bookInstanceId != "") {
+                Model.instance().returnBookInstanceToStation(bookInstanceId, stationId, new Model.Listener<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean bookReturned) {
+                        if (bookReturned) {
+                            Comment newComment = new Comment(bookInfo.getId(), userEmail, ratingValue, commentText);
+                            Model.instance().addNewComment(newComment, new Model.Listener<Boolean>() {
+                                @Override
+                                public void onComplete(Boolean commentAdded) {
+                                    if (!commentAdded) {
+                                        Toast.makeText(getContext(), "Could not save new comment", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
-
-                        BookInstance newBookInstance = new BookInstance(bookInfoID, stationId, "");
-                        Model.instance().addBookInstanceToStation(newBookInstance, new Model.Listener<Boolean>() {
-                            @Override
-                            public void onComplete(Boolean bookInstanceAdded) {
-                                if (!bookInstanceAdded) {
-                                    Toast.makeText(getContext(), "Could not add this book to " + stationName, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getContext(), "Book was added to " + stationName , Toast.LENGTH_SHORT).show();
-                                   AddBook_FragmentDirections.ActionAddBookFragmentToStationBookListFragment action =
-                                           AddBook_FragmentDirections.actionAddBookFragmentToStationBookListFragment(stationId, stationName);
-                                    Navigation.findNavController(view).navigate(action);
-                                }
-                            }
-                        });
-
-                    } else {
-                        Toast.makeText(getContext(), "Could not add this book to " + stationName, Toast.LENGTH_SHORT).show();
-                        Log.d("TAG", "Error saving new book info or retrieving existing one by info link");
+                            });
+                            Toast.makeText(getContext(), "Book returned to " + stationName + " station", Toast.LENGTH_SHORT).show();
+                            AddBook_FragmentDirections.ActionAddBookFragmentToStationBookListFragment action =
+                                    AddBook_FragmentDirections.actionAddBookFragmentToStationBookListFragment(stationId, stationName);
+                            Navigation.findNavController(view).navigate(action);
+                        } else {
+                            Toast.makeText(getContext(), "Could not return book to " + stationName + " station", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
+
+
+                });
+
+
+            } else {
+                Model.instance().addBookInfo(bookInfo, new Model.Listener<String>() {
+                    @Override
+                    public void onComplete(String bookInfoID) {
+                        if (bookInfoID != null) {
+                            Comment newComment = new Comment(bookInfoID, userEmail, ratingValue, commentText);
+                            Model.instance().addNewComment(newComment, new Model.Listener<Boolean>() {
+                                @Override
+                                public void onComplete(Boolean commentAdded) {
+                                    if (!commentAdded) {
+                                        Toast.makeText(getContext(), "Could not save new comment", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                            BookInstance newBookInstance = new BookInstance(bookInfoID, stationId, "");
+                            Model.instance().addBookInstanceToStation(newBookInstance, new Model.Listener<Boolean>() {
+                                @Override
+                                public void onComplete(Boolean bookInstanceAdded) {
+                                    if (!bookInstanceAdded) {
+                                        Toast.makeText(getContext(), "Could not add this book to " + stationName, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getContext(), "Book was added to " + stationName, Toast.LENGTH_SHORT).show();
+                                        AddBook_FragmentDirections.ActionAddBookFragmentToStationBookListFragment action =
+                                                AddBook_FragmentDirections.actionAddBookFragmentToStationBookListFragment(stationId, stationName);
+                                        Navigation.findNavController(view).navigate(action);
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(getContext(), "Could not add this book to " + stationName, Toast.LENGTH_SHORT).show();
+                            Log.d("TAG", "Error saving new book info or retrieving existing one by info link");
+                        }
+                    }
+                });
+            }
         }
     });
 

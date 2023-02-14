@@ -24,4 +24,7 @@ public interface BookInstanceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(BookInstance... bookInstances);
+
+    @Query("update BookInstance set stationId =:stationID, userEmail = '' where id= :bookInstanceID")
+    void returnBookInstanceToStation(String bookInstanceID, String stationID);
 }

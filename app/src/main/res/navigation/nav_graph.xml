@@ -107,6 +107,9 @@
         <argument
             android:name="bookInfo"
             app:argType="com.example.bookaticket.Model.BookInfo" />
+        <argument
+            android:name="bookInstanceId"
+            app:argType="string" />
         <action
             android:id="@+id/action_addBook_Fragment_to_stationBookList_fragment"
             app:destination="@id/stationBookList_fragment" />

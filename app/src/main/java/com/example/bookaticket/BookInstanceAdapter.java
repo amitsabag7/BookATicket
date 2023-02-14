@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,10 +35,14 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
     private Context mcontext;
     private FragmentManager fm;
 
-    public BookInstanceAdapter(List<BookInstance> bookInstanceList, Map<String, BookInfo> bookInfosMap, Context mcontext) {
+    private Bundle bundle;
+
+    public BookInstanceAdapter(List<BookInstance> bookInstanceList, Map<String, BookInfo> bookInfosMap, Context mcontext, Bundle bundle) {
         this.bookInstanceList = bookInstanceList;
         this.bookInfosMap = bookInfosMap;
         this.mcontext = mcontext;
+        this.bundle = bundle;
+
     }
 
     @NonNull
@@ -60,6 +65,22 @@ public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapte
             } else {
                 Toast.makeText(this.mcontext, "No book info found", Toast.LENGTH_SHORT).show();
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    FragmentActivity activity = (FragmentActivity) mcontext;
+
+                    if (bundle != null) {
+                        bundle.putSerializable("bookInfo", bookInfo);
+                        bundle.putString("bookInstanceId", bookInstance.getId());
+                        Navigation.findNavController(v).navigate(R.id.addBook_Fragment, bundle);
+                    } else {
+                        Toast.makeText(mcontext, "bundle is empty", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
 //            Model.instance().getBookInfoByID(bookInfoID, (callback) -> {
 //                BookInfo bookInfo = new BookInfo();
