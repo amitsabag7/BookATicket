@@ -111,7 +111,7 @@ public class FirebaseModel {
     }
 
     public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback) {
-        db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since, 0))
+            db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -175,7 +175,7 @@ public class FirebaseModel {
     public void getAllBookInstancesByStationIDSince(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
         db.collection("bookInstance")
                 .whereEqualTo("stationID", stationID)
-                .whereEqualTo("lastUpdate", new Timestamp(since, 0))
+                .whereEqualTo("lastUpdated", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
