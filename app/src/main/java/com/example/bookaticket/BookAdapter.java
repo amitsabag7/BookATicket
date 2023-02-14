@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -20,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookaticket.Model.BookInfo;
 import com.squareup.picasso.Picasso;
 
@@ -35,11 +37,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private ArrayList<BookInfo> bookInfoArrayList;
     private Context mcontext;
     private FragmentManager fm;
-
+    private Bundle bundle;
     // creating constructor for array list and context.
-    public BookAdapter(ArrayList<BookInfo> bookInfoArrayList, Context mcontext) {
+    public BookAdapter(ArrayList<BookInfo> bookInfoArrayList, Context mcontext, Bundle bundle) {
         this.bookInfoArrayList = bookInfoArrayList;
         this.mcontext = mcontext;
+        this.bundle = bundle;
     }
 
     @NonNull
@@ -62,9 +65,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.dateTV.setText(bookInfo.getPublishedDate());
 
         // below line is use to set image from URL in our image view.
-        String newUrlString = bookInfo.getThumbnail().replaceFirst("^http", "https");
+//        String newUrlString = bookInfo.getThumbnail().replaceFirst("^http", "https");
         try{
-            Picasso.get().load(newUrlString).into(holder.bookIV);
+            Glide.with(mcontext).load(bookInfo.getThumbnail()).into(holder.bookIV);
+//            Picasso.get().load(newUrlString).into(holder.bookIV);
         }catch (Exception e){
             System.out.println(e);
         }
@@ -76,13 +80,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 //                 inside on click listener method we are calling a new activity
 //                 and passing all the data of that item in next intent.
 
-                Bundle args = new Bundle();
-                args.putString("stationId", "1");
-                args.putString("stationName", "Holon");
+                FragmentActivity activity = (FragmentActivity) mcontext;
 
-                NewBook_FragmentDirections.ActionNewBookFragmentToAddBookFragment action =
-                        NewBook_FragmentDirections.actionNewBookFragmentToAddBookFragment("1", "Holon", bookInfo);
-                Navigation.findNavController(v).navigate(action);
+                if (bundle != null) {
+                    bundle.putSerializable("bookInfo", bookInfo);
+                    Navigation.findNavController(v).navigate(R.id.addBook_Fragment, bundle);
+                } else {
+                    Toast.makeText(mcontext, "bundle is empty", Toast.LENGTH_SHORT).show();
+                }
+
+
 //                AddBookDialog newAddDialog = new AddBookDialog();
 //
 

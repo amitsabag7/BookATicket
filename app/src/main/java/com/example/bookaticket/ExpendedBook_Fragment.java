@@ -41,6 +41,7 @@ public class ExpendedBook_Fragment extends Fragment {
         BookInfo bookInfo = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
         String bookInstanceID = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInstanceId();
 
+
         Model.instance().getAllCommentsByBookInfoID(bookInfo.getId(), (list) -> {
             if (list != null) {
                 comments = list;

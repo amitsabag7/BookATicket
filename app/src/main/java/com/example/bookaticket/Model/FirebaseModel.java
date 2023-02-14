@@ -175,7 +175,7 @@ public class FirebaseModel {
     public void getAllBookInstancesByStationIDSince(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
         db.collection("bookInstance")
                 .whereEqualTo("stationID", stationID)
-                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+                .whereEqualTo("lastUpdate", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -196,28 +196,56 @@ public class FirebaseModel {
                 });
     }
 
-    public void getAllBookInstancesUserEmailSince(String userEmail, Long since, Model.Listener<List<BookInstance>> callback) {
-        db.collection("bookInstance")
-                .whereEqualTo("userEmail", userEmail)
-                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<BookInstance> list = new LinkedList<>();
-                        if (task.isSuccessful()) {
-                            Log.d("TAG", " found " + list.size() + "bookInstances successful for userEmail: " + userEmail);
-                            QuerySnapshot jsonsList = task.getResult();
-                            for (DocumentSnapshot json : jsonsList) {
-                                BookInstance bi = BookInstance.fromJson(json.getData());
-                                list.add(bi);
-                            }
-                        } else {
 
+    public void getAllBookInfosByStationID(String stationID, Model.Listener<List<BookInfo>> callback) {
+        db.collection("bookInstance").whereEqualTo("stationID", stationID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<BookInstance> bookInstances = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                        if (document.getData() != null) {
+                            BookInstance bookInstance = BookInstance.fromJson(document.getData());
+                            bookInstances.add(bookInstance);
                         }
-                        callback.onComplete(list);
                     }
-                });
+
+                    ArrayList<String> bookInfoIds = new ArrayList<String>();
+                    for (BookInstance bookInstance : bookInstances) {
+                        bookInfoIds.add(bookInstance.bookInfoID);
+                    }
+
+                    if (!bookInfoIds.isEmpty()) {
+
+                        db.collection("bookInfo").whereIn("id", bookInfoIds)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            List<BookInfo> bookInfos = new ArrayList<>();
+                                            for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                                                if (document.getData() != null) {
+                                                    BookInfo bookInfo = BookInfo.fromJson(document.getData());
+                                                    bookInfos.add(bookInfo);
+                                                }
+                                            }
+                                            callback.onComplete(bookInfos);
+                                        } else {
+                                            Log.d("station-list", "Error getting documents: ", task.getException());
+                                            callback.onComplete(null);
+                                        }
+                                    }
+                                });
+                    } else {
+                        Log.d("station-list", "Error getting documents: ", task.getException());
+                    }
+                } else {
+                    Log.d("station-list", "bookInfoIds is empty", task.getException());
+                    callback.onComplete(null);
+                }
+            }
+        });
     }
 
     public void getAllCommentsByBookInfoID(String bookInfoID, Long since, Model.Listener<List<Comment>> callback) {
@@ -281,6 +309,117 @@ public class FirebaseModel {
 
                         }
                         callback.onComplete(bookInfo);
+                    }
+                });
+    }
+
+    public void addBookInfo(BookInfo bookInfo, Model.Listener<String> callback) {
+        db.collection("bookInfo").whereEqualTo("infoLink", bookInfo.getInfoLink())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (!querySnapshot.getDocuments().isEmpty()) {
+                        callback.onComplete(querySnapshot.getDocuments().get(0).getId());
+                    } else {
+                        String newBookInfoDocID = db.collection("bookInfo").document().getId();
+                        bookInfo.setId(newBookInfoDocID);
+                        db.collection("bookInfo").document(newBookInfoDocID).set(bookInfo.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+
+                                    callback.onComplete(newBookInfoDocID);
+                                } else {
+                                    callback.onComplete(null);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void addBookInstanceToStation(BookInstance newBookInstance, Model.Listener<Boolean> callback) {
+        String newBookInstanceDocID = db.collection("bookInstance").document().getId();
+        newBookInstance.setId(newBookInstanceDocID);
+            db.collection("bookInstance").document(newBookInstanceDocID).set(newBookInstance.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        callback.onComplete(true);
+                    } else {
+                        callback.onComplete(false);
+                    }
+                }
+            });
+        }
+
+
+    public void addNewComment(Comment newComment, Model.Listener<Boolean> booleanListener) {
+        String newCommentDocId = db.collection("bookInfo").document().getId();
+        newComment.setId(newCommentDocId);
+        db.collection("comments").document(newCommentDocId).set(newComment).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    booleanListener.onComplete(true);
+                } else {
+                    booleanListener.onComplete(false);
+                }
+            }
+        });
+    }
+
+
+//    public void getAllBookInstancesByStationID(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
+//        db.collection("bookInstance")
+//                .whereEqualTo("stationID", stationID)
+////                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        List<BookInstance> list = new LinkedList<>();
+//                        if (task.isSuccessful()){
+//                            Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
+//                            QuerySnapshot jsonsList = task.getResult();
+//                            for (DocumentSnapshot json: jsonsList){
+//                                BookInstance st = BookInstance.fromJson(json.getData());
+//                                list.add(st);
+//                            }
+//                        }
+//                        else {
+//
+//                        }
+//                        callback.onComplete(list);
+//                    }
+//                });
+//    }
+
+    public void getAllBookInstancesUserEmailSince(String userEmail, Long since, Model.Listener<List<BookInstance>> callback) {
+        db.collection("bookInstance")
+                .whereEqualTo("userEmail", userEmail)
+                .whereEqualTo("lastUpdated", new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<BookInstance> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + list.size() + "bookInstances successful for userEmail: " + userEmail);
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                BookInstance bi = BookInstance.fromJson(json.getData());
+                                list.add(bi);
+                            }
+                        } else {
+
+                        }
+                        callback.onComplete(list);
                     }
                 });
     }

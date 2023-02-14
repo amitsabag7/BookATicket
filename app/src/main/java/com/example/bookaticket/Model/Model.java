@@ -7,13 +7,10 @@ import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 
-import com.example.bookaticket.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
-import org.checkerframework.checker.units.qual.C;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +36,9 @@ public class Model {
 
         users.add(user1);
     }
+
+
+
 
     public interface Listener<T>{
         void onComplete(T data);
@@ -168,8 +168,6 @@ public class Model {
         Long localLastUpdate = BookInstance.getLocalLastUpdated();
 
         firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
-
-            //firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
             executor.execute(() -> {
                 Log.d("tag","firebase return "+list.size() );
                 Long time = localLastUpdate;
@@ -181,7 +179,8 @@ public class Model {
                 }
                 BookInstance.setLocalLastUpdated(time);
                 // needs to only find specific books
-                List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByStationID(stationId);
+               List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByStationID(stationId);
+               Log.d("TAG", "Local book Instances:" + complete.size());
                 mainHandler.post(() -> {
                     callback.onComplete(complete);
                 });
@@ -238,6 +237,7 @@ public class Model {
         });
     }
 
+
     public void getAllCommentsByBookInfoID(String bookInfoId, Listener<List<Comment>> callback) {
         Long localLastUpdate = Comment.getLocalLastUpdated();
 
@@ -260,4 +260,21 @@ public class Model {
             });
         });
     }
+
+    public void getAllBookInfosByStationID(String stationId, Listener<List<BookInfo>> callback) {
+        firebaseModel.getAllBookInfosByStationID(stationId, callback);
+    }
+
+    public void addBookInfo(BookInfo bookInfo, Listener<String> callback) {
+        firebaseModel.addBookInfo(bookInfo, callback);
+    }
+
+    public void addBookInstanceToStation(BookInstance newBookInstance, Listener<Boolean> callback) {
+        firebaseModel.addBookInstanceToStation(newBookInstance, callback);
+    }
+
+    public void addNewComment(Comment newComment, Listener<Boolean> booleanListener) {
+        firebaseModel.addNewComment(newComment, booleanListener);
+    }
+
 }

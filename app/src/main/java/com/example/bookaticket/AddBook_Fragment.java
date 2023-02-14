@@ -1,11 +1,11 @@
 package com.example.bookaticket;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bookaticket.Model.Book;
 import com.example.bookaticket.Model.BookInfo;
+import com.example.bookaticket.Model.BookInstance;
 import com.example.bookaticket.Model.Comment;
 import com.example.bookaticket.Model.Model;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 public class AddBook_Fragment extends Fragment {
 
@@ -55,15 +52,9 @@ public class AddBook_Fragment extends Fragment {
         description.setText(bookInfo.getDescription());
         addBook.setText("Add Book to " + stationName + " Station");
 
-//        String newUrlString = bookInfo.getThumbnail().replaceFirst("^http", "https");
-//        try{
-//            Picasso.get().load(newUrlString).into(cover);
-//        }catch (Exception e){
-//            System.out.println(e);
-//        }
 
-        String newUrlString = bookInfo.getThumbnail().replaceFirst("^http", "https");
-        Glide.with(this).load(newUrlString).into(cover);
+//        String newUrlString = bookInfo.getThumbnail().replaceFirst("^http:", "https:");
+        Glide.with(this).load(bookInfo.getThumbnail()).into(cover);
 
 
          addBook.setOnClickListener(new View.OnClickListener() {
@@ -71,22 +62,45 @@ public class AddBook_Fragment extends Fragment {
 
             String username = Model.instance().getUser().getUserName();
             String commentText = comment.getText().toString();
-            int userAvatar = 1;
+            String userEmail = Model.instance().getCurentUserEmail();
             int ratingValue = (int) rating.getRating();
-//            Comment newComment = new Comment(username, ratingValue, commentText, userAvatar);
-        //    book = new Book(bookInfo.getTitle(), bookInfo.getThumbnail(), bookInfo.authorsToString(), bookInfo.getPublishedDate(), bookInfo.getDescription(), newComment, true);
 
+            Model.instance().addBookInfo(bookInfo, new Model.Listener<String>() {
+                @Override
+                public void onComplete(String bookInfoID) {
+                    if (bookInfoID != null) {
+                        Comment newComment = new Comment(bookInfoID, userEmail, ratingValue, commentText);
+                        Model.instance().addNewComment(newComment, new Model.Listener<Boolean>() {
+                            @Override
+                            public void onComplete(Boolean commentAdded) {
+                                if (!commentAdded) {
+                                    Toast.makeText(getContext(), "Could not save new comment", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
-//            Model.instance().addBookToStation(book, stationId, newComment, new Model.AddBookToStationListener() {
-//                @Override
-//                public void onComplete(boolean b) {
-//                    Navigation.findNavController(view).navigateUp();
-//                }
-//
-//            });
+                        BookInstance newBookInstance = new BookInstance(bookInfoID, stationId, "");
+                        Model.instance().addBookInstanceToStation(newBookInstance, new Model.Listener<Boolean>() {
+                            @Override
+                            public void onComplete(Boolean bookInstanceAdded) {
+                                if (!bookInstanceAdded) {
+                                    Toast.makeText(getContext(), "Could not add this book to " + stationName, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Book was added to " + stationName , Toast.LENGTH_SHORT).show();
+                                   AddBook_FragmentDirections.ActionAddBookFragmentToStationBookListFragment action =
+                                           AddBook_FragmentDirections.actionAddBookFragmentToStationBookListFragment(stationId, stationName);
+                                    Navigation.findNavController(view).navigate(action);
+                                }
+                            }
+                        });
+
+                    } else {
+                        Toast.makeText(getContext(), "Could not add this book to " + stationName, Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "Error saving new book info or retrieving existing one by info link");
+                    }
+                }
+            });
         }
-
-
     });
 
     return view;

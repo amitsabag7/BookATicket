@@ -20,23 +20,75 @@ public class Comment {
 
     @PrimaryKey
     @NotNull
-    public String id="";
-    public String bookInfoID="";
-    public Long lastUpdated=null;
-    public String userEmail="";
-    public int rate=0;
-    public String text="";
+    public String id = "";
+    public String bookInfoID = "";
+    public Long lastUpdated = null;
+    public String userEmail = "";
+    public int rate = 0;
+    public String text = "";
 
-    public Comment(){}
+    public Comment() {
+    }
 
-    public Comment(String bookInfoID, String id, String userEmail, int rate, String text) {
+    public Comment(String bookInfoID, String userEmail, int rate, String text) {
         this.bookInfoID = bookInfoID;
-        this.id = id;
+        this.id = null;
+//        this.lastUpdated = lastUpdated;
         this.userEmail = userEmail;
         this.rate = rate;
         this.text = text;
     }
 
+    public Comment(String id, String bookInfoID, String userEmail, int rate, String text) {
+        this.bookInfoID = bookInfoID;
+        this.id = id;
+//        this.lastUpdated = lastUpdated;
+        this.userEmail = userEmail;
+        this.rate = rate;
+        this.text = text;
+    }
+
+    public static Comment fromJson(Map<String, Object> data) {
+        String id = (String) data.get("id");
+        String bookInfoID = (String) data.get("bookInfoID");
+        String userEmail = (String) data.get("userEmail");
+        int rate = (int) data.get("rate");
+        String text = (String) data.get("text");
+        Comment c = new Comment(id, bookInfoID, userEmail, rate, text);
+        try {
+            Timestamp time = (Timestamp) data.get("lastUpdated");
+            c.setLastUpdated(time.getSeconds());
+        } catch (Exception e) {
+
+        }
+//        Long lastUpdated = ((Timestamp) data.get("lastUpdated")).getSeconds();
+        return c;
+    }
+
+    public Map<String, Object> toJson() {
+        Map<String, Object> json = new HashMap<>();
+        json.put("id", getId());
+        json.put("bookInfoID", getBookInfoID());
+        json.put("rate", getRate());
+        json.put("userEmail", getUserEmail());
+        json.put("text", getText());
+        json.put("lastUpdated", FieldValue.serverTimestamp());
+        return json;
+    }
+
+    public static Long getLocalLastUpdated() {
+        SharedPreferences sharedPref = MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        return sharedPref.getLong("comment_local_last_update", 0);
+    }
+
+    public static void setLocalLastUpdated(Long time) {
+        SharedPreferences sharedPref = MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong("comment_local_last_update", time);
+        editor.commit();
+    }
+
+    @NotNull
     public String getId() {
         return id;
     }
@@ -61,7 +113,7 @@ public class Comment {
         return text;
     }
 
-    public void setId(String id) {
+    public void setId(@NotNull String id) {
         this.id = id;
     }
 
@@ -83,45 +135,5 @@ public class Comment {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public static Long getLocalLastUpdated() {
-        SharedPreferences sharedPref= MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
-        return sharedPref.getLong("comment_local_last_update", 0);
-    }
-
-    public static void setLocalLastUpdated(Long time){
-        SharedPreferences sharedPref= MyApplication.getMyContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong("comment_local_last_update", time);
-        editor.commit();
-    }
-
-    public static Comment fromJson(Map<String, Object> data) {
-        String id = (String) data.get("id");
-        String bookInfoID = (String) data.get("bookInfoID");
-        String userEmail = (String) data.get("userEmail");
-        int rate = (int) data.get("rate");
-        String text = (String) data.get("text");
-        Comment c = new Comment(id, bookInfoID, userEmail, rate, text);
-        try{
-            Timestamp time = (Timestamp) data.get("lastUpdated");
-            c.setLastUpdated(time.getSeconds());
-        }catch (Exception e){
-
-        }
-//        Long lastUpdated = ((Timestamp) data.get("lastUpdated")).getSeconds();
-        return c;
-    }
-
-    public Map<String, Object> toJson() {
-        Map<String, Object> json = new HashMap<>();
-        json.put("id", getId());
-        json.put("bookInfoID", getBookInfoID());
-        json.put("rate", getRate());
-        json.put("userEmail", getUserEmail());
-        json.put("text", getText());
-        json.put("lastUpdated", FieldValue.serverTimestamp());
-        return json;
     }
 }
