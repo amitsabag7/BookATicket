@@ -156,6 +156,13 @@ public class Model {
         });
     }
 
+    public void returnBookInstanceToStation(String bookInstanceID, String stationID, Listener<Boolean> callback){
+        firebaseModel.returnBookInstanceToStation(bookInstanceID, stationID, callback);
+        executor.execute(() -> {
+            localDb.bookInstanceDao().returnBookInstanceToStation(bookInstanceID, stationID);
+        });
+    }
+
     public void updateUserDetails(User user) {
         firebaseModel.updateUserDetails(user);
     }

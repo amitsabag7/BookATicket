@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +39,7 @@ public class AddBookFromCurrentBook_Fragment extends Fragment {
     private BookInstanceAdapter bookInstanceAdapter;
     List<BookInstance> bookInstances;
 
-    private Map<String, BookInfo> bookInfoMap;
+    private Map<String, BookInfo> bookInfoMap =  new HashMap<>();
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView mRecyclerView;
     private String userEmail;
@@ -52,13 +53,15 @@ public class AddBookFromCurrentBook_Fragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("stationId", stationId);
         bundle.putString("stationName", stationName);
-        bookInstanceAdapter = new BookInstanceAdapter(bookInstances, bookInfoMap, AddBookFromCurrentBook_Fragment.this.getContext());
+        bookInstanceAdapter = new BookInstanceAdapter(bookInstances, bookInfoMap, AddBookFromCurrentBook_Fragment.this.getContext(), bundle);
 //        adapter = new BookAdapter(bookInstances, bookInfoMap, AddBookFromCurrentBook_Fragment.this.getContext(), bundle);
         linearLayoutManager = new LinearLayoutManager(AddBookFromCurrentBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
         mRecyclerView  = (RecyclerView) view.findViewById(R.id.idCurrentBooks);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(bookInstanceAdapter);
-
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
 
         if (Model.instance().isLogedIn())
@@ -68,32 +71,29 @@ public class AddBookFromCurrentBook_Fragment extends Fragment {
             Model.instance().getAllBookInstancesByUserEmail(userEmail, (bookInstancesList) -> {
                 if (bookInstancesList != null) {
                     bookInstances = bookInstancesList;
-                    bookInfoMap = new HashMap<>();
+                    bookInstanceAdapter.setBookInstances(bookInstances);
+                    bookInstanceAdapter.notifyDataSetChanged();
+
                     for (BookInstance bookInstance : bookInstances) {
                         Model.instance().getBookInfoByID(bookInstance.getBookInfoID(), (bookInfo) -> {
                             if (bookInfo != null) {
                                 bookInfoMap.put(bookInfo.getId(), bookInfo);
+                                bookInstanceAdapter.setBookInfoMap(bookInfoMap);
+                                bookInstanceAdapter.notifyDataSetChanged();
+                                Log.d("TAG", "book info by book instance size: " + bookInfoMap.size());
                             }
                         });
                     }
                     Log.d("TAG", "book instances by user size: " + bookInstances.size());
-                    Log.d("TAG", "book infos by user size: " + bookInfoMap.size());
-                    bookInstanceAdapter.setBookInstances(bookInstances);
-                    bookInstanceAdapter.setBookInfoMap(bookInfoMap);
-                } else {
-                    Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
         }
         else {
             Toast.makeText(getContext(), "No logged in user", Toast.LENGTH_SHORT).show();
         }
-//        bookInfoArrayList.add(new BookInfo("Harry Potter 1", "res/drawable/harry_potter1.png", "J K Rolling", "something"));
-//        adapter.notifyDataSetChanged();
-
-
-        //myBooksTv = view.findViewById(R.id.myBooksTv);
-        bookInstanceAdapter.notifyDataSetChanged();
+//
         globalsearchBtn = view.findViewById(R.id.idBtnGlobalSearch);
 
         globalsearchBtn.setOnClickListener(new View.OnClickListener() {

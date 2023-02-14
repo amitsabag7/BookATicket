@@ -84,6 +84,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
                 if (bundle != null) {
                     bundle.putSerializable("bookInfo", bookInfo);
+                    bundle.putString("bookInstanceId", "");
                     Navigation.findNavController(v).navigate(R.id.addBook_Fragment, bundle);
                 } else {
                     Toast.makeText(mcontext, "bundle is empty", Toast.LENGTH_SHORT).show();
