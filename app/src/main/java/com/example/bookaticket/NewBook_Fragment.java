@@ -42,6 +42,7 @@ public class NewBook_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_new_book_, container, false);
 
+
         progressBar = view.findViewById(R.id.idLoadingPB);
         searchEdt = view.findViewById(R.id.idEdtSearchBooks);
         searchBtn = view.findViewById(R.id.idBtnSearch);
@@ -90,7 +91,11 @@ public class NewBook_Fragment extends Fragment {
                             String description = volumeObj.optString("description");
                             Long pageCount = volumeObj.optLong("pageCount");
                             JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
+                            assert imageLinks != null;
                             String thumbnail = imageLinks.optString("thumbnail");
+                            if (!thumbnail.isEmpty()) {
+                                thumbnail = thumbnail.replaceFirst("^http:", "https:");
+                            }
                             String previewLink = volumeObj.optString("previewLink");
                             String infoLink = volumeObj.optString("infoLink");
                             JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
@@ -108,7 +113,13 @@ public class NewBook_Fragment extends Fragment {
                             BookInfo bookInfo = new BookInfo(title, subtitle, author, publisher, publishedDate,
                                     description, pageCount, thumbnail, previewLink, infoLink, buyLink);
                             bookInfoArrayList.add(bookInfo);
-                            BookAdapter adapter = new BookAdapter(bookInfoArrayList, NewBook_Fragment.this.getContext());
+                            String stationId = NewBook_FragmentArgs.fromBundle(getArguments()).getStationId();
+                            String stationName = NewBook_FragmentArgs.fromBundle(getArguments()).getStationName();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("stationId", stationId);
+                            bundle.putString("stationName", stationName);
+                            BookAdapter adapter = new BookAdapter(bookInfoArrayList, NewBook_Fragment.this.getContext(), bundle);
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(NewBook_Fragment.this.getContext(), RecyclerView.VERTICAL, false);
                             RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.idRVBooks);
                             mRecyclerView.setLayoutManager(linearLayoutManager);

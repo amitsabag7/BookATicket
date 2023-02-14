@@ -43,10 +43,10 @@ public class ExpendedBook_Fragment extends Fragment {
 
 //        books = Model.instance().getAllBooks();
 //        book1 = new Book();
-        Comment c1 = new Comment("String bookInfoID", "String id", "user1", 4, "very good");
-        Comment c2 = new Comment("String bookInfoID", "String id", "user2", 5, "great");
-        comments.add(c1);
-        comments.add(c2);
+//        Comment c1 = new Comment("String bookInfoID", "String id", "user1", 4, "very good");
+//        Comment c2 = new Comment("String bookInfoID", "String id", "user2", 5, "great");
+//        comments.add(c1);
+//        comments.add(c2);
 
         TextView name = view.findViewById(R.id.expandedBook_name_tv);
         ImageView cover = view.findViewById(R.id.expandedBook_cover_img);

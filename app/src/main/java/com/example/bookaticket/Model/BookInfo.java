@@ -14,10 +14,9 @@ import com.google.firebase.firestore.GeoPoint;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
+
 
 @Entity
 public class BookInfo implements Serializable {
