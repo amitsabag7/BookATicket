@@ -97,7 +97,7 @@ public class EditUserDetails_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_user_details, container, false);
-        user = Model.instance().getUsers().get(0);
+
         books = Model.instance().getAllBooks();
 
         EditText userName = view.findViewById(R.id.editTextTextPersonName);
@@ -108,15 +108,19 @@ public class EditUserDetails_Fragment extends Fragment {
         ImageButton camera = view.findViewById(R.id.cameraButton);
         ImageButton gallery = view.findViewById(R.id.galleryButton);
 
-        userName.setText(user.userName);
-        hometown.setText(user.homeTown);
-        email.setText(user.email);
+        Model.instance().getUserByEmail(Model.instance().getCurentUserEmail(),(u)-> {
+            user = u;
+            userName.setText(user.userName);
+            hometown.setText(user.homeTown);
+            email.setText(user.email);
+            if (user.profileImg != "") {
+                Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(profileImg);
+            }
+            else {
+                profileImg.setImageResource(R.drawable.avatar);
+            }
+        });
 
-        if (user.profileImg != "") {
-            Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(profileImg);
-        } else {
-            profileImg.setImageResource(R.drawable.avatar);
-        }
 
         RecyclerView books = view.findViewById(R.id.MyBooksrecyclerView);
 
@@ -130,9 +134,6 @@ public class EditUserDetails_Fragment extends Fragment {
             public void onClick(View view) {
                 user.userName = String.valueOf(userName.getText());
                 user.homeTown = String.valueOf(hometown.getText());
-                Model.instance().setUser(user);
-                userName.setText(user.userName);
-                hometown.setText(user.homeTown);
 
                 if (isAvatarSelected){
                     profileImg.setDrawingCacheEnabled(true);
@@ -141,11 +142,11 @@ public class EditUserDetails_Fragment extends Fragment {
                     Model.instance().uploadImage(user.email, bitmap,url -> {
                         if (url != null) {
                         Log.d("profileImg", "***" + url);
-                        Model.instance().updateProfileImage(user.email,url);
+                        user.profileImg=url;
                         }
                     });
                 }
-
+                Model.instance().updateUserDetails(user);
                 Navigation.findNavController(view).navigate(R.id.action_editUserDetails_Fragment_to_userDetails_Fragment);
             }
         });

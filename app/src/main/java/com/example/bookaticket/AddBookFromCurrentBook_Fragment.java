@@ -60,8 +60,7 @@ public class AddBookFromCurrentBook_Fragment extends Fragment {
         mRecyclerView.setAdapter(bookInstanceAdapter);
 
 
-        // adding my books here
-        // get user email
+
         if (Model.instance().isLogedIn())
         {
             userEmail = Model.instance().getCurentUserEmail();

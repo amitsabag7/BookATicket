@@ -72,6 +72,10 @@
         <action
             android:id="@+id/action_stationBookList_fragment_to_addBookFromCurrentBook_Fragment"
             app:destination="@id/addBookFromCurrentBook_Fragment" />
+        <action
+            android:id="@+id/action_stationBookList_fragment_to_expendedBook_Fragment"
+            app:destination="@id/expendedBook_Fragment" />
+
     </fragment>
     <fragment
         android:id="@+id/addBookFromCurrentBook_Fragment"
@@ -87,7 +91,6 @@
         <action
             android:id="@+id/action_addBookFromCurrentBook_Fragment_to_newBook_Fragment"
             app:destination="@id/newBook_Fragment" />
-
     </fragment>
 
     <fragment
@@ -127,6 +130,19 @@
     <action
         android:id="@+id/action_global_privateArea_Fragment"
         app:destination="@id/userDetails_Fragment" />
+
+    <fragment
+        android:id="@+id/expendedBook_Fragment"
+        android:name="com.example.bookaticket.ExpendedBook_Fragment"
+        android:label="fragment_expended_book"
+        tools:layout="@layout/fragment_expended_book" >
+        <argument
+            android:name="bookInfo"
+            app:argType="com.example.bookaticket.Model.BookInfo" />
+        <argument
+            android:name="bookInstanceId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
 

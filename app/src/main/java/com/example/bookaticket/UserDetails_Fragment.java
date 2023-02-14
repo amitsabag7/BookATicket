@@ -33,7 +33,8 @@ import java.util.List;
 public class UserDetails_Fragment extends Fragment {
 
     List<Book> books;
-    User user;
+//    public User user= new User();
+    UserViewModel viewModel = new UserViewModel();
 
 
     @Override
@@ -67,8 +68,6 @@ public class UserDetails_Fragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_user_details, container, false);
-        user = Model.instance().getUsers().get(0);
-        books = Model.instance().getAllBooks();
 
         TextView userName = view.findViewById(R.id.UserName);
         TextView hometown = view.findViewById(R.id.Hometown);
@@ -76,17 +75,21 @@ public class UserDetails_Fragment extends Fragment {
         ImageView profileImg = view.findViewById(R.id.profileImg);
         ImageView editprofile=view.findViewById(R.id.editprofileimg);
 
-        userName.setText(user.userName);
-        hometown.setText(user.homeTown);
-//        email.setText(user.email);
-        email.setText(Model.instance().getCurentUserEmail());
+        Model.instance().getUserByEmail(Model.instance().getCurentUserEmail(),(u)-> {
+            viewModel.setUser(u);
+            userName.setText(viewModel.getUser().userName);
+            hometown.setText(viewModel.getUser().homeTown);
+            email.setText(viewModel.getUser().email);
+            if (viewModel.getUser().profileImg != "") {
+                Picasso.get().load(viewModel.getUser().profileImg).placeholder(R.drawable.avatar).into(profileImg);
+            }
+            else {
+                profileImg.setImageResource(R.drawable.avatar);
+            }
+        });
 
-        if (user.profileImg != "") {
-            Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(profileImg);
-        }
-        else {
-            profileImg.setImageResource(R.drawable.avatar);
-        }
+
+        books = Model.instance().getAllBooks();
 
         editprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +107,11 @@ public class UserDetails_Fragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
