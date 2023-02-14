@@ -20,6 +20,7 @@ import com.example.bookaticket.Model.Book;
 import com.example.bookaticket.Model.BookInfo;
 import com.example.bookaticket.Model.Comment;
 import com.example.bookaticket.Model.Model;
+import com.example.bookaticket.Model.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
@@ -125,7 +126,10 @@ public class ExpendedBook_Fragment extends Fragment {
 
             public void bind(Comment comment) {
                 userName.setText(comment.userEmail);
-         //       avatar.setImageResource(comment.userAvatarPath);
+                Model.instance().getUserByEmail(comment.userEmail, user -> {
+                    Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(avatar);
+                });
+
                 text.setText(comment.text);
                 starRate.setImageResource(starImage(comment.rate));
             }
