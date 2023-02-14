@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ExpendedBook_Fragment extends Fragment {
-    private LinkedList<Comment> comments = new LinkedList<>();
+    private List<Comment> comments;
 
 
     // change everything to book info and delete book!
@@ -41,12 +41,6 @@ public class ExpendedBook_Fragment extends Fragment {
         BookInfo bookInfo = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
         String bookInstanceID = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInstanceId();
 
-//        books = Model.instance().getAllBooks();
-//        book1 = new Book();
-//        Comment c1 = new Comment("String bookInfoID", "String id", "user1", 4, "very good");
-//        Comment c2 = new Comment("String bookInfoID", "String id", "user2", 5, "great");
-//        comments.add(c1);
-//        comments.add(c2);
 
         TextView name = view.findViewById(R.id.expandedBook_name_tv);
         ImageView cover = view.findViewById(R.id.expandedBook_cover_img);
@@ -68,12 +62,21 @@ public class ExpendedBook_Fragment extends Fragment {
                 }
             }
         });
-        RecyclerView comments = view.findViewById(R.id.expandedBook_comments_rl);
+        RecyclerView commentsView = view.findViewById(R.id.expandedBook_comments_rl);
 
-        comments.setHasFixedSize(true);
-        comments.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        commentsView.setHasFixedSize(true);
+        commentsView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         CommentRecyclerAdapter commentAdapter = new CommentRecyclerAdapter();
-        comments.setAdapter(commentAdapter);
+        commentsView.setAdapter(commentAdapter);
+
+        Model.instance().getAllCommentsByBookInfoID(bookInfo.getId(), (list) -> {
+            if (list != null) {
+                comments = list;
+                commentAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         name.setText(bookInfo.getTitle());
         //cover.setImageURI(Uri.parse("res/drawable/harry_potter1.png"));
@@ -134,11 +137,6 @@ public class ExpendedBook_Fragment extends Fragment {
 
         class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
 
-            //OnItemClickListener listener;
-//            void setOnItemClickListener(OnItemClickListener listener) {
-//                this.listener = listener;
-//            }
-
 
             @NonNull
             @Override
@@ -156,7 +154,9 @@ public class ExpendedBook_Fragment extends Fragment {
 
             @Override
             public int getItemCount() {
-                return comments.size();
+                if (comments != null) {
+                    return comments.size();
+                }return 0;
             }
         }
     }

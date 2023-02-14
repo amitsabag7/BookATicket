@@ -25,7 +25,6 @@
             android:layout_toEndOf="@id/idIVbook"
             android:padding="3dp"
             android:text="Book Title"
-            android:textColor="@color/black"
             android:textSize="11sp" />
 
         <TextView
@@ -37,7 +36,6 @@
             android:layout_toEndOf="@id/idIVbook"
             android:padding="3dp"
             android:text="Publisher"
-            android:textColor="@color/black"
             android:textSize="11sp" />
 
 
