@@ -220,6 +220,29 @@ public class FirebaseModel {
                 });
     }
 
+    public void getAllCommentsByBookInfoID(String bookInfoID, Long since, Model.Listener<List<Comment>> callback) {
+        db.collection("comments")
+                .whereEqualTo("bookInfoID", bookInfoID)
+                .whereEqualTo("comment_local_last_update", new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Comment> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + list.size() + "comments for book:  " + bookInfoID);
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                Comment c = Comment.fromJson(json.getData());
+                                list.add(c);
+                            }
+                        } else {
+
+                        }
+                        callback.onComplete(list);
+                    }
+                });
+    }
 
     public void takeBookFromStation(String bookInstanceID, String userEmail) {
         Map<String, Object> updateMap = new HashMap<>();
