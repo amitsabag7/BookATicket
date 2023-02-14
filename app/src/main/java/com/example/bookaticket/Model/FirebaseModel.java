@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookaticket.Login_Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,19 +13,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -214,8 +209,6 @@ public class FirebaseModel {
                         bookInfoIds.add(bookInstance.bookInfoID);
                     }
 
-
-
                     if (!bookInfoIds.isEmpty()) {
 
                         db.collection("bookInfo").whereIn("id", bookInfoIds)
@@ -274,6 +267,69 @@ public class FirebaseModel {
                     }
                 });
     }
+
+    public void addBookInfo(BookInfo bookInfo, Model.Listener<String> callback) {
+        db.collection("bookInfo").whereEqualTo("infoLink", bookInfo.getInfoLink())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (!querySnapshot.getDocuments().isEmpty()) {
+                        callback.onComplete(querySnapshot.getDocuments().get(0).getId());
+                    } else {
+                        String newBookInfoDocID = db.collection("bookInfo").document().getId();
+                        bookInfo.setId(newBookInfoDocID);
+                        db.collection("bookInfo").document(newBookInfoDocID).set(bookInfo.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+
+                                    callback.onComplete(newBookInfoDocID);
+                                } else {
+                                    callback.onComplete(null);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void addBookInstanceToStation(BookInstance newBookInstance, Model.Listener<Boolean> callback) {
+        String newBookInstanceDocID = db.collection("bookInstance").document().getId();
+        newBookInstance.setId(newBookInstanceDocID);
+            db.collection("bookInstance").document(newBookInstanceDocID).set(newBookInstance.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        callback.onComplete(true);
+                    } else {
+                        callback.onComplete(false);
+                    }
+                }
+            });
+        }
+
+
+    public void addNewComment(Comment newComment, Model.Listener<Boolean> booleanListener) {
+        String newCommentDocId = db.collection("bookInfo").document().getId();
+        newComment.setId(newCommentDocId);
+        db.collection("comments").document(newCommentDocId).set(newComment).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    booleanListener.onComplete(true);
+                } else {
+                    booleanListener.onComplete(false);
+                }
+            }
+        });
+    }
+
+
 //    public void getAllBookInstancesByStationID(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
 //        db.collection("bookInstance")
 //                .whereEqualTo("stationID", stationID)
@@ -298,4 +354,28 @@ public class FirebaseModel {
 //                    }
 //                });
 //    }
+
+    public void getAllBookInstancesUserEmailSince(String userEmail, Long since, Model.Listener<List<BookInstance>> callback) {
+        db.collection("bookInstance")
+                .whereEqualTo("userEmail", userEmail)
+                .whereEqualTo("lastUpdated", new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<BookInstance> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + list.size() + "bookInstances successful for userEmail: " + userEmail);
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                BookInstance bi = BookInstance.fromJson(json.getData());
+                                list.add(bi);
+                            }
+                        } else {
+
+                        }
+                        callback.onComplete(list);
+                    }
+                });
+    }
 }

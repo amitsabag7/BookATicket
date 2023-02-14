@@ -30,11 +30,17 @@ public class BookInstance {
 
     }
     public BookInstance(String bookInfoID, String id,
-//                        Long lastUpdated,
                         String stationID, String userEmail) {
         this.bookInfoID = bookInfoID;
         this.id = id;
-//        this.lastUpdated = lastUpdated;
+        this.stationID = stationID;
+        this.userEmail = userEmail;
+    }
+
+    public BookInstance(String bookInfoID,
+                        String stationID,
+                        String userEmail) {
+        this.bookInfoID = bookInfoID;
         this.stationID = stationID;
         this.userEmail = userEmail;
     }
@@ -85,9 +91,6 @@ public class BookInstance {
         this.lastUpdated = lastUpdated;
     }
 
-//    public static Long getLocalLastUpdated() {
-//        return new Long(0);
-//    }
 
     public String getBookInfoID() {
         return bookInfoID;

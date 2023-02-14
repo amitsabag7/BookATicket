@@ -28,6 +28,12 @@
         android:name="com.example.bookaticket.NewBook_Fragment"
         android:label="Add new book"
         tools:layout="@layout/fragment_new_book_">
+        <argument
+            android:name="stationId"
+            app:argType="string" />
+        <argument
+            android:name="stationName"
+            app:argType="string" />
         <action
             android:id="@+id/action_newBook_Fragment_to_AddBook_Fragment"
             app:destination="@id/addBook_Fragment" />
@@ -63,15 +69,25 @@
         <argument
             android:name="name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_stationBookList_fragment_to_addBookFromCurrentBook_Fragment"
+            app:destination="@id/addBookFromCurrentBook_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/addBookFromCurrentBook_Fragment"
         android:name="com.example.bookaticket.AddBookFromCurrentBook_Fragment"
         android:label="Search for a book"
         tools:layout="@layout/fragment_add_book_from_current_book_">
+        <argument
+            android:name="stationId"
+            app:argType="string" />
+        <argument
+            android:name="stationName"
+            app:argType="string" />
         <action
             android:id="@+id/action_addBookFromCurrentBook_Fragment_to_newBook_Fragment"
             app:destination="@id/newBook_Fragment" />
+
     </fragment>
 
     <fragment
@@ -88,6 +104,9 @@
         <argument
             android:name="bookInfo"
             app:argType="com.example.bookaticket.Model.BookInfo" />
+        <action
+            android:id="@+id/action_addBook_Fragment_to_stationBookList_fragment"
+            app:destination="@id/stationBookList_fragment" />
     </fragment>
     <fragment
         android:id="@+id/userDetails_Fragment"
