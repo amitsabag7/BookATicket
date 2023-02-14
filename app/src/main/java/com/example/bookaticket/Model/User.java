@@ -1,14 +1,28 @@
 package com.example.bookaticket.Model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.firebase.Timestamp;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Native;
 import java.util.HashMap;
 import java.util.Map;
 
+@Entity
 public class User {
 
-    public String userName;
-    public String homeTown;
-    public String email;
-    public String profileImg;
+    @PrimaryKey
+    @NotNull
+    public String email="";
+
+    public String userName="";
+    public String homeTown="";
+
+    public String profileImg="";
+    public Long lastUpdated=new Long(0);
 
     public User(String userName,String homeTown,String email, String profileImg){
         this.userName = userName;
@@ -59,7 +73,12 @@ public class User {
         String email = (String)json.get("email");
         String profileImg = (String)json.get("profileImg");
         User user = new User(userName,homeTown,email,profileImg);
+        try {
+            Timestamp lastUpdated = (Timestamp) json.get("lastUpdated");
+            user.setLastUpdated(lastUpdated.getSeconds());
+        } catch (Exception e) {
 
+        }
         return user;
     }
 
@@ -70,5 +89,13 @@ public class User {
         json.put("email", getEmail());
         json.put("profileImg", getProfileImg());
         return json;
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

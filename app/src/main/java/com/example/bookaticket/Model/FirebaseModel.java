@@ -250,8 +250,9 @@ public class FirebaseModel {
                             QuerySnapshot jsonsList = task.getResult();
                             for (DocumentSnapshot json: jsonsList){
                                 user = User.fromJson(json.getData());
-                                Log.d("TAG","Amit"+user.getUserName()+user.getProfileImg()+user.getHomeTown());
+                                Log.d("TAG","Amit"+user.getUserName()+user.getLastUpdated());
                             }
+
 
                         }
                         else {

@@ -263,7 +263,15 @@ public class Model {
 
 
     public void getUserByEmail(String userEmail, Model.Listener<User> callback) {
-        firebaseModel.getUserByEmail(userEmail, callback);
+        firebaseModel.getUserByEmail(userEmail, (u) -> {
+            executor.execute(()-> {
+                localDb.userDao().insertAll(u);
+                mainHandler.post(()-> {
+                    callback.onComplete(u);
+                });
+
+            });
+        });
     }
     public void getBookInfoByID(String bookInfoID, Listener<BookInfo> callback) {
         Long localLastUpdate = BookInfo.getLocalLastUpdated();
