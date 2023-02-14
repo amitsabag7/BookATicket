@@ -16,7 +16,10 @@
             android:id="@+id/idIVbook"
             android:layout_width="130dp"
             android:layout_height="160dp"
-            android:layout_margin="10dp" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
 
         <TextView
             android:id="@+id/idTVBookTitle"
@@ -26,7 +29,6 @@
             android:layout_toEndOf="@id/idIVbook"
             android:padding="3dp"
             android:text="Book Title"
-            android:textColor="@color/white"
             android:textSize="11sp" />
 
         <TextView
@@ -38,7 +40,6 @@
             android:layout_toEndOf="@id/idIVbook"
             android:padding="3dp"
             android:text="Publisher"
-            android:textColor="@color/white"
             android:textSize="11sp" />
 
         <TextView
@@ -50,20 +51,18 @@
             android:layout_toEndOf="@id/idIVbook"
             android:padding="3dp"
             android:text="Page count"
-            android:textColor="@color/white"
             android:textSize="11sp" />
 
         <TextView
             android:id="@+id/idTVDate"
-            android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@id/idIVbook"
-            android:padding="3dp"
-            android:text="date"
-            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/idTVPageCount"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:layout_toEndOf="@id/idIVbook"
+            android:padding="3dp"
+            android:text="date"
             android:textSize="11sp" />
 
     </RelativeLayout>
