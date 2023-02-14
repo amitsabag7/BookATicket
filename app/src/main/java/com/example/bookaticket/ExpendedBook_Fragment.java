@@ -42,16 +42,6 @@ public class ExpendedBook_Fragment extends Fragment {
         String bookInstanceID = ExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInstanceId();
 
 
-        Model.instance().getAllCommentsByBookInfoID(bookInfo.getId(), (list) -> {
-            if (list != null) {
-                comments = list;
-
-            } else {
-                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
         TextView name = view.findViewById(R.id.expandedBook_name_tv);
         ImageView cover = view.findViewById(R.id.expandedBook_cover_img);
         TextView writer = view.findViewById(R.id.expandedBook_writer_tv);
@@ -78,6 +68,15 @@ public class ExpendedBook_Fragment extends Fragment {
         commentsView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         CommentRecyclerAdapter commentAdapter = new CommentRecyclerAdapter();
         commentsView.setAdapter(commentAdapter);
+
+        Model.instance().getAllCommentsByBookInfoID(bookInfo.getId(), (list) -> {
+            if (list != null) {
+                comments = list;
+                commentAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         name.setText(bookInfo.getTitle());
         //cover.setImageURI(Uri.parse("res/drawable/harry_potter1.png"));
@@ -155,7 +154,9 @@ public class ExpendedBook_Fragment extends Fragment {
 
             @Override
             public int getItemCount() {
-                return comments.size();
+                if (comments != null) {
+                    return comments.size();
+                }return 0;
             }
         }
     }

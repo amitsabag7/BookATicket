@@ -168,23 +168,25 @@ public class Model {
         Long localLastUpdate = BookInstance.getLocalLastUpdated();
 
         firebaseModel.getAllBookInstancesByStationIDSince(stationId, localLastUpdate, list -> {
-            executor.execute(() -> {
-                Log.d("tag","firebase return "+list.size() );
-                Long time = localLastUpdate;
-                for (BookInstance bookInstance:list) {
-                    localDb.bookInstanceDao().insertAll(bookInstance);
-                    if (time < bookInstance.getLastUpdated()) {
-                        time = bookInstance.getLastUpdated();
+            if (list != null) {
+                executor.execute(() -> {
+                    Log.d("tag","firebase return "+list.size() );
+                    Long time = localLastUpdate;
+                    for (BookInstance bookInstance:list) {
+                        localDb.bookInstanceDao().insertAll(bookInstance);
+                        if (time < bookInstance.getLastUpdated()) {
+                            time = bookInstance.getLastUpdated();
+                        }
                     }
-                }
-                BookInstance.setLocalLastUpdated(time);
-                // needs to only find specific books
-               List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByStationID(stationId);
-               Log.d("TAG", "Local book Instances:" + complete.size());
-                mainHandler.post(() -> {
-                    callback.onComplete(complete);
+                    BookInstance.setLocalLastUpdated(time);
+                    // needs to only find specific books
+                    List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByStationID(stationId);
+                    Log.d("TAG", "Local book Instances:" + complete.size());
+                    mainHandler.post(() -> {
+                        callback.onComplete(complete);
+                    });
                 });
-            });
+            }
         });
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -86,6 +87,14 @@ public class StationBookList_Fragment extends Fragment {
             }
         });
 
+        Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
+            if (list != null) {
+                bookInstances = list;
+                adapter.notifyDataSetChanged();
+            } else {
+            }
+        });
+
         stationBookList.setAdapter(adapter);
         ImageButton addBookBtn = view.findViewById(R.id.stationBookList_addBookBtn);
         addBookBtn.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +145,21 @@ public class StationBookList_Fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
+            int p = position;
             if (bookInfoList != null) {
                 BookInfo bookInfo = bookInfoList.get(position);
                 holder.bind(bookInfo);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (bookInstances != null) {
+                            StationBookList_FragmentDirections.ActionStationBookListFragmentToExpendedBookFragment action =
+                                    StationBookList_FragmentDirections.actionStationBookListFragmentToExpendedBookFragment(bookInfo,bookInstances.get(p).getId());
+                            Navigation.findNavController(v).navigate(action);
+                        }
+
+                    }
+                });
             }
         }
 

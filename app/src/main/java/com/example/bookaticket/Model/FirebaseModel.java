@@ -175,7 +175,7 @@ public class FirebaseModel {
     public void getAllBookInstancesByStationIDSince(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
         db.collection("bookInstance")
                 .whereEqualTo("stationID", stationID)
-                .whereEqualTo("lastUpdate", new Timestamp(since, 0))
+//                .whereGreaterThanOrEqualTo("lastUpdated", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -188,10 +188,10 @@ public class FirebaseModel {
                                 BookInstance bi = BookInstance.fromJson(json.getData());
                                 list.add(bi);
                             }
+                            callback.onComplete(list);
                         } else {
-
+                            callback.onComplete(null);
                         }
-                        callback.onComplete(list);
                     }
                 });
     }
@@ -251,7 +251,7 @@ public class FirebaseModel {
     public void getAllCommentsByBookInfoID(String bookInfoID, Long since, Model.Listener<List<Comment>> callback) {
         db.collection("comments")
                 .whereEqualTo("bookInfoID", bookInfoID)
-                .whereEqualTo("comment_local_last_update", new Timestamp(since, 0))
+//                .whereGreaterThanOrEqualTo("lastUpdated", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -52,7 +52,7 @@ public class Comment {
         String id = (String) data.get("id");
         String bookInfoID = (String) data.get("bookInfoID");
         String userEmail = (String) data.get("userEmail");
-        int rate = (int) data.get("rate");
+        int rate = ((Long) data.get("rate")).intValue();
         String text = (String) data.get("text");
         Comment c = new Comment(id, bookInfoID, userEmail, rate, text);
         try {
