@@ -198,7 +198,7 @@ public class FirebaseModel {
 
     public void takeBookFromStation(String bookInstanceID, String userEmail){
         Map<String,Object> updateMap = new HashMap<>();
-        updateMap.put("stationId", "");
+        updateMap.put("stationID", "");
         updateMap.put("userEmail", userEmail);
         db.collection("bookInstance")
                 .document(bookInstanceID)

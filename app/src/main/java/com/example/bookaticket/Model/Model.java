@@ -231,6 +231,7 @@ public class Model {
 
     public void takeBookFromStation(String bookInstanceID, String userEmail){
         firebaseModel.takeBookFromStation(bookInstanceID, userEmail);
+        localDb.bookInstanceDao().takeBookFromStation(bookInstanceID, userEmail);
     }
 
     public void updateUserDetails(User user) {
