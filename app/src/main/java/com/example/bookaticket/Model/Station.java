@@ -2,6 +2,7 @@ package com.example.bookaticket.Model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -25,7 +26,7 @@ public class Station {
     public Double xLocation=0.0;
     public Double yLocation=0.0;
     public String name="";
-    public Long lastUpdated=null;
+    public Long lastUpdated;
 
     public Station() {
 
@@ -108,6 +109,7 @@ public class Station {
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             st.setLastUpdated(time.getSeconds());
         } catch (Exception e) {
+            Log.d("TAG","cannot read lastupdate of station from firebase");
 
         }
         return st;

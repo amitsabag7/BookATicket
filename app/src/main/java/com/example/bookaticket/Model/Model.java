@@ -197,18 +197,13 @@ public class Model {
 
        firebaseModel.getAllStationsSince(localLastUpdate,list-> {
            executor.execute(()->{
-               Log.d("tag","firebasr return "+list.size() );
+               Log.d("tag","firebase return "+list.size());
                Long time = localLastUpdate;
                for(Station st: list) {
                    localDb.stationDao().insertAll(st);
-                   if(time > st.getLastUpdated()) {
+                   if(time < st.getLastUpdated()) {
                        time = st.getLastUpdated();
                    }
-               }
-               try {
-                   Thread.sleep(3000);
-               } catch (InterruptedException e) {
-
                }
                Station.setLocalLastUpdate(time);
               List<Station> complete = localDb.stationDao().getAll();

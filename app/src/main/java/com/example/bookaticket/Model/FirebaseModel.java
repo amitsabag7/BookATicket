@@ -110,7 +110,7 @@ public class FirebaseModel {
     }
 
     public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback){
-        db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since,0))
+        db.collection("stations").whereGreaterThan(Station.LAST_UPDATED, new Timestamp(since,0))
                                              .get()
                                              .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
