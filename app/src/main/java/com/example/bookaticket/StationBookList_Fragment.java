@@ -100,7 +100,21 @@ public class StationBookList_Fragment extends Fragment {
         return view;
     }
 
-//    public class BookViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onResume() {
+        super.onResume();
+        Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
+            if (list != null) {
+                bookInstances = list;
+                adapter.notifyDataSetChanged();
+
+            } else {
+                Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //    public class BookViewHolder extends RecyclerView.ViewHolder {
 //
 //        TextView bookNameTV;
 //        TextView bookAuthorTV;

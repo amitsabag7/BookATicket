@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookaticket.Model.Book;
 import com.example.bookaticket.Model.BookInfo;
@@ -58,8 +59,13 @@ public class ExpendedBook_Fragment extends Fragment {
         takeBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // need usee email here
-                Model.instance().takeBookFromStation(bookInstanceID, "ofriTakesOver");
+                String currentUserEmail = Model.instance().getCurentUserEmail();
+                if (currentUserEmail != "") {
+                    Model.instance().takeBookFromStation(bookInstanceID, currentUserEmail);
+                    Toast.makeText(getContext(), "Book taken", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "you mast be logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         RecyclerView comments = view.findViewById(R.id.expandedBook_comments_rl);
@@ -80,7 +86,9 @@ public class ExpendedBook_Fragment extends Fragment {
         return view;
 
     }
-        class CommentsViewHolder extends RecyclerView.ViewHolder{
+
+
+    class CommentsViewHolder extends RecyclerView.ViewHolder{
             TextView userName;
             ImageView avatar;
             ImageView starRate;
