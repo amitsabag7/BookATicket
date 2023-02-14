@@ -22,7 +22,7 @@ public class Comment {
     @NotNull
     public String id = "";
     public String bookInfoID = "";
-    public Long lastUpdated = null;
+    public Long lastUpdated = 0L;
     public String userEmail = "";
     public int rate = 0;
     public String text = "";

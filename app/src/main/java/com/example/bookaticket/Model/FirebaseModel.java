@@ -252,7 +252,7 @@ public class FirebaseModel {
     public void getAllCommentsByBookInfoID(String bookInfoID, Long since, Model.Listener<List<Comment>> callback) {
         db.collection("comments")
                 .whereEqualTo("bookInfoID", bookInfoID)
-//                .whereGreaterThanOrEqualTo("lastUpdated", new Timestamp(since, 0))
+                .whereGreaterThanOrEqualTo("lastUpdated", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

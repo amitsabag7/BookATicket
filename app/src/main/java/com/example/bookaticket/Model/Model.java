@@ -249,9 +249,9 @@ public class Model {
         firebaseModel.getAllCommentsByBookInfoID(bookInfoId, localLastUpdate, list -> {
 
             executor.execute(() -> {
-                Log.d("tag","firebase return "+list.size() + "comments");
+                Log.d("tag","firebase return "+ list.size() + "comments");
                 Long time = localLastUpdate;
-                for (Comment comment:list) {
+                for (Comment comment : list) {
                     localDb.commentsDao().insertAll(comment);
                     if (time < comment.getLastUpdated()) {
                         time = comment.getLastUpdated();
