@@ -266,7 +266,27 @@ public class Model {
     }
 
     public void getAllBookInstancesByUserEmail(String userEmail, Listener<List<BookInstance>> callback) {
-//        firebaseModel.getAllBookInstancesByStationID(userEmail, callback);
+        Long localLastUpdate = BookInstance.getLocalLastUpdated();
+
+        firebaseModel.getAllBookInstancesUserEmailSince(userEmail, localLastUpdate, list -> {
+
+            executor.execute(() -> {
+                Log.d("tag","firebase return "+list.size() );
+                Long time = localLastUpdate;
+                for (BookInstance bookInstance:list) {
+                    localDb.bookInstanceDao().insertAll(bookInstance);
+                    if (time < bookInstance.getLastUpdated()) {
+                        time = bookInstance.getLastUpdated();
+                    }
+                }
+                BookInstance.setLocalLastUpdated(time);
+                // needs to only find specific books
+                List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByUserEmail(userEmail);
+                mainHandler.post(() -> {
+                    callback.onComplete(complete);
+                });
+            });
+        });
     }
 
 

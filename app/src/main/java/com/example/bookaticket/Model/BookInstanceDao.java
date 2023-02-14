@@ -16,6 +16,9 @@ public interface BookInstanceDao {
     @Query("select * from  BookInstance where stationID = :stationID")
     List<BookInstance> getBookInstanceByStationID(String stationID);
 
+    @Query("select * from  BookInstance where userEmail = :userEmail")
+    List<BookInstance> getBookInstanceByUserEmail(String userEmail);
+
     @Query("update BookInstance set stationId ='', userEmail = :userEmail where id= :bookInstanceID")
     void takeBookFromStation(String bookInstanceID, String userEmail);
 

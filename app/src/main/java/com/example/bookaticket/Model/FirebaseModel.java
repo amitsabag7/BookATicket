@@ -49,12 +49,12 @@ public class FirebaseModel {
         storage = FirebaseStorage.getInstance();
     }
 
-    public void loginUser(String email, String password, Model.LoginListener callback){
+    public void loginUser(String email, String password, Model.LoginListener callback) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    Log.d("tag","Login successesful");
+                if (task.isSuccessful()) {
+                    Log.d("tag", "Login successesful");
                     callback.onComplete(task);
                 } else {
                     callback.onComplete(task);
@@ -63,12 +63,13 @@ public class FirebaseModel {
         });
 
     }
+
     public void signupUser(String username, String email, String password, Model.SignupListener callback) {
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    Log.d("tag","Signup successesful");
+                if (task.isSuccessful()) {
+                    Log.d("tag", "Signup successesful");
                     callback.onComplete(task);
                 } else {
                     callback.onComplete(task);
@@ -78,62 +79,62 @@ public class FirebaseModel {
     }
 
     public void saveUser(String username, String email) {
-        User user = new User(username,"", email, "");
+        User user = new User(username, "", email, "");
         Map<String, Object> json = user.toJson();
         db.collection("users").document(email).set(json).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Log.d("tag","The user "+username+" saved in FireBase");
+                Log.d("tag", "The user " + username + " saved in FireBase");
             }
         });
     }
 
-    public boolean isLogedIn () {
-        if(mAuth.getCurrentUser() != null) {
+    public boolean isLogedIn() {
+        if (mAuth.getCurrentUser() != null) {
             return true;
         }
         return false;
     }
 
     public void logoutuser() {
-       if(isLogedIn()) {
-          mAuth.signOut();
-       }
+        if (isLogedIn()) {
+            mAuth.signOut();
+        }
     }
 
     public String getCurentUserEmail() {
-        if(mAuth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null) {
             return mAuth.getCurrentUser().getEmail();
         }
 
         return "";
     }
 
-    public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback){
-        db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since,0))
-                                             .get()
-                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<Station> list = new LinkedList<>();
-                if (task.isSuccessful()){
-                    Log.d("TAG","successful");
-                    QuerySnapshot jsonsList = task.getResult();
-                                                                                                                                                                                          for (DocumentSnapshot json: jsonsList){
-                        Station st = Station.fromJson(json.getData());
-                        list.add(st);
+    public void getAllStationsSince(Long since, Model.Listener<List<Station>> callback) {
+        db.collection("stations").whereGreaterThanOrEqualTo(Station.LAST_UPDATED, new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Station> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", "successful");
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                Station st = Station.fromJson(json.getData());
+                                list.add(st);
+                            }
+                        }
+                        callback.onComplete(list);
                     }
-                }
-                callback.onComplete(list);
-            }
-        });
+                });
     }
 
     public void getBookById(String id, Model.Listener<Book> listener) {
         db.collection("books").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful() && task.getResult() != null) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     DocumentSnapshot document = task.getResult();
                     Book book = document.toObject(Book.class);
                     listener.onComplete(book);
@@ -174,30 +175,54 @@ public class FirebaseModel {
     public void getAllBookInstancesByStationIDSince(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
         db.collection("bookInstance")
                 .whereEqualTo("stationID", stationID)
-//                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<BookInstance> list = new LinkedList<>();
-                if (task.isSuccessful()){
-                    Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
-                    QuerySnapshot jsonsList = task.getResult();
-                    for (DocumentSnapshot json: jsonsList){
-                        BookInstance bi = BookInstance.fromJson(json.getData());
-                        list.add(bi);
-                    }
-                }
-                else {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<BookInstance> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + list.size() + "bookInstances successful for stationID: " + stationID);
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                BookInstance bi = BookInstance.fromJson(json.getData());
+                                list.add(bi);
+                            }
+                        } else {
 
-                }
-                callback.onComplete(list);
-            }
-        });
+                        }
+                        callback.onComplete(list);
+                    }
+                });
     }
 
-    public void takeBookFromStation(String bookInstanceID, String userEmail){
-        Map<String,Object> updateMap = new HashMap<>();
+    public void getAllBookInstancesUserEmailSince(String userEmail, Long since, Model.Listener<List<BookInstance>> callback) {
+        db.collection("bookInstance")
+                .whereEqualTo("userEmail", userEmail)
+                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<BookInstance> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + list.size() + "bookInstances successful for userEmail: " + userEmail);
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                BookInstance bi = BookInstance.fromJson(json.getData());
+                                list.add(bi);
+                            }
+                        } else {
+
+                        }
+                        callback.onComplete(list);
+                    }
+                });
+    }
+
+
+    public void takeBookFromStation(String bookInstanceID, String userEmail) {
+        Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("stationID", "");
         updateMap.put("userEmail", userEmail);
         db.collection("bookInstance")
@@ -207,7 +232,7 @@ public class FirebaseModel {
     }
 
     public void updateUserDetails(User user) {
-        Map<String,Object> updateMap = user.toJson();
+        Map<String, Object> updateMap = user.toJson();
         db.collection("users")
                 .document(user.getEmail()).update(updateMap);
     }
@@ -221,16 +246,15 @@ public class FirebaseModel {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         BookInfo bookInfo = new BookInfo();
-                        if (task.isSuccessful()){
-                            Log.d("TAG"," found " + bookInfo.getTitle() + "bookInfo successful for ID: " + ID);
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + bookInfo.getTitle() + "bookInfo successful for ID: " + ID);
                             QuerySnapshot jsonsList = task.getResult();
-                            for (DocumentSnapshot json: jsonsList){
+                            for (DocumentSnapshot json : jsonsList) {
                                 bookInfo = BookInfo.fromJson(json.getData());
                             }
 //                            DocumentSnapshot json = task.getResult().getDocuments().get(0);
 
-                        }
-                        else {
+                        } else {
 
                         }
                         callback.onComplete(bookInfo);
@@ -246,44 +270,19 @@ public class FirebaseModel {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         User user = new User();
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             QuerySnapshot jsonsList = task.getResult();
-                            for (DocumentSnapshot json: jsonsList){
+                            for (DocumentSnapshot json : jsonsList) {
                                 user = User.fromJson(json.getData());
-                                Log.d("TAG","Amit"+user.getUserName()+user.getProfileImg()+user.getHomeTown());
+                                Log.d("TAG", "Amit" + user.getUserName() + user.getProfileImg() + user.getHomeTown());
                             }
 
-                        }
-                        else {
-                            Log.d("failfire","failfire");
+                        } else {
+                            Log.d("failfire", "failfire");
 
                         }
                         callback.onComplete(user);
                     }
                 });
     }
-//    public void getAllBookInstancesByStationID(String stationID, Long since, Model.Listener<List<BookInstance>> callback) {
-//        db.collection("bookInstance")
-//                .whereEqualTo("stationID", stationID)
-////                .whereEqualTo("book_instance_local_last_update", new Timestamp(since, 0))
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        List<BookInstance> list = new LinkedList<>();
-//                        if (task.isSuccessful()){
-//                            Log.d("TAG"," found " + list.size() + "bookInstances successful for stationID: " + stationID);
-//                            QuerySnapshot jsonsList = task.getResult();
-//                            for (DocumentSnapshot json: jsonsList){
-//                                BookInstance st = BookInstance.fromJson(json.getData());
-//                                list.add(st);
-//                            }
-//                        }
-//                        else {
-//
-//                        }
-//                        callback.onComplete(list);
-//                    }
-//                });
-//    }
 }
