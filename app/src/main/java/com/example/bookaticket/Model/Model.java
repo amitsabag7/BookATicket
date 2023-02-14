@@ -202,15 +202,11 @@ public class Model {
                Long time = localLastUpdate;
                for(Station st: list) {
                    localDb.stationDao().insertAll(st);
-                   if(time > st.getLastUpdated()) {
+                   if(time < st.getLastUpdated()) {
                        time = st.getLastUpdated();
                    }
                }
-               try {
-                   Thread.sleep(3000);
-               } catch (InterruptedException e) {
 
-               }
                Station.setLocalLastUpdate(time);
               List<Station> complete = localDb.stationDao().getAll();
                    Log.d("TAG",complete.toString());
