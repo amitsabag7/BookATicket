@@ -3,6 +3,7 @@ package com.example.bookaticket;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
-            controller.popBackStack();
+//            controller.popBackStack();
+            controller.navigate(R.id.homePage_Fragment);
         } else if(item.getItemId() == R.id.main_menu_private) {
             controller.navigate(R.id.action_global_privateArea_Fragment);
         }

@@ -63,9 +63,14 @@ public class EditUserDetails_Fragment extends Fragment {
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if(menuItem.getItemId() == android.R.id.home) {
+                    Navigation.findNavController(getView()).navigate(R.id.userDetails_Fragment);
+                }
                 return false;
             }
         },this, Lifecycle.State.RESUMED);
+
+
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,14 +93,15 @@ public class ExpendedBook_Fragment extends Fragment {
     class CommentsViewHolder extends RecyclerView.ViewHolder{
             TextView userName;
             ImageView avatar;
-            ImageView starRate;
+//            ImageView starRate;
+            RatingBar startRate;
             TextView text;
 
             public CommentsViewHolder(@NonNull View itemView) {
                 super(itemView);
                 avatar = itemView.findViewById(R.id.comment_userAvatar_img);
                 userName = itemView.findViewById(R.id.comment_userName_tv);
-                starRate = itemView.findViewById(R.id.comment_stars);
+                startRate = itemView.findViewById(R.id.comment_row_rating);
                 text = itemView.findViewById(R.id.comment_text_tv);
             }
 
@@ -128,7 +130,8 @@ public class ExpendedBook_Fragment extends Fragment {
                 });
 
                 text.setText(comment.text);
-                starRate.setImageResource(starImage(comment.rate));
+                //starRate.setImageResource(starImage(comment.rate));
+                startRate.setRating(comment.rate);
             }
         }
 

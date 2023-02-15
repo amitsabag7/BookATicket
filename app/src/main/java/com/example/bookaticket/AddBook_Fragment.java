@@ -7,6 +7,7 @@ import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,6 +43,28 @@ public class AddBook_Fragment extends Fragment {
         RatingBar rating = view.findViewById(R.id.addBook_ratingRB);
         EditText comment = view.findViewById(R.id.addBook_newCommentET);
         Button addBook = view.findViewById(R.id.addBook_addBtn);
+
+        rating.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    float touchPositionX = motionEvent.getX();
+                    float width = rating.getWidth();
+                    float starsf = (touchPositionX / width) * 5.0f;
+                    int stars = (int)starsf + 1;
+                    rating.setRating(stars);
+                    view.setPressed(false);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    view.setPressed(true);
+                }
+
+                if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+                    view.setPressed(false);
+                }
+            return true;
+            }
+        });
 
         stationId = AddBook_FragmentArgs.fromBundle(getArguments()).getStationId();
         stationName = AddBook_FragmentArgs.fromBundle(getArguments()).getStationName();
