@@ -25,6 +25,7 @@ import com.example.bookaticket.Model.BookInfo;
 import com.example.bookaticket.Model.BookInstance;
 import com.example.bookaticket.Model.Model;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,6 +82,7 @@ public class StationBookList_Fragment extends Fragment {
         Model.instance().getAllBookInfosByStationID(stationId, (list) -> {
             if (list != null) {
                 bookInfoList = list;
+                bookInfoList.sort((bi1, bi2) -> bi1.getId().compareTo(bi2.getId()));
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(getContext(), "No books found", Toast.LENGTH_SHORT).show();
@@ -90,6 +92,7 @@ public class StationBookList_Fragment extends Fragment {
         Model.instance().getAllBookInstancesByStationID(stationId, (list) -> {
             if (list != null) {
                 bookInstances = list;
+                bookInstances.sort((bi1, bi2) -> bi1.getBookInfoID().compareTo(bi2.getBookInfoID()));
                 adapter.notifyDataSetChanged();
             } else {
             }

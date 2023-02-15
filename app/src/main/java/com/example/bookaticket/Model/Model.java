@@ -149,8 +149,8 @@ public class Model {
     }
 
 
-    public void takeBookFromStation(String bookInstanceID, String userEmail){
-        firebaseModel.takeBookFromStation(bookInstanceID, userEmail);
+    public void takeBookFromStation(String bookInstanceID, String userEmail,Listener<Boolean> callback){
+        firebaseModel.takeBookFromStation(bookInstanceID, userEmail, callback);
         executor.execute(() -> {
             localDb.bookInstanceDao().takeBookFromStation(bookInstanceID, userEmail);
         });

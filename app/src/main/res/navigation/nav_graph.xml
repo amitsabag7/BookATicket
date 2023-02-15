@@ -145,6 +145,9 @@
         <argument
             android:name="bookInstanceId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_expendedBook_Fragment_to_stationBookList_fragment"
+            app:destination="@id/stationBookList_fragment" />
     </fragment>
 
 </navigation>

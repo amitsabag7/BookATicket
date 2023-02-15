@@ -273,13 +273,23 @@ public class FirebaseModel {
                 });
     }
 
-    public void takeBookFromStation(String bookInstanceID, String userEmail) {
+    public void takeBookFromStation(String bookInstanceID, String userEmail, Model.Listener<Boolean> callback) {
         Map<String, Object> updateMap = new HashMap<>();
         updateMap.put("stationID", "");
         updateMap.put("userEmail", userEmail);
         db.collection("bookInstance")
                 .document(bookInstanceID)
-                .update(updateMap);
+                .update(updateMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            callback.onComplete(true);
+                        } else {
+                            callback.onComplete(false);
+                        }
+                    }
+                });
         System.out.println("tried to update book with id " + bookInstanceID);
     }
 
