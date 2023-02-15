@@ -24,32 +24,21 @@
         android:layout_marginTop="6dp"
         android:background="@android:color/transparent"
         app:layout_constraintStart_toEndOf="@+id/comment_userAvatar_img"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/comment_text_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="35dp"
-        android:background="@android:color/transparent"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/applyComment"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/comment_userAvatar_img"
-        app:layout_constraintTop_toBottomOf="@+id/comment_userName_tv" />
-
-    <ImageView
-        android:id="@+id/comment_stars"
-        android:layout_width="100dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintStart_toEndOf="@+id/comment_userName_tv"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/stars0" />
+        app:layout_constraintBottom_toTopOf="@+id/comment_row_rating"/>
+
+
+    <RatingBar
+        android:id="@+id/comment_row_rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/editCommentText"
+        app:layout_constraintStart_toEndOf="@+id/comment_userAvatar_img"
+        app:layout_constraintTop_toBottomOf="@+id/comment_userName_tv"
+        app:layout_constraintVertical_bias="0.771" />
 
     <EditText
         android:id="@+id/editCommentText"
@@ -63,13 +52,13 @@
         android:inputType="text"
         android:textAlignment="textStart"
         android:textSize="14sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/comment_text_tv"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
         app:layout_constraintEnd_toStartOf="@+id/applyComment"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/comment_userAvatar_img"
-        app:layout_constraintTop_toBottomOf="@+id/comment_userName_tv"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toBottomOf="@+id/comment_row_rating"
+        />
 
     <ImageButton
         android:id="@+id/applyComment"
@@ -79,13 +68,13 @@
         android:background="#00FFFFFF"
         android:scaleX="1.5"
         android:scaleY="1.5"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        app:srcCompat="@drawable/save" />
+        app:srcCompat="@drawable/ic_baseline_save_24"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
