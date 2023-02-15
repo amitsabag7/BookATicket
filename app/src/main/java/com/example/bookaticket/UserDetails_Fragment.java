@@ -168,7 +168,7 @@ public class UserDetails_Fragment extends Fragment {
                 if (bookInfo != null) {
                     holder.bind(bookInfo);
                 } else {
-                    Toast.makeText(getContext(), "No book info found", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "No book info found", Toast.LENGTH_SHORT).show();
                 }
 
 //                holder.itemView.setOnClickListener(new View.OnClickListener() {

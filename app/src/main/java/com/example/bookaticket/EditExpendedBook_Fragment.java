@@ -63,7 +63,7 @@ public class EditExpendedBook_Fragment extends Fragment {
                     commentsList = data;
                     commentAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "No comments", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "No comments", Toast.LENGTH_SHORT).show();
                 }
             }
         });
