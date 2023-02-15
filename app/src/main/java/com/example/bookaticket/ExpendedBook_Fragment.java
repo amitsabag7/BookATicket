@@ -129,7 +129,12 @@ public class ExpendedBook_Fragment extends Fragment {
             public void bind(Comment comment) {
                 userName.setText(comment.userEmail);
                 Model.instance().getUserByEmail(comment.userEmail, user -> {
-                    Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(avatar);
+                    if(user.profileImg != "") {
+                        Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(avatar);
+                    } else {
+                        avatar.setImageResource(R.drawable.avatar);
+                    }
+
                 });
 
                 text.setText(comment.text);
