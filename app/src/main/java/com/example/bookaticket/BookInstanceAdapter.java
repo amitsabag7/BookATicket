@@ -29,9 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class BookInstanceAdapter extends RecyclerView.Adapter<BookInstanceAdapter.BookViewHolder> {
 
     private List<BookInstance> bookInstanceList;
-//    private List<BookInfo> bookInfos;
-
-     private Map<String, BookInfo> bookInfosMap;
+    private Map<String, BookInfo> bookInfosMap;
     private Context mcontext;
     private FragmentManager fm;
 

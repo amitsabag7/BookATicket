@@ -105,24 +105,6 @@ public class ExpendedBook_Fragment extends Fragment {
                 text = itemView.findViewById(R.id.comment_text_tv);
             }
 
-            public int starImage(int stars) {
-                switch (stars) {
-                    case 0:
-                        return R.drawable.stars0;
-                    case 1:
-                        return R.drawable.star1;
-                    case 2:
-                        return R.drawable.stars2;
-                    case 3:
-                        return R.drawable.stars3;
-                    case 4:
-                        return R.drawable.stars4;
-                    case 5:
-                        return R.drawable.stars5;
-                }
-                return R.drawable.stars0;
-            }
-
             public void bind(Comment comment) {
                 userName.setText(comment.userEmail);
                 Model.instance().getUserByEmail(comment.userEmail, user -> {

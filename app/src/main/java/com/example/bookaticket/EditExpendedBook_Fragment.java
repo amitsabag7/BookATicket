@@ -8,32 +8,31 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.bookaticket.Model.Book;
+
+import com.bumptech.glide.Glide;
+import com.example.bookaticket.Model.BookInfo;
 import com.example.bookaticket.Model.Comment;
 import com.example.bookaticket.Model.Model;
-import com.example.bookaticket.Model.User;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class EditExpendedBook_Fragment extends Fragment {
 
-    List<Book> books;
-    static Book book1;
-    static User user;
-    CommentsListFagmentViewModel viewModel = new CommentsListFagmentViewModel();
+    List<Comment> commentsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_expended_book, container, false);
-        books = Model.instance().getAllBooks();
-        book1 = books.get(0);
-        user = Model.instance().getUser();
-
         TextView name = view.findViewById(R.id.expandedBook_name_tv);
         ImageView cover = view.findViewById(R.id.expandedBook_cover_img);
         TextView writer = view.findViewById(R.id.expandedBook_writer_tv);
@@ -44,143 +43,104 @@ public class EditExpendedBook_Fragment extends Fragment {
 
         comments.setHasFixedSize(true);
         comments.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        CommentRecyclerAdapter commentAdapter = new CommentRecyclerAdapter(viewModel.getData(user.userName));
+        EditCommentRecyclerAdapter commentAdapter = new EditCommentRecyclerAdapter();
         comments.setAdapter(commentAdapter);
 
-        commentAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int pos) {}
-        });
+        BookInfo bookInfo = EditExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInfo();
+        String bookInstanceId = EditExpendedBook_FragmentArgs.fromBundle(getArguments()).getBookInstanceId();
+        String userEmail = Model.instance().getCurentUserEmail();
 
-        name.setText(book1.name);
-        cover.setImageResource(R.drawable.harry_potter1);
-        writer.setText(book1.writer);
-        year.setText(String.valueOf(book1.year));
-        description.setText(book1.description);
+        name.setText(bookInfo.getTitle());
+        Glide.with(this).load(bookInfo.getThumbnail()).into(cover);
+        writer.setText(bookInfo.getAuthor());
+        year.setText(bookInfo.getPublishedDate());
+//        description.setText(bookInfo.getDescription());
+
+        Model.instance().getBookInfoCommentsByUserEmail(bookInfo.getId(), userEmail, new Model.Listener<List<Comment>>() {
+            @Override
+            public void onComplete(List<Comment> data) {
+                if (data != null && data.size() > 0) {
+                    commentsList = data;
+                    commentAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "No comments", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return view;
     }
 
-    public class CommentsViewHolder extends RecyclerView.ViewHolder{
+    class EditCommentsViewHolder extends RecyclerView.ViewHolder{
         TextView userName;
         ImageView avatar;
-        ImageView starRate;
-        TextView text;
-        EditText editComment;
-        ImageButton applyComment;
-        List<Comment> data;
+        //            ImageView starRate;
+        RatingBar startRate;
+        EditText text;
 
-        public CommentsViewHolder(@NonNull View itemView,OnItemClickListener listener,List<Comment> data) {
+        ImageButton saveBtn;
+
+        public EditCommentsViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.data = data;
             avatar = itemView.findViewById(R.id.comment_userAvatar_img);
             userName = itemView.findViewById(R.id.comment_userName_tv);
-            starRate = itemView.findViewById(R.id.comment_stars);
-            text = itemView.findViewById(R.id.comment_text_tv);
-            editComment = itemView.findViewById(R.id.editCommentText);
-            applyComment = itemView.findViewById(R.id.applyComment);
-
-            applyComment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Comment comment = data.get(getAdapterPosition());
-                    String commetText = String.valueOf(editComment.getText());
-                    book1.updateComment(comment,commetText);
-
-                    if (text.getText().length() > 31){
-                       text.getLayoutParams().width = 0;
-                       text.requestLayout();
-                    }
-
-                    text.setText(data.get(getAdapterPosition()).text);
-                    text.setVisibility(View.VISIBLE);
-                    editComment.setVisibility(View.INVISIBLE);
-                    applyComment.setVisibility(View.INVISIBLE);
-                }
-            });
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    listener.onItemClick(pos);
-                    text.setVisibility(View.INVISIBLE);
-                    editComment.setText(text.getText());
-                    editComment.setVisibility(View.VISIBLE);
-                    applyComment.setVisibility(View.VISIBLE);
-                }
-            });
+            startRate = itemView.findViewById(R.id.comment_row_rating);
+            text = itemView.findViewById(R.id.editCommentText);
+            saveBtn = itemView.findViewById(R.id.applyComment);
         }
 
-        public int starImage(int stars) {
-            switch (stars) {
-                case 0:
-                    return R.drawable.stars0;
-                case 1:
-                    return R.drawable.star1;
-                case 2:
-                    return R.drawable.stars2;
-                case 3:
-                    return R.drawable.stars3;
-                case 4:
-                    return R.drawable.stars4;
-                case 5:
-                    return R.drawable.stars5;
-            }
-            return R.drawable.stars0;
-        }
+        public void bind(Comment comment) {
+            userName.setText(comment.userEmail);
+            Model.instance().getUserByEmail(comment.userEmail, user -> {
+                Picasso.get().load(user.profileImg).placeholder(R.drawable.avatar).into(avatar);
+            });
 
-        public void bind(Comment comment,int position) {
-                userName.setText(comment.userEmail);
-               // avatar.setImageResource("drawable/avatar.png");
-                text.setText(comment.text);
-                starRate.setImageResource(starImage(comment.rate));
+            text.setText(comment.text);
+            //starRate.setImageResource(starImage(comment.rate));
+            startRate.setRating(comment.rate);
         }
     }
 
-    interface OnItemClickListener {
-        void onItemClick(int position);
-    }
+    class EditCommentRecyclerAdapter extends RecyclerView.Adapter<EditCommentsViewHolder> {
 
-    class CommentRecyclerAdapter extends RecyclerView.Adapter<EditExpendedBook_Fragment.CommentsViewHolder> {
-
-        OnItemClickListener mListener;
-
-        List<Comment> data;
-
-        public CommentRecyclerAdapter(List<Comment> data){
-            this.data = data;
-        }
-
-        void setOnItemClickListener(OnItemClickListener listener){
-            mListener = listener;
-        }
 
         @NonNull
         @Override
-        public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public EditCommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.edit_comment_row, parent, false);
-
-            return new CommentsViewHolder(view, mListener,data);
+            return new EditCommentsViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
-            Comment comment = data.get(position);
-            holder.bind(comment, position);
+        public void onBindViewHolder(@NonNull EditCommentsViewHolder holder, int position) {
+            Comment comment = commentsList.get(position);
+            //Log.d("tag", "comment: " + st.avatarURL);
+            holder.bind(comment);
+
+            holder.saveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    comment.text = holder.text.getText().toString();
+                    comment.rate = (int) holder.startRate.getRating();
+                    Model.instance().updateComment(comment, new Model.Listener<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data) {
+                            if (data) {
+                                Toast.makeText(getContext(), "Comment updated", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Comment not updated", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
-            int count = 0;
-            List<Comment> comment = book1.comments;
-
-            for (Comment cm:comment) {
-                if (cm.userEmail == user.userName){
-                    count++;
-                }
-            }
-            return count;
+            if (commentsList != null) {
+                return commentsList.size();
+            }return 0;
         }
     }
 }

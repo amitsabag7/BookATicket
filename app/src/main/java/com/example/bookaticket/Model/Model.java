@@ -37,7 +37,9 @@ public class Model {
         users.add(user1);
     }
 
-
+    public void getBookInfoCommentsByUserEmail(String bookInfoId, String userEmail, Listener<List<Comment>> callback) {
+        firebaseModel.getBookInfoCommentsByUserEmail(bookInfoId, userEmail, callback);
+    }
 
 
     public interface Listener<T>{
@@ -196,25 +198,26 @@ public class Model {
     public void getAllBookInstancesByUserEmail(String userEmail, Listener<List<BookInstance>> callback) {
         Long localLastUpdate = BookInstance.getLocalLastUpdated();
 
-        firebaseModel.getAllBookInstancesUserEmailSince(userEmail, localLastUpdate, list -> {
+        firebaseModel.getAllBookInstancesUserEmailSince(userEmail, localLastUpdate, callback);
 
-            executor.execute(() -> {
-                Log.d("tag","firebase return "+list.size() );
-                Long time = localLastUpdate;
-                for (BookInstance bookInstance:list) {
-                    localDb.bookInstanceDao().insertAll(bookInstance);
-                    if (time < bookInstance.getLastUpdated()) {
-                        time = bookInstance.getLastUpdated();
-                    }
-                }
-                BookInstance.setLocalLastUpdated(time);
-                // needs to only find specific books
-                List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByUserEmail(userEmail);
-                mainHandler.post(() -> {
-                    callback.onComplete(complete);
-                });
-            });
-        });
+//            executor.execute(() -> {
+//                Log.d("tag","firebase return "+list.size() );
+//                Long time = localLastUpdate;
+//                for (BookInstance bookInstance:list) {
+//                    localDb.bookInstanceDao().insertAll(bookInstance);
+//                    if (time < bookInstance.getLastUpdated()) {
+//                        time = bookInstance.getLastUpdated();
+//                    }
+//                }
+//                BookInstance.setLocalLastUpdated(time);
+//                // needs to only find specific books
+//                List<BookInstance> complete = localDb.bookInstanceDao().getBookInstanceByUserEmail(userEmail);
+//                mainHandler.post(() -> {
+//                    callback.onComplete(complete);
+//                });
+//            });
+
+     //   });
     }
 
 
@@ -280,6 +283,10 @@ public class Model {
 
     public void addNewComment(Comment newComment, Listener<Boolean> booleanListener) {
         firebaseModel.addNewComment(newComment, booleanListener);
+    }
+
+    public void updateComment(Comment comment, Listener<Boolean> booleanListener) {
+        firebaseModel.updateComment(comment, booleanListener);
     }
 
 }

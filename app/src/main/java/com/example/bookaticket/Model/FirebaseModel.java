@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookaticket.Login_Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,12 +13,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -427,10 +423,11 @@ public class FirebaseModel {
                                 BookInstance bi = BookInstance.fromJson(json.getData());
                                 list.add(bi);
                             }
+                            callback.onComplete(list);
                         } else {
-
+                            callback.onComplete(null);
                         }
-                        callback.onComplete(list);
+
                     }
                 });
     }
@@ -472,6 +469,49 @@ public class FirebaseModel {
                             callback.onComplete(true);
                         } else {
                             callback.onComplete(false);
+                        }
+                    }
+                });
+    }
+
+    public void getBookInfoCommentsByUserEmail(String bookInfoId, String userEmail, Model.Listener<List<Comment>> callback) {
+        db.collection("comments")
+                .whereEqualTo("bookInfoID", bookInfoId)
+                .whereEqualTo("userEmail", userEmail)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Comment> list = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", " found " + list.size() + "comments successful for userEmail: " + userEmail);
+                            QuerySnapshot jsonsList = task.getResult();
+                            if (jsonsList != null) {
+                                for (DocumentSnapshot json : jsonsList) {
+                                    Comment c = Comment.fromJson(json.getData());
+                                    list.add(c);
+                                }
+                                callback.onComplete(list);
+                            }
+                        } else {
+                            callback.onComplete(null);
+                        }
+
+                    }
+                });
+    }
+
+    public void updateComment(Comment comment, Model.Listener<Boolean> booleanListener) {
+        db.collection("comments")
+                .document(comment.getId())
+                .update("text", comment.getText())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            booleanListener.onComplete(true);
+                        } else {
+                            booleanListener.onComplete(false);
                         }
                     }
                 });
