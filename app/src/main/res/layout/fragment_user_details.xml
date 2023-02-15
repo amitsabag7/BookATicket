@@ -233,7 +233,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layput_marginTop = "10dp"
+        android:paddingTop="10dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
